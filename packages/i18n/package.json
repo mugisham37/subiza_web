@@ -1,0 +1,13 @@
+{
+  "name": "@subiza/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./messages/en.json": "./src/messages/en.json",
+    "./messages/rw.json": "./src/messages/rw.json",
+    "./messages/fr.json": "./src/messages/fr.json",
+    "./messages/sw.json": "./src/messages/sw.json"
+  }
+}

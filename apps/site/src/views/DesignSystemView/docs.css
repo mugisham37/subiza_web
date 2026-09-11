@@ -1,0 +1,441 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SWATCHES, SPECIMENS, DO/DON'T — documentation furniture
+   ═══════════════════════════════════════════════════════════════════ */
+.sw {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface);
+}
+.sw .chip-c {
+  height: 74px;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--s-4);
+  position: relative;
+}
+.sw .meta {
+  padding: var(--s-5);
+  border-top: 1px solid var(--rule);
+}
+.sw .meta b {
+  display: block;
+  font-size: var(--t-cap);
+  font-weight: 600;
+}
+.sw .meta code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 10.5px;
+  color: var(--ink-3);
+  display: block;
+  margin-top: 2px;
+}
+.sw .cr {
+  position: absolute;
+  top: var(--s-4);
+  right: var(--s-4);
+  font-family: var(--f-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.9);
+  color: #14150f;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.sw .cr.bad {
+  background: rgba(196, 68, 46, 0.95);
+  color: #fff;
+}
+
+.spec {
+  border-bottom: 1px solid var(--rule);
+  padding: var(--s-6) 0;
+  display: flex;
+  gap: var(--s-7);
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.spec:last-child {
+  border-bottom: none;
+}
+.spec .sm {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  width: 150px;
+  flex: none;
+  line-height: 1.6;
+}
+.spec .sm b {
+  display: block;
+  color: var(--ink-2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+.spec .ss {
+  flex: 1;
+  min-width: 220px;
+}
+
+.dd {
+  display: grid;
+  gap: var(--s-6);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin: var(--s-6) 0;
+}
+.ddc {
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface);
+}
+.ddc .h {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-6);
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.ddc .h svg {
+  width: 13px;
+  height: 13px;
+}
+.ddc.do .h {
+  background: var(--ok-soft);
+  color: var(--ok);
+  border-bottom: 1px solid var(--ok-edge);
+}
+.ddc.dont .h {
+  background: var(--risk-soft);
+  color: var(--risk);
+  border-bottom: 1px solid var(--risk-edge);
+}
+.ddc .b {
+  padding: var(--s-6);
+  display: grid;
+  place-items: center;
+  min-height: 96px;
+  background: var(--ground);
+}
+.ddc .n {
+  padding: var(--s-5) var(--s-6);
+  border-top: 1px solid var(--rule);
+  font-size: var(--t-cap);
+  color: var(--ink-2);
+}
+
+.codeblk {
+  background: var(--panel);
+  color: var(--panel-ink);
+  border-radius: var(--r-md);
+  padding: var(--s-6);
+  overflow-x: auto;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  margin: var(--s-6) 0;
+  border: 1px solid var(--panel-rule);
+}
+.codeblk .k {
+  color: var(--signal);
+}
+.codeblk .c {
+  color: var(--panel-ink-2);
+}
+.codeblk .v {
+  color: #f0b840;
+}
+
+.themebar {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-pill);
+  padding: 3px;
+}
+.themebar button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all var(--t-micro);
+}
+.themebar button svg {
+  width: 15px;
+  height: 15px;
+}
+.themebar button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--e-2);
+}
+
+.pgtop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s-7);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-8);
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-4);
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: var(--s-6);
+}
+.eyebrow i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal-lo);
+}
+.h0 {
+  font-family: var(--f-display);
+  font-size: var(--t-d2);
+  font-variation-settings: "opsz" 72;
+  font-weight: 600;
+  letter-spacing: -0.038em;
+  line-height: 1.02;
+  margin: 0 0 var(--s-6);
+  text-wrap: balance;
+}
+.h0 em {
+  font-style: normal;
+  background: var(--signal);
+  color: var(--signal-ink);
+  border-radius: 6px;
+  padding: 0 0.16em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.anchors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  margin: var(--s-8) 0 0;
+}
+.anchors a {
+  text-decoration: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   Base is 360. Everything above is an enhancement.
+   Two components stop being themselves below 720 and are replaced.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1080px) {
+  :root {
+    --nav-w: 228px;
+  }
+  .wrap {
+    padding: var(--s-10) var(--s-8) var(--s-13);
+  }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .nav {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 280px;
+    z-index: 60;
+    height: 100dvh;
+    transform: translateX(-101%);
+    transition: transform var(--t-panel) var(--e-out);
+    box-shadow: var(--e-4);
+  }
+  .nav[data-open="true"] {
+    transform: none;
+  }
+  .navscrim {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay);
+    z-index: 55;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--t-panel);
+  }
+  .navscrim[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    height: 58px;
+    padding: 0 var(--s-6);
+    background: rgba(250, 249, 244, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar .brand {
+    margin: 0;
+  }
+  .topbar .sp {
+    margin-left: auto;
+  }
+  .main {
+    grid-column: 1;
+  }
+  .wrap {
+    padding: var(--s-9) var(--s-6) var(--s-13);
+  }
+  section.sec {
+    padding-top: var(--s-11);
+    scroll-margin-top: 66px;
+  }
+  .g2,
+  .g3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .spec {
+    flex-direction: column;
+    gap: var(--s-4);
+  }
+  .spec .sm {
+    width: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --s-10: 28px;
+    --s-11: 40px;
+    --s-13: 64px;
+  }
+  .wrap {
+    padding: var(--s-8) var(--s-5) var(--s-12);
+  }
+  .demo {
+    padding: var(--s-6);
+    border-radius: var(--r-sm);
+    margin-left: calc(var(--s-5) * -1);
+    margin-right: calc(var(--s-5) * -1);
+    border-left: none;
+    border-right: none;
+  }
+  .demo-lab {
+    position: static;
+    display: block;
+    border: none;
+    border-bottom: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 0 0 var(--s-5);
+    margin: 0 0 var(--s-5);
+  }
+  /* buttons in a row stack, and each becomes full-width — a 44px
+     target beside another 44px target is a mis-tap on a 360 screen */
+  .demo-row.stackable {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .demo-row.stackable .btn {
+    width: 100%;
+  }
+  .g4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .otp .slot {
+    height: 52px;
+    font-size: 1.15rem;
+  }
+  .otp,
+  .otp .slots {
+    gap: var(--s-3);
+  }
+  .otp > input {
+    font-size: 1.15rem;
+    letter-spacing: 0.85em;
+  }
+  .fcode-a {
+    flex-direction: column;
+  }
+  .card-ft {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .banner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--s-3) var(--s-5);
+    align-items: start;
+  }
+  .banner .ba {
+    grid-column: 1/-1;
+    margin-left: 0;
+    width: 100%;
+  }
+  .banner .ba .btn {
+    width: 100%;
+  }
+  .ring {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--s-5);
+  }
+  .phone {
+    width: 100%;
+    max-width: 320px;
+  }
+  .wamsg {
+    max-width: 100%;
+  }
+  .h0 {
+    letter-spacing: -0.03em;
+  }
+}
+
+/* Container queries: components adapt to their slot, not the viewport.
+   A stat card in a 200px sidebar and the same card in a 900px page
+   are different components, and neither knows the window's width. */
+.cq {
+  container-type: inline-size;
+}
+@container (max-width:300px) {
+  .stat .sv {
+    font-size: 1.65rem;
+  }
+  .stat .sd {
+    flex-wrap: wrap;
+  }
+  .chan {
+    flex-wrap: wrap;
+  }
+  .chan .cmeta {
+    flex-basis: 100%;
+    order: 3;
+  }
+}
+@supports not (container-type: inline-size) {
+  /* 5% of devices. they get the wide form, which is never broken —
+     only less clever. no feature is behind this query. */
+}

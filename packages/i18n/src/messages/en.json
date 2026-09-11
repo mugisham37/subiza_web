@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "title": "Subiza design system",
+    "description": "The living design system for Subiza."
+  },
+  "nav": {
+    "home": "Home",
+    "conversations": "Conversations",
+    "chats": "Chats",
+    "agent": "Agent",
+    "connections": "Connections",
+    "results": "Results",
+    "credit": "Credit",
+    "settings": "Settings",
+    "more": "More",
+    "skip": "Skip to content"
+  },
+  "states": {
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "This is where answered conversations will land. Start with a test call.",
+    "emptyAction": "Run a test call",
+    "offline": "You are offline. We will send this when you are back.",
+    "deniedTitle": "You cannot do this",
+    "deniedBody": "Ask {who} to do it.",
+    "notFoundTitle": "We cannot find that",
+    "rateLimited": "Try again in {minutes} minutes.",
+    "errorTitle": "Something went wrong on our side",
+    "errorBody": "We know, and we are looking. This is not your fault.",
+    "support": "Contact support"
+  },
+  "ds": {
+    "eyebrow": "Design system",
+    "title": "The system, not a kit",
+    "lede": "Every token, component and state that later screens must use. Light and dark are authored. Lime is a fill."
+  }
+}

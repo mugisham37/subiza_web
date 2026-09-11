@@ -1,0 +1,16 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss";
+@import "@subiza/ui/tokens.css";
+@import "@subiza/ui/theme.css";
+@import "@subiza/ui/base.css";
+@import "@subiza/ui/components.css";
+@import "@subiza/ui/product.css";
+@import "../views/DesignSystemView/docs.css";
+
+@source "../../../../packages/ui/src";
+
+:root {
+  --f-display: var(--font-display), "Bricolage Grotesque Fallback", Georgia, serif;
+  --f-body: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}

@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "title": "Sisitemu y'imiterere ya Subiza",
+    "description": "Sisitemu y'imiterere iba ho ya Subiza."
+  },
+  "nav": {
+    "home": "Ahabanza",
+    "conversations": "Ibiganiro",
+    "chats": "Ibiganiro",
+    "agent": "Umukozi",
+    "connections": "Ihuza",
+    "results": "Ibisubizo",
+    "credit": "Inguzanyo",
+    "settings": "Igenamiterere",
+    "more": "Ibindi",
+    "skip": "Simbuka ujye ku birimo"
+  },
+  "states": {
+    "emptyTitle": "Nta kintu kirimo ubu",
+    "emptyBody": "Aha ni ho ibiganiro byasubijwe bizagera. Tangira n'ihamagara ryo kugerageza.",
+    "emptyAction": "Kora iringa ryo kugerageza",
+    "offline": "Nta murongo ufite. Tuzohereza iyo ugarutse.",
+    "deniedTitle": "Ntushobora kubikora",
+    "deniedBody": "Saba {who} kubikora.",
+    "notFoundTitle": "Ntidushobora kubibona",
+    "rateLimited": "Ongera ugerageze mu minota {minutes}.",
+    "errorTitle": "Hari ikintu cyagenze nabi ku ruhande rwacu",
+    "errorBody": "Turabizi, kandi turacyitegereza. Si icyaha cyawe.",
+    "support": "Vugana n'ubufasha"
+  },
+  "ds": {
+    "eyebrow": "Sisitemu y'imiterere",
+    "title": "Sisitemu, si agasanduku k'ibikoresho",
+    "lede": "Buri tokeni, kimwe n'ibice n'imiterere yose ibindi bice bigomba gukoresha. Umucyo n'umwijima byanditswe ku giti cyabyo. Lime ni iyuzura."
+  }
+}

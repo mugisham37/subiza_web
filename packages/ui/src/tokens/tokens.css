@@ -1,0 +1,134 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SUBIZA DESIGN SYSTEM
+   Tokens are declared once, in full, on :root — the light theme.
+   Dark redefines only what changes, twice: once for the system
+   preference, once for the explicit toggle. No hex is ever inverted.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── Ground & surface ─────────────────────────────────────────── */
+  --ground:#FAF9F4;          /* warm paper. never pure white */
+  --surface:#FFFFFF;
+  --surface-2:#F2F1EA;       /* sunken: inputs, wells, code */
+  --surface-3:#EAE9E0;       /* hover on surface-2 */
+  --overlay:rgba(20,21,15,.42);
+
+  /* ── Ink ──────────────────────────────────────────────────────── */
+  --ink:#14150F;             /* 17.4:1 on ground */
+  --ink-2:#4A4C42;           /* 8.3:1  */
+  --ink-3:#6E7063;           /* 4.8:1 — the floor. nothing lighter carries text */
+  --ink-inv:#FAF9F4;
+
+  /* ── Hairlines. this system draws with lines, not shadows ─────── */
+  --rule:rgba(20,21,15,.09);
+  --rule-2:rgba(20,21,15,.16);
+  --rule-3:rgba(20,21,15,.28);
+
+  /* ── Signal: the lime. A FILL. NEVER A TEXT COLOUR. ───────────── */
+  --signal:#C6F24E;          /* 1.2:1 on ground — unusable as text, by design */
+  --signal-hi:#D3F86B;       /* hover */
+  --signal-lo:#B3E033;       /* pressed */
+  --signal-ink:#14150F;      /* 14.2:1 on signal — what sits ON the lime */
+  --signal-soft:#EEF9CE;     /* the wash: selected rows, soft callouts */
+  --signal-edge:#D6E9A0;
+  --signal-text:#3D5C10;     /* 7.3:1 — the ONLY green allowed to be text */
+
+  /* ── Panel: the deep surface. inverted regions, not dark mode ─── */
+  --panel:#1C2A12;
+  --panel-2:#26361A;
+  --panel-ink:#FFFFFF;       /* 15.1:1 */
+  --panel-ink-2:#B9C7A6;
+  --panel-rule:rgba(255,255,255,.14);
+
+  /* ── Status ───────────────────────────────────────────────────── */
+  --ok:#3D5C10; --ok-fill:#C6F24E; --ok-soft:#EEF9CE; --ok-edge:#D6E9A0;
+  --warn:#7A5300; --warn-fill:#F0B840; --warn-soft:#FCF0D6; --warn-edge:#EFD9A4;
+  --risk:#A6311D; --risk-fill:#C4442E; --risk-soft:#FBE7E2; --risk-edge:#F0C4B9;
+  --info:#2C4A6B; --info-fill:#5B87B8; --info-soft:#E4EDF6; --info-edge:#C0D5E8;
+  --live:#C4442E;            /* the on-air dot. red because a call is live */
+
+  /* ── Type ─────────────────────────────────────────────────────── */
+  --f-display:'Bricolage Grotesque','Bricolage Grotesque Fallback',Georgia,serif;
+  --f-body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --t-d1:clamp(2.6rem,1.6rem + 4.4vw,4.75rem);
+  --t-d2:clamp(2.1rem,1.45rem + 2.9vw,3.5rem);
+  --t-h1:clamp(1.7rem,1.3rem + 1.8vw,2.5rem);
+  --t-h2:clamp(1.35rem,1.15rem + .9vw,1.75rem);
+  --t-h3:1.125rem;
+  --t-h4:1rem;
+  --t-body-l:1.0625rem;
+  --t-body:.9375rem;
+  --t-body-s:.875rem;
+  --t-cap:.8125rem;
+  --t-label:.6875rem;
+
+  /* ── Space. 4px base, no arbitrary values anywhere ────────────── */
+  --s-1:2px;  --s-2:4px;  --s-3:6px;  --s-4:8px;  --s-5:12px;
+  --s-6:16px; --s-7:20px; --s-8:24px; --s-9:32px; --s-10:40px;
+  --s-11:56px;--s-12:72px;--s-13:96px;--s-14:128px;
+
+  /* ── Radius. three steps and a pill. deliberate, not uniform ──── */
+  --r-sm:4px;   /* inputs, chips, tags, small tiles */
+  --r-md:12px;  /* cards, sheets, buttons */
+  --r-lg:24px;  /* feature panels, media, the hero */
+  --r-pill:999px;
+
+  /* ── Elevation. four levels; three of them have no shadow ─────── */
+  --e-0:none;
+  --e-1:none;                                  /* hairline only */
+  --e-2:0 1px 2px rgba(20,21,15,.05);          /* raised, still grounded */
+  --e-3:0 6px 16px -4px rgba(20,21,15,.10),0 2px 4px rgba(20,21,15,.05);   /* menus */
+  --e-4:0 24px 48px -12px rgba(20,21,15,.20),0 8px 16px -8px rgba(20,21,15,.10); /* modal */
+
+  /* ── Motion. ceiling is 300ms. exits run ~20% faster than entries ─ */
+  --t-micro:120ms;  /* hover, focus, colour */
+  --t-ui:200ms;     /* the default: expand, slide, reveal */
+  --t-panel:280ms;  /* sheets, modals, drawers */
+  --t-exit:160ms;
+  --e-out:cubic-bezier(.22,1,.36,1);
+  --e-in:cubic-bezier(.55,0,1,.45);
+  --e-inout:cubic-bezier(.65,0,.35,1);
+  --e-spring:linear(0,.42 8.7%,.75 17.5%,.96 25.4%,1.06 32.1%,1.09 39.3%,1.06 47.5%,1.01 60.2%,.99 76.2%,1);
+
+  --nav-w:264px;
+  --measure:70ch;
+}
+
+:root:not([data-theme=light]){ @media (prefers-color-scheme:dark){
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}}
+:root[data-theme=dark]{
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}

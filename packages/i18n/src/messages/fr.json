@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "title": "Système de design Subiza",
+    "description": "Le système de design vivant de Subiza."
+  },
+  "nav": {
+    "home": "Accueil",
+    "conversations": "Conversations",
+    "chats": "Discussions",
+    "agent": "Agent",
+    "connections": "Connexions",
+    "results": "Résultats",
+    "credit": "Crédit",
+    "settings": "Réglages",
+    "more": "Plus",
+    "skip": "Aller au contenu"
+  },
+  "states": {
+    "emptyTitle": "Rien ici pour l'instant",
+    "emptyBody": "C'est ici que les conversations traitées apparaîtront. Commencez par un appel test.",
+    "emptyAction": "Lancer un appel test",
+    "offline": "Vous êtes hors ligne. Nous enverrons ceci à la reconnexion.",
+    "deniedTitle": "Vous ne pouvez pas faire cela",
+    "deniedBody": "Demandez à {who} de le faire.",
+    "notFoundTitle": "Introuvable",
+    "rateLimited": "Réessayez dans {minutes} minutes.",
+    "errorTitle": "Un problème est survenu de notre côté",
+    "errorBody": "Nous le savons et nous regardons. Ce n'est pas votre faute.",
+    "support": "Contacter le support"
+  },
+  "ds": {
+    "eyebrow": "Système de design",
+    "title": "Le système, pas une boîte à outils",
+    "lede": "Chaque jeton, composant et état que les écrans suivants doivent utiliser. Clair et sombre sont rédigés. Le lime est un fond."
+  }
+}

@@ -1,0 +1,109 @@
+@theme inline {
+  --color-*: initial;
+  --breakpoint-*: initial;
+
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-overlay: var(--overlay);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-inv: var(--ink-inv);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-rule-3: var(--rule-3);
+  --color-signal: var(--signal);
+  --color-signal-hi: var(--signal-hi);
+  --color-signal-lo: var(--signal-lo);
+  --color-signal-ink: var(--signal-ink);
+  --color-signal-soft: var(--signal-soft);
+  --color-signal-edge: var(--signal-edge);
+  --color-signal-text: var(--signal-text);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-panel-ink: var(--panel-ink);
+  --color-panel-ink-2: var(--panel-ink-2);
+  --color-panel-rule: var(--panel-rule);
+  --color-ok: var(--ok);
+  --color-ok-fill: var(--ok-fill);
+  --color-ok-soft: var(--ok-soft);
+  --color-ok-edge: var(--ok-edge);
+  --color-warn: var(--warn);
+  --color-warn-fill: var(--warn-fill);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-edge: var(--warn-edge);
+  --color-risk: var(--risk);
+  --color-risk-fill: var(--risk-fill);
+  --color-risk-soft: var(--risk-soft);
+  --color-risk-edge: var(--risk-edge);
+  --color-info: var(--info);
+  --color-info-fill: var(--info-fill);
+  --color-info-soft: var(--info-soft);
+  --color-info-edge: var(--info-edge);
+  --color-live: var(--live);
+
+  --font-display: var(--f-display);
+  --font-body: var(--f-body);
+  --font-mono: var(--f-mono);
+
+  --text-d1: var(--t-d1);
+  --text-d1--line-height: 1.02;
+  --text-d1--letter-spacing: -0.038em;
+  --text-d2: var(--t-d2);
+  --text-d2--line-height: 1.02;
+  --text-d2--letter-spacing: -0.038em;
+  --text-h1: var(--t-h1);
+  --text-h1--line-height: 1.12;
+  --text-h1--letter-spacing: -0.022em;
+  --text-h2: var(--t-h2);
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.022em;
+  --text-h3: var(--t-h3);
+  --text-h4: var(--t-h4);
+  --text-body-l: var(--t-body-l);
+  --text-body: var(--t-body);
+  --text-body-s: var(--t-body-s);
+  --text-cap: var(--t-cap);
+  --text-label: var(--t-label);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-pill: var(--r-pill);
+
+  --shadow-e0: var(--e-0);
+  --shadow-e1: var(--e-1);
+  --shadow-e2: var(--e-2);
+  --shadow-e3: var(--e-3);
+  --shadow-e4: var(--e-4);
+
+  --ease-out: var(--e-out);
+  --ease-in: var(--e-in);
+  --ease-inout: var(--e-inout);
+  --ease-spring: var(--e-spring);
+
+  --transition-duration-micro: var(--t-micro);
+  --transition-duration-ui: var(--t-ui);
+  --transition-duration-panel: var(--t-panel);
+  --transition-duration-exit: var(--t-exit);
+
+  --breakpoint-sm: 35rem;
+  --breakpoint-md: 53.75rem;
+  --breakpoint-lg: 67.5rem;
+
+  --container-measure: var(--measure);
+  --container-nav: var(--nav-w);
+}
+
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-theme="dark"] *) {
+    @slot;
+  }
+}

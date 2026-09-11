@@ -1,0 +1,23 @@
+{
+  "name": "subiza",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "dev:site": "pnpm --filter @subiza/site dev",
+    "dev:studio": "pnpm --filter @subiza/studio dev",
+    "dev:admin": "pnpm --filter @subiza/admin dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:e2e": "pnpm --filter @subiza/site test:e2e",
+    "format": "prettier --write .",
+    "icons": "pnpm --filter @subiza/ui icons"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.8",
+    "typescript": "5.9.3"
+  }
+}

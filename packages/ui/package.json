@@ -1,0 +1,36 @@
+{
+  "name": "@subiza/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./preferences": "./src/lib/preferences.ts",
+    "./tokens.css": "./src/tokens/tokens.css",
+    "./theme.css": "./src/tokens/theme.css",
+    "./base.css": "./src/tokens/base.css",
+    "./components.css": "./src/tokens/components.css",
+    "./product.css": "./src/tokens/product.css",
+    "./scripts/*": "./src/scripts/*"
+  },
+  "scripts": {
+    "icons": "tsx scripts/build-sprite.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@subiza/core": "workspace:*",
+    "class-variance-authority": "^0.7.1",
+    "input-otp": "^1.4.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "lucide-static": "^0.544.0",
+    "tsx": "^4.20.5",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "title": "Mfumo wa muundo wa Subiza",
+    "description": "Mfumo hai wa muundo wa Subiza."
+  },
+  "nav": {
+    "home": "Nyumbani",
+    "conversations": "Mazungumzo",
+    "chats": "Soga",
+    "agent": "Wakala",
+    "connections": "Miunganisho",
+    "results": "Matokeo",
+    "credit": "Salio",
+    "settings": "Mipangilio",
+    "more": "Zaidi",
+    "skip": "Ruka kwenda kwenye maudhui"
+  },
+  "states": {
+    "emptyTitle": "Hakuna kitu hapa bado",
+    "emptyBody": "Hapa ndipo mazungumzo yaliyojibiwa yataonekana. Anza na simu ya majaribio.",
+    "emptyAction": "Fanya simu ya majaribio",
+    "offline": "Haujaunganishwa. Tutapeleka hii utakaporudi.",
+    "deniedTitle": "Huwezi kufanya hivi",
+    "deniedBody": "Mwombe {who} afanye.",
+    "notFoundTitle": "Hatuwezi kupata hiyo",
+    "rateLimited": "Jaribu tena baada ya dakika {minutes}.",
+    "errorTitle": "Kuna tatizo upande wetu",
+    "errorBody": "Tunajua, na gunatuangalia. Si kosa lako.",
+    "support": "Wasiliana na msaada"
+  },
+  "ds": {
+    "eyebrow": "Mfumo wa muundo",
+    "title": "Mfumo, si sanduku la zana",
+    "lede": "Kila tokeni, kipengele na hali ambayo skrini zijazo lazima zitumie. Mwanga na giza vimeandikwa. Lime ni kujaza."
+  }
+}

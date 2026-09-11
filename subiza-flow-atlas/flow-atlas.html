@@ -1,0 +1,684 @@
+<title>Subiza Flow Atlas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root{
+  --ground:#F1F4F2; --surface:#FFFFFF; --surface-2:#E9EEEB;
+  --ink:#14201C; --slate:#5A6B64; --faint:#8A9992;
+  --rule:#D2DAD6; --rule-strong:#B4C0BA;
+  --signal:#0B6E4F; --signal-soft:#E1EDE7; --signal-ink:#095B41; --signal-edge:#9CC9B6;
+  --ochre:#8F5510; --ochre-soft:#F4EBDD;
+  --ember:#A32E28; --ember-soft:#F6E4E2;
+  --rail:270px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1411; --surface:#111B17; --surface-2:#16211C;
+    --ink:#E4EDE8; --slate:#93A79E; --faint:#6E827A;
+    --rule:#22302A; --rule-strong:#31423A;
+    --signal:#45C594; --signal-soft:#132A21; --signal-ink:#67D8AC; --signal-edge:#2C6B54;
+    --ochre:#D6A05A; --ochre-soft:#2A2114;
+    --ember:#E4796F; --ember-soft:#2B1715;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1411; --surface:#111B17; --surface-2:#16211C;
+  --ink:#E4EDE8; --slate:#93A79E; --faint:#6E827A;
+  --rule:#22302A; --rule-strong:#31423A;
+  --signal:#45C594; --signal-soft:#132A21; --signal-ink:#67D8AC; --signal-edge:#2C6B54;
+  --ochre:#D6A05A; --ochre-soft:#2A2114;
+  --ember:#E4796F; --ember-soft:#2B1715;
+}
+*{box-sizing:border-box}
+body{background:var(--ground); color:var(--ink);
+  font-family:"Source Serif 4",Charter,Georgia,serif; font-size:16.5px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;}
+a{color:var(--signal-ink); text-underline-offset:2px}
+a:hover{color:var(--signal)}
+:focus-visible{outline:2px solid var(--signal); outline-offset:3px; border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{display:grid; grid-template-columns:var(--rail) minmax(0,1fr); min-height:100vh}
+
+/* rail */
+.rail{border-right:1px solid var(--rule); background:var(--surface);
+  position:sticky; top:0; height:100vh; overflow-y:auto; display:flex; flex-direction:column}
+.brand{padding:24px 20px 16px; border-bottom:1px solid var(--rule)}
+.brandmark{font-family:"IBM Plex Sans Condensed",system-ui,sans-serif; font-weight:700;
+  font-size:26px; letter-spacing:.01em; line-height:1.05; margin:0}
+.brandmark span{display:block; color:var(--signal-ink); font-size:15px; letter-spacing:.14em;
+  text-transform:uppercase; margin-top:4px}
+.brandgloss{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:10.5px;
+  color:var(--slate); margin:10px 0 0; line-height:1.55}
+.railnav{list-style:none; margin:0; padding:8px 0 24px}
+.navsec{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--faint); padding:16px 20px 6px}
+.navlink{display:grid; grid-template-columns:26px minmax(0,1fr); gap:9px; align-items:baseline;
+  padding:7px 20px; text-decoration:none; color:var(--ink); border-left:3px solid transparent}
+.navlink:hover{background:var(--surface-2)}
+.navlink.is-active{border-left-color:var(--signal); background:var(--signal-soft)}
+.navnum{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px; color:var(--faint);
+  font-variant-numeric:tabular-nums}
+.navlink.is-active .navnum{color:var(--signal-ink)}
+.navtitle{font-family:"IBM Plex Sans Condensed",system-ui,sans-serif; font-weight:600;
+  font-size:15px; line-height:1.25}
+.railfoot{margin-top:auto; padding:14px 20px 18px; border-top:1px solid var(--rule);
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:10px; color:var(--faint); line-height:1.6}
+
+/* main */
+main{padding:0 0 100px; min-width:0}
+.panel{display:none; padding:0 clamp(20px,4vw,56px)}
+.panel.is-shown{display:block}
+
+.phead{padding:40px 0 20px; border-bottom:2px solid var(--ink); max-width:78ch}
+.peyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:10.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--signal-ink); margin:0 0 9px}
+.ptitle{font-family:"IBM Plex Sans Condensed",system-ui,sans-serif; font-weight:700;
+  font-size:clamp(30px,4vw,46px); line-height:1.03; letter-spacing:-.01em; margin:0; text-wrap:balance}
+.ppurpose{margin:12px 0 0; color:var(--slate); font-size:17px; max-width:68ch}
+.pmeta{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px 26px;
+  margin:22px 0 0; padding:0}
+.pmeta div{min-width:0}
+.pmeta dt{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:9.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint); margin:0 0 3px}
+.pmeta dd{margin:0; font-family:"IBM Plex Sans Condensed",system-ui,sans-serif; font-size:14.5px; line-height:1.35}
+.pill{display:inline-block; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:10px;
+  letter-spacing:.1em; text-transform:uppercase; padding:3px 8px; border:1px solid currentColor; border-radius:2px}
+.crit-x{color:var(--ember); background:var(--ember-soft)}
+.crit-c{color:var(--ochre); background:var(--ochre-soft)}
+.crit-h{color:var(--signal-ink); background:var(--signal-soft)}
+.crit-i{color:var(--slate)}
+.crit-f{color:var(--faint)}
+
+/* diagram */
+.diagram{margin:34px 0 10px; padding:26px clamp(12px,3vw,34px); background:var(--surface);
+  border:1px solid var(--rule); overflow-x:auto}
+.frow{display:flex; justify-content:center}
+.frow-multi{gap:14px; flex-wrap:wrap}
+.node{flex:1 1 260px; max-width:640px; min-width:220px; background:var(--ground);
+  border:1px solid var(--rule-strong); border-radius:3px; padding:12px 16px;
+  display:flex; flex-direction:column; gap:3px}
+.frow:not(.frow-multi) .node{max-width:660px; width:100%}
+.ntitle{font-family:"IBM Plex Sans Condensed",system-ui,sans-serif; font-weight:600;
+  font-size:16px; line-height:1.25}
+.nsub{font-size:13.5px; line-height:1.45; color:var(--slate)}
+.node-key{background:var(--signal-soft); border-color:var(--signal-edge); border-width:2px}
+.node-key .ntitle{color:var(--signal-ink)}
+.node-key .nsub{color:var(--ink)}
+.node-gate{border-style:dashed; background:var(--surface-2)}
+.node-gate .ntitle::before{content:"◇ "; color:var(--ochre)}
+.node-term{background:var(--ink); border-color:var(--ink)}
+.node-term .ntitle{color:var(--ground)}
+.node-term .nsub{color:var(--ground); opacity:.75}
+.node-note{background:none; border:0; border-top:1px solid var(--rule); border-radius:0;
+  padding:16px 0 2px; margin-top:8px; text-align:center}
+.node-note .ntitle{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:10.5px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--faint); font-weight:500}
+.node-note .nsub{text-align:center; font-size:13px}
+.fconn{width:1px; height:22px; margin:0 auto; background:var(--rule-strong); position:relative}
+.fconn-short{height:10px}
+.fconn::after{content:""; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%);
+  border-left:4px solid transparent; border-right:4px solid transparent;
+  border-top:5px solid var(--rule-strong)}
+
+/* columns */
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:26px 40px; margin:32px 0 0}
+.col h2{font-family:"IBM Plex Sans Condensed",system-ui,sans-serif; font-weight:700; font-size:17px;
+  margin:0 0 10px; padding-bottom:7px; border-bottom:1px solid var(--rule)}
+.bul{list-style:none; margin:0; padding:0}
+.bul li{position:relative; padding-left:20px; margin:0 0 10px; font-size:15.5px; line-height:1.5}
+.bul li::before{content:"—"; position:absolute; left:0; color:var(--ochre); font-family:"IBM Plex Mono",monospace}
+.bul-check li::before{content:"✓"; color:var(--signal-ink)}
+
+@media (max-width:980px){
+  :root{--rail:0px}
+  .wrap{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static; height:auto; border-right:0; border-bottom:1px solid var(--rule)}
+  .railnav{display:flex; overflow-x:auto; padding:0; scrollbar-width:thin}
+  .navsec{display:none}
+  .navlink{border-left:0; border-bottom:3px solid transparent; white-space:nowrap;
+    grid-template-columns:auto; gap:0; padding:11px 14px}
+  .navlink.is-active{border-left:0; border-bottom-color:var(--signal)}
+  .navnum{display:inline; margin-right:6px}
+  .navtitle{display:inline; font-size:14px}
+  .railfoot{display:none}
+  .node{min-width:0}
+  .frow-multi{flex-direction:column}
+  body{font-size:16px}
+}
+</style>
+
+<div class="wrap">
+  <aside class="rail">
+    <div class="brand">
+      <p class="brandmark">SUBIZA<span>Flow Atlas</span></p>
+      <p class="brandgloss">
+        The software flow specification.<br>
+        26 flows · every actor · every state<br>
+        v1.0 · 05 SEP 2026 · KIGALI
+      </p>
+    </div>
+    <ul class="railnav">
+      <li class="navsec">Foundations</li>
+<li><a class="navlink" href="#f-01" data-target="f-01"><span class="navnum">01</span><span class="navtitle">Actors, Roles &amp; Permissions</span></a></li>
+<li><a class="navlink" href="#f-02" data-target="f-02"><span class="navnum">02</span><span class="navtitle">Information Architecture</span></a></li>
+<li><a class="navlink" href="#f-03" data-target="f-03"><span class="navnum">03</span><span class="navtitle">Master Flow Map</span></a></li>
+<li><a class="navlink" href="#f-04" data-target="f-04"><span class="navnum">04</span><span class="navtitle">Platform Constraints</span></a></li>
+<li class="navsec">Business console</li>
+<li><a class="navlink" href="#f-05" data-target="f-05"><span class="navnum">05</span><span class="navtitle">Signup &amp; Account Creation</span></a></li>
+<li><a class="navlink" href="#f-06" data-target="f-06"><span class="navnum">06</span><span class="navtitle">Guided Activation</span></a></li>
+<li><a class="navlink" href="#f-07" data-target="f-07"><span class="navnum">07</span><span class="navtitle">Phone Connection</span></a></li>
+<li><a class="navlink" href="#f-08" data-target="f-08"><span class="navnum">08</span><span class="navtitle">Messaging Channel Connection</span></a></li>
+<li><a class="navlink" href="#f-09" data-target="f-09"><span class="navnum">09</span><span class="navtitle">Agent Design &amp; Scripts</span></a></li>
+<li><a class="navlink" href="#f-10" data-target="f-10"><span class="navnum">10</span><span class="navtitle">Knowledge Base</span></a></li>
+<li><a class="navlink" href="#f-11" data-target="f-11"><span class="navnum">11</span><span class="navtitle">Voice Selection &amp; Cloning</span></a></li>
+<li><a class="navlink" href="#f-12" data-target="f-12"><span class="navnum">12</span><span class="navtitle">Language &amp; Switching</span></a></li>
+<li><a class="navlink" href="#f-13" data-target="f-13"><span class="navnum">13</span><span class="navtitle">Test &amp; Go-Live</span></a></li>
+<li><a class="navlink" href="#f-14" data-target="f-14"><span class="navnum">14</span><span class="navtitle">Daily Operations — the Inbox</span></a></li>
+<li><a class="navlink" href="#f-15" data-target="f-15"><span class="navnum">15</span><span class="navtitle">Escalation &amp; Human Handover</span></a></li>
+<li><a class="navlink" href="#f-16" data-target="f-16"><span class="navnum">16</span><span class="navtitle">Analytics &amp; the Retention Loop</span></a></li>
+<li><a class="navlink" href="#f-17" data-target="f-17"><span class="navnum">17</span><span class="navtitle">Billing &amp; Mobile Money</span></a></li>
+<li><a class="navlink" href="#f-18" data-target="f-18"><span class="navnum">18</span><span class="navtitle">Team &amp; Permissions</span></a></li>
+<li><a class="navlink" href="#f-19" data-target="f-19"><span class="navnum">19</span><span class="navtitle">Compliance, Consent &amp; Data Rights</span></a></li>
+<li class="navsec">Admin console</li>
+<li><a class="navlink" href="#f-20" data-target="f-20"><span class="navnum">20</span><span class="navtitle">Admin Console &amp; Operations</span></a></li>
+<li><a class="navlink" href="#f-21" data-target="f-21"><span class="navnum">21</span><span class="navtitle">Tenant Lifecycle &amp; Support</span></a></li>
+<li><a class="navlink" href="#f-22" data-target="f-22"><span class="navnum">22</span><span class="navtitle">AI Operations</span></a></li>
+<li><a class="navlink" href="#f-23" data-target="f-23"><span class="navnum">23</span><span class="navtitle">Trust, Safety &amp; Quality</span></a></li>
+<li class="navsec">Cross-cutting</li>
+<li><a class="navlink" href="#f-24" data-target="f-24"><span class="navnum">24</span><span class="navtitle">Errors, Degradation &amp; Edge Cases</span></a></li>
+<li><a class="navlink" href="#f-25" data-target="f-25"><span class="navnum">25</span><span class="navtitle">Notifications</span></a></li>
+<li><a class="navlink" href="#f-26" data-target="f-26"><span class="navnum">26</span><span class="navtitle">Success Criteria &amp; Acceptance Tests</span></a></li>
+    </ul>
+    <div class="railfoot">
+      ◇ decision &nbsp; ▬ step &nbsp; ▮ terminal<br>
+      GREEN = the moments that decide<br>
+      whether the product works
+    </div>
+  </aside>
+  <main><section class="panel" id="f-01">
+<header class="phead">
+<p class="peyebrow">Flow 01 · Foundations</p>
+<h1 class="ptitle">Actors, Roles &amp; Permissions</h1>
+<p class="ppurpose">Every human and system that touches Subiza, and exactly what each may do. Four actors never log in. Two are not human.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>All eleven actors</dd></div>
+<div><dt>Entry</dt><dd>—</dd></div>
+<div><dt>Exit</dt><dd>Permission model settled</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-f">Foundation</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-note"><span class="ntitle">NEVER LOG IN</span><span class="nsub">A1 Caller · A2 Messager · A3 Voice Owner · A4 Data Subject</span></div></div><div class="fconn fconn-short" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">BUSINESS CONSOLE</span><span class="nsub">A5 Owner · A6 Manager · A7 Agent · A8 Viewer</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">ADMIN CONSOLE</span><span class="nsub">A9 Platform staff — nine internal roles</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">NON-HUMAN</span><span class="nsub">A10 The AI, scoped to one tenant · A11 External systems</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>The AI is modelled as an actor with a permission scope — which is what makes prompt injection an authorisation failure rather than a prompt failure</li><li>Only the Owner initiates voice cloning: it creates a legal artefact naming a third party</li><li>Any staff member can pause the AI; only Owner or Manager can resume</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>No actor can read another tenant&#x27;s data by any path</li><li>The AI cannot take an action the tenant has not enabled</li><li>Every impersonation session is time-boxed, reasoned, logged and visible to the tenant</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-02">
+<header class="phead">
+<p class="peyebrow">Flow 02 · Foundations</p>
+<h1 class="ptitle">Information Architecture</h1>
+<p class="ppurpose">Seven top-level sections. Channel is a property of a conversation, not a section of the app — which is the structural consequence of spanning voice and chat in one product.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>All console users</dd></div>
+<div><dt>Entry</dt><dd>—</dd></div>
+<div><dt>Exit</dt><dd>Navigation settled</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-f">Foundation</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow frow-multi"><div class="node"><span class="ntitle">Home</span><span class="nsub">the feed</span></div><div class="node"><span class="ntitle">Conversations</span><span class="nsub">unified inbox</span></div><div class="node"><span class="ntitle">My Agent</span><span class="nsub">behaviour · knowledge · voice · language</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">Connections</span><span class="nsub">channel health</span></div><div class="node"><span class="ntitle">Results</span><span class="nsub">the value number</span></div><div class="node"><span class="ntitle">Credit</span><span class="nsub">MoMo balance</span></div><div class="node"><span class="ntitle">Settings</span><span class="nsub">team · privacy · data</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Mobile-first, low-bandwidth: 34% household smartphone ownership, rural internet usage 19%</li><li>Simple and Advanced are two views of ONE agent configuration — nobody else in the category allows this</li><li>Structured price tables are first-class; every competitor forces prices into unstructured text</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Any core task reachable in 3 taps from Home</li><li>Simple to Advanced round-trips without configuration loss</li><li>First meaningful paint under 3s on simulated 3G</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-03">
+<header class="phead">
+<p class="peyebrow">Flow 03 · Foundations</p>
+<h1 class="ptitle">Master Flow Map</h1>
+<p class="ppurpose">How every flow connects, and the critical path through them. First value sits before channel connection, not after it.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>All</dd></div>
+<div><dt>Entry</dt><dd>—</dd></div>
+<div><dt>Exit</dt><dd>Orientation</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-f">Foundation</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">DISCOVER</span><span class="nsub">landing · demo call · field sales</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">ACTIVATE</span><span class="nsub">signup, then guided activation</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">★ FIRST VALUE ★</span><span class="nsub">the agent answers, the owner hears it — before anything is connected</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">CONNECT</span><span class="nsub">forwarding, then channels</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">OPERATE</span><span class="nsub">daily inbox loop</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">RETAIN</span><span class="nsub">weekly value report → renewal</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Connecting a real channel is the highest-friction, most failure-prone step — so it comes after belief, not before</li><li>Sandbox needs no external connection, which is what makes the inversion possible</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>First value reachable with no external channel connected</li><li>Every failure hands control to a named flow, never to silence</li><li>Credit exhaustion never makes a business less reachable than before Subiza</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-04">
+<header class="phead">
+<p class="peyebrow">Flow 04 · Foundations</p>
+<h1 class="ptitle">Platform Constraints</h1>
+<p class="ppurpose">What WhatsApp, Instagram, Telegram and the carriers actually permit. The most important document in the atlas: every constraint becomes a designed state rather than a bug found in month four.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>Engineering</dd></div>
+<div><dt>Entry</dt><dd>—</dd></div>
+<div><dt>Exit</dt><dd>Design boundaries fixed</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-f">Foundation</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-gate"><span class="ntitle">IMPOSSIBLE</span><span class="nsub">design it out, never promise it</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">REQUIRES A HUMAN</span><span class="nsub">guided instruction + verification + waiting state</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">CONDITIONAL</span><span class="nsub">a pending state that can last days</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">THE OPPORTUNITY</span><span class="nsub">verify the business ONCE — reused across Meta, CPaaS and internal KYC</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>We cannot register a business&#x27;s WhatsApp number — they must personally enter an OTP</li><li>We cannot set call forwarding — they dial a GSM code; we verify by placing a test call</li><li>We cannot create a Telegram bot on their behalf — BotFather is a manual human step</li><li>One Instagram private reply per comment, ever. No template escape hatch after 24 hours</li><li>No general-purpose AI assistants on WhatsApp — enforced for all users since 15 Jan 2026</li><li>Meta Business Verification takes 5–15 business days; our own onboarding is capped at 10 tenants per 7 days</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Every constraint has a corresponding designed state — traceability matrix</li><li>No raw platform error code ever reaches a business owner</li><li>Business verification documents collected exactly once</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-05">
+<header class="phead">
+<p class="peyebrow">Flow 05 · Business console</p>
+<h1 class="ptitle">Signup &amp; Account Creation</h1>
+<p class="ppurpose">Phone number to account in under two minutes. No email, no password, no card.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner</dd></div>
+<div><dt>Entry</dt><dd>Landing · demo call · referral</dd></div>
+<div><dt>Exit</dt><dd>Account created → Flow 06</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">1 Phone number</span><span class="nsub">+250, nothing else</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">2 OTP</span><span class="nsub">SMS, then voice, then WhatsApp</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">3 Your name + business name</span><span class="nsub">the business name personalises everything after</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">4 Language</span><span class="nsub">Kinyarwanda default, changeable any time</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">5 Terms</span><span class="nsub">plain language, in their language</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">ACCOUNT EXISTS</span><span class="nsub">→ guided activation</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Voice OTP fallback is mandatory — SMS delivery is imperfect and a dead-end signup is a lost customer</li><li>Consent here covers only the owner&#x27;s relationship with Subiza. Recording and voice-cloning consent are separate</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Signup completes in under 2 minutes, median</li><li>No card, no email, no password required anywhere</li><li>Abandoned signups resumable for 30 days</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-06">
+<header class="phead">
+<p class="peyebrow">Flow 06 · Business console</p>
+<h1 class="ptitle">Guided Activation</h1>
+<p class="ppurpose">The flow the company lives or dies on. Activation is a customer interaction handled by the AI that the owner watched happen — reached in under ten minutes, before anything real is connected.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner</dd></div>
+<div><dt>Entry</dt><dd>After signup · resume link</dd></div>
+<div><dt>Exit</dt><dd>Activated · Live</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-x">EXISTENTIAL</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-note"><span class="ntitle">PART ONE — MAKE IT YOURS</span><span class="nsub">target 6 minutes</span></div></div><div class="fconn fconn-short" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">1 What kind of business?</span><span class="nsub">loads a template</span></div><div class="node"><span class="ntitle">2 When are you open?</span><span class="nsub">hours + after-hours</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">3 What do you charge?</span><span class="nsub">photograph the price list</span></div><div class="node"><span class="ntitle">4 How should it sound?</span><span class="nsub">pick a voice, hear it</span></div></div><div class="frow"><div class="node node-note"><span class="ntitle">PART TWO — HEAR IT WORK</span><span class="nsub">target 3 minutes</span></div></div><div class="fconn fconn-short" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">5 ★ SUBIZA CALLS YOUR PHONE ★</span><span class="nsub">you are the customer. ask it something. live transcript on screen</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">6 Fix and retry</span><span class="nsub">corrections write straight to the knowledge base</span></div></div><div class="frow"><div class="node node-note"><span class="ntitle">PART THREE — CONNECT IT</span><span class="nsub">target 10 minutes</span></div></div><div class="fconn fconn-short" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">7 Who does it fetch?</span><span class="nsub">no escalation target = cannot go live</span></div><div class="node"><span class="ntitle">8 Connect your phone</span><span class="nsub">forwarding code + verification</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">9 How much should it handle?</span><span class="nsub">after-hours only, recommended</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">PART FOUR — LATER</span><span class="nsub">WhatsApp · Instagram · Telegram · voice cloning · team — a checklist, not a wizard</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>WhatsApp cannot be in the critical path: Meta verification takes 5–15 business days</li><li>Everything requiring an external account or content upload is deferred to Part Four</li><li>The test call is the category&#x27;s most obvious missing feature — every guide recommends real-call testing; nobody ships it as one click</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Time to first value under 10 minutes, median</li><li>Activation rate above 60%</li><li>Parts One to Three completed unaided by more than 60%</li><li>Fully completable in Kinyarwanda</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-07">
+<header class="phead">
+<p class="peyebrow">Flow 07 · Business console</p>
+<h1 class="ptitle">Phone Connection</h1>
+<p class="ppurpose">Get real calls to the AI without the business changing the number their customers already know. Guidance plus verification — never an action we perform.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner + carrier</dd></div>
+<div><dt>Entry</dt><dd>Activation step 8 · Connections</dd></div>
+<div><dt>Exit</dt><dd>Forwarding verified · Number live</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-x">EXISTENTIAL</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-gate"><span class="ntitle">How should customers reach Subiza?</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">KEEP MY NUMBER</span><span class="nsub">recommended — call forwarding</span></div><div class="node"><span class="ntitle">GET A NEW NUMBER</span><span class="nsub">regulatory KYC, takes days</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Detect network, show the exact GSM code</span><span class="nsub">**61* · **67* · **62* · tap to dial</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">★ WE PLACE A VERIFICATION CALL ★</span><span class="nsub">&quot;We just called your number. Subiza answered.&quot;</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">LIVE</span><span class="nsub">undo code shown up front — reversibility reduces hesitation</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>We cannot set forwarding programmatically. The network API for even querying it is early-stage and unavailable here</li><li>Verification is only possible by placing a test call — which is also the moment of delight</li><li>Unverified: whether MTN and Airtel honour these codes, whether caller ID survives, who pays for the forwarded leg</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Forwarding set up and verified in one session, above 80%</li><li>Silent forwarding removal detected within 7 days</li><li>Zero balance: the call still reaches the owner</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-08">
+<header class="phead">
+<p class="peyebrow">Flow 08 · Business console</p>
+<h1 class="ptitle">Messaging Channel Connection</h1>
+<p class="ppurpose">Connect each channel honestly representing what it requires, how long it takes, and what it will not allow.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner</dd></div>
+<div><dt>Entry</dt><dd>Home checklist · Connections · repair alert</dd></div>
+<div><dt>Exit</dt><dd>Connected · Pending · Blocked</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-h">High</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">TELEGRAM</span><span class="nsub">3 min · free · no review · build first</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">WHATSAPP — pre-flight questions first</span><span class="nsub">&quot;Do you already use this number on WhatsApp?&quot; — turns the category&#x27;s most common dead end into a branch</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Meta Embedded Signup</span><span class="nsub">8 Meta-hosted screens · owner enters the OTP</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">Display name review</span><span class="nsub">async, can be rejected, never blocks go-live</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">Business verification</span><span class="nsub">5–15 business days — honest waiting state</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">INSTAGRAM</span><span class="nsub">professional account required · 24h window · no templates</span></div><div class="node"><span class="ntitle">SMS</span><span class="nsub">local aggregator only — 80× cheaper than a global API</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">CONNECTED</span><span class="nsub">tier and quality rating made visible, not discovered by failing</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>A number already on the WhatsApp Business app cannot be registered unless removed first, or Coexistence is used</li><li>Coexistence: one-time history sync, app open ~24h, 20 msg/sec cap, no groups visible</li><li>Tech Provider model means each tenant must add their own Meta payment method — a real conversion wall here</li><li>Revocation is never pushed: disconnection is detected reactively on the next failure</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Fewer than 5% of tenants hit the number-already-in-use wall inside Meta&#x27;s popup</li><li>Channel disconnection visible within 5 minutes</li><li>Instagram private replies are never retried</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-09">
+<header class="phead">
+<p class="peyebrow">Flow 09 · Business console</p>
+<h1 class="ptitle">Agent Design &amp; Scripts</h1>
+<p class="ppurpose">Tell the AI how to behave without writing a prompt or learning a flow builder. One agent, two views — nobody else in the category allows a simple agent to graduate without a rebuild.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner, A6 Manager</dd></div>
+<div><dt>Entry</dt><dd>Activation · My Agent → Behaviour</dd></div>
+<div><dt>Exit</dt><dd>Published · Reverted</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">Template loaded</span><span class="nsub">from business type</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">1 Who is it?</span><span class="nsub">name · greeting · tone</span></div><div class="node"><span class="ntitle">2 How should it speak?</span><span class="nsub">length · warmth · use their name</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">3 Always do</span><span class="nsub">structured rules</span></div><div class="node"><span class="ntitle">4 Never do</span><span class="nsub">structured rules</span></div><div class="node"><span class="ntitle">5 Get a person when</span><span class="nsub">escalation triggers</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">6 Hours and after-hours</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">⚠ CONTRADICTION CHECK</span><span class="nsub">&quot;Two of your rules disagree. Which wins?&quot;</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">RULES BECOME STRUCTURE, NOT TEXT</span><span class="nsub">the pricing tool is simply unavailable in stages where quoting is forbidden</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">PUBLISH</span><span class="nsub">versioned, one-tap revert</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Single free-text prompts drift past roughly 1,000 words or five tools — every vendor documents this</li><li>The out-of-scope deflection rule cannot be removed: it is a WhatsApp platform requirement, not a preference</li><li>Positive framing beats banlists — negative instructions can prime the behaviour they forbid</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>An owner can change agent behaviour unaided, above 80% success</li><li>Contradiction check catches over 90% of seeded conflicts</li><li>Structurally-enforceable rules are enforced structurally, never by prompting alone</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-10">
+<header class="phead">
+<p class="peyebrow">Flow 10 · Business console</p>
+<h1 class="ptitle">Knowledge Base</h1>
+<p class="ppurpose">Give the agent the facts in a form it can answer from reliably. Two layers: structured facts answered directly, and unstructured knowledge retrieved with citation.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner, A6 Manager</dd></div>
+<div><dt>Entry</dt><dd>Activation step 3 · My Agent → Knowledge · a correction</dd></div>
+<div><dt>Exit</dt><dd>Published · Draft</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">📷 PHOTOGRAPH THE PRICE LIST</span><span class="nsub">OCR → confirmation table → STRUCTURED. A Rwandan SME has a laminated list, not a website</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">✍️ Type it</span><span class="nsub">thumb-friendly rows</span></div><div class="node"><span class="ntitle">📄 Upload a document</span></div><div class="node"><span class="ntitle">🌐 Import a website or IG bio</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">❓ Question and answer pairs</span><span class="nsub">where corrections from transcripts land</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">🗣 PRONUNCIATION DICTIONARY</span><span class="nsub">required, not advanced — Kinyarwanda is unsupported in mainstream TTS</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">REVIEW: what does it know?</span><span class="nsub">inline ask box with citation: &quot;from your price list, row 3&quot;</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">PUBLISH</span><span class="nsub">versioned</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>No competitor treats price tables as structured data — everyone forces them into text, which is where hallucinated numbers come from</li><li>A price is a typed field, read directly, never generated</li><li>Gaps found from real customer questions become two-minute improvement tasks</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>OCR extractions accepted with 3 or fewer edits, above 70%</li><li>Prices are never generated — adversarial test escalates 100% of unlisted price requests</li><li>Every knowledge-derived answer carries a citation</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-11">
+<header class="phead">
+<p class="peyebrow">Flow 11 · Business console</p>
+<h1 class="ptitle">Voice Selection &amp; Cloning</h1>
+<p class="ppurpose">Choose how the agent sounds — from a library, or by cloning a real voice with consent that is genuine, documented and revocable. The highest-legal-risk flow in the product.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner initiates · A3 Voice Owner consents</dd></div>
+<div><dt>Entry</dt><dd>Activation step 4 · My Agent → Voice</dd></div>
+<div><dt>Exit</dt><dd>Library voice · Cloned · Revoked</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical (legal)</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">CHOOSE A LIBRARY VOICE</span><span class="nsub">30 seconds, in activation, preview says their business name</span></div></div><div class="frow"><div class="node node-note"><span class="ntitle">OR — CLONE A REAL VOICE</span><span class="nsub">deferred to Part Four: needs a second person and a legal artefact</span></div></div><div class="fconn fconn-short" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">1 Whose voice?</span><span class="nsub">no contactable owner = REFUSED, no exception</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">2 Their consent</span><span class="nsub">in their language, revocation stated before they agree</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">3 Record 30–60 seconds</span><span class="nsub">despite technical minimums of 5–10s</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">4 ★ VERIFY — read this generated sentence ★</span><span class="nsub">proves presence and participation, not identity. We are honest about that</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">5 Build → 6 Preview → 7 Approve</span><span class="nsub">the VOICE OWNER can veto after hearing it</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">LIVE + AUDIBLE AI DISCLOSURE</span><span class="nsub">required independently of consent</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Industry norm is a checkbox with no verification. We reject that norm</li><li>A voiceprint is very likely biometric data: unlawful processing carries 7–10 years and RWF 20–25 million</li><li>Only the voice owner can revoke — even after leaving the business, even if the account owner objects</li><li>Subiza never impersonates a named human. The cloned voice still says it is an assistant</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>No voice cloned without a verified consent artefact naming the voice owner</li><li>Revocation disables within 5 minutes and cannot be blocked by the account owner</li><li>Third-party cloning without a contactable owner is refused, 100%</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-12">
+<header class="phead">
+<p class="peyebrow">Flow 12 · Business console</p>
+<h1 class="ptitle">Language &amp; Switching</h1>
+<p class="ppurpose">Understand and answer in the language the caller actually speaks — including when they mix two in one sentence, which in Kigali is the normal case.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 configures · A1/A2 experience</dd></div>
+<div><dt>Entry</dt><dd>Signup · My Agent → Languages · every conversation</dd></div>
+<div><dt>Exit</dt><dd>Language set · switched · escalated</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">GREETING in the primary language + AI disclosure</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">caller speaks</span><span class="nsub">detection assists</span></div><div class="node"><span class="ntitle">caller presses a key</span><span class="nsub">absolute</span></div><div class="node"><span class="ntitle">caller asks</span><span class="nsub">absolute</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">CHOICE FIRST, DETECTION SECOND</span><span class="nsub">auto-detection misfires — one vendor reports ~4% of calls switching unexpectedly around turn eight</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Code-switching within a sentence</span><span class="nsub">understood, answered in the dominant language — NOT a switch</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">More than two proposed switches?</span><span class="nsub">LOCK to current, log a warning</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">Two failures → other language → keypad → HUMAN</span><span class="nsub">never a third failed attempt in the same language</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Kinyarwanda quality is labelled honestly per language — we do not quietly substitute a French-accented voice</li><li>One configuration, translated views — never separate agents per language, which drift apart</li><li>Voice notes are wideband, so recognition is materially better than on 8 kHz calls</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Code-switched utterances do not trigger a full switch, above 95%</li><li>Spurious mid-conversation switches under 1% of conversations</li><li>No third consecutive failed understanding attempt</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-13">
+<header class="phead">
+<p class="peyebrow">Flow 13 · Business console</p>
+<h1 class="ptitle">Test &amp; Go-Live</h1>
+<p class="ppurpose">Satisfy the owner the agent is good enough, then let them increase its responsibility one reversible step at a time.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner, A6 Manager</dd></div>
+<div><dt>Entry</dt><dd>Activation · My Agent → Test</dd></div>
+<div><dt>Exit</dt><dd>Sandbox · Live scoped · Live full · Paused</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-x">EXISTENTIAL</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">RUNG 1 — SANDBOX</span><span class="nsub">nobody real is affected. activation happens here</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">RUNG 2 — AFTER-HOURS ONLY</span><span class="nsub">recommended start: these calls were going unanswered anyway</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">RUNG 3 — WHEN YOU DON&#x27;T ANSWER</span><span class="nsub">busy, no answer, phone off</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">RUNG 4 — EVERYTHING</span><span class="nsub">Subiza answers first, every time</span></div></div><div class="frow"><div class="node node-note"><span class="ntitle">AT EVERY RUNG</span><span class="nsub">full transcripts · one-tap pause · a human always reachable · movement both ways</span></div></div><div class="fconn fconn-short" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">📞 Call me now</span><span class="nsub">the primary test — real GSM, real latency, honest</span></div><div class="node"><span class="ntitle">Try a customer</span><span class="nsub">five personas: the mumbler, the upset caller, the off-topic question</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">READINESS CHECK</span><span class="nsub">only two things block: no escalation target, no completed test</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Rung 2 is a decision with no downside — which is why people say yes</li><li>The exits are named in the go-live confirmation: visible reversibility reduces hesitation</li><li>Upgrade prompts fire on evidence — &quot;34 calls, no problems&quot; — never on a timer</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Test call succeeds including fallbacks, above 95%</li><li>An agent cannot go live without an escalation target</li><li>Over 60% of tenants start at rung 2 or 3 rather than 4</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-14">
+<header class="phead">
+<p class="peyebrow">Flow 14 · Business console</p>
+<h1 class="ptitle">Daily Operations — the Inbox</h1>
+<p class="ppurpose">See what happened, deal with what needs you, close the app — in under two minutes. This is the habit loop.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5, A6, A7</dd></div>
+<div><dt>Entry</dt><dd>Home · notification · search</dd></div>
+<div><dt>Exit</dt><dd>Reviewed · replied · taken over</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">⬤ NEEDS YOU (2)</span><span class="nsub">the only actionable zone — collapses when empty</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">✓ HANDLED TODAY (10)</span><span class="nsub">summary only, never a to-do list</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">▲ 31 you would have missed</span><span class="nsub">the number that renews the subscription</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">CONVERSATION: what happened · what it did · transcript</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">&quot;WHY DID IT SAY THAT?&quot; per turn</span><span class="nsub">which price row, which rule — largely absent across the category</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">CUSTOMER TIMELINE</span><span class="nsub">every prior contact, every channel, one list — unclaimed IA territory</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">Call back · Reply · Take over · Mark done</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Channel is metadata, not structure — one relationship, many channels</li><li>A thumbs-down writes a correction straight into the knowledge base, so review produces improvement</li><li>Identity resolves on phone number; weak-signal merges are never automatic — a wrong merge is a privacy failure</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Median daily session under 2 minutes</li><li>Every conversation has a viewable transcript with citations</li><li>No wrong identity merges</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-15">
+<header class="phead">
+<p class="peyebrow">Flow 15 · Business console</p>
+<h1 class="ptitle">Escalation &amp; Human Handover</h1>
+<p class="ppurpose">Get a customer to a human quickly, with context, without ever feeling abandoned. Not the failure path — the feature that makes everything else safe to deploy.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A1/A2 → A10 AI → A7/A5</dd></div>
+<div><dt>Entry</dt><dd>Any turn · caller request · owner takeover</dd></div>
+<div><dt>Exit</dt><dd>Transferred · promised · resolved</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">TRIGGERS</span><span class="nsub">low confidence · &quot;a person&quot; · frustration · owner rule · 3rd failure · high value · out of scope</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">WHO IS AVAILABLE?</span><span class="nsub">hours · rota · rules</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">WARM TRANSFER</span><span class="nsub">AI briefs the human in one spoken sentence, then bridges</span></div><div class="node"><span class="ntitle">RING &amp; BRIEF</span><span class="nsub">45s cap, then fall through</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">MESSAGE &amp; PROMISE</span><span class="nsub">a SPECIFIC callback time — &quot;before 11 tomorrow&quot;, never &quot;soon&quot;</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">IF THE DEADLINE APPROACHES UNMET, THE OWNER IS REMINDED</span><span class="nsub">the product made the promise, so the product keeps it</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">LOGGED · TIMED · MEASURED</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>&quot;I want a person&quot; is honoured immediately, always — no qualification, no one-more-try</li><li>The spoken brief is what makes a transfer warm; without it the human starts confused and the customer repeats themselves</li><li>The Instagram Human Agent tag can only be applied by a real human — enforced in the product</li><li>Loop breaker after two handover cycles</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Every escalation reaches a human or a logged promise, 100%</li><li>Promised callbacks made within the promised window, above 90%</li><li>Containment 70–80% — both edges investigated</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-16">
+<header class="phead">
+<p class="peyebrow">Flow 16 · Business console</p>
+<h1 class="ptitle">Analytics &amp; the Retention Loop</h1>
+<p class="ppurpose">Make the value visible. An owner who cannot see what Subiza did will cancel the first month money is tight.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5, A6, A8</dd></div>
+<div><dt>Entry</dt><dd>Home · Results · the weekly WhatsApp report</dd></div>
+<div><dt>Exit</dt><dd>Value seen · churn signal raised</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-h">High</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">31 CALLS YOU WOULD HAVE MISSED</span><span class="nsub">counterfactual · verifiable · emotionally correct · impossible for a competitor to show</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">DAILY — Home zone 3</span></div><div class="node"><span class="ntitle">WEEKLY — a WhatsApp message under 60 words</span></div><div class="node"><span class="ntitle">MONTHLY — value beside the bill</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">What your customers asked</span><span class="nsub">ranked intents — genuinely new information about their own business</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">⚠ Parking asked 3 times, Subiza couldn&#x27;t answer</span><span class="nsub">a two-minute task drawn from real customer demand</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">How well it worked</span><span class="nsub">bad news shown too, with a fix attached</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">RENEW · EXPAND · or CHURN SIGNAL</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>The exclusions matter more than the inclusions — a number they can poke a hole in poisons every other number</li><li>Delivered on WhatsApp: the notification is itself an instance of the product working</li><li>A zero-traffic week triggers a forwarding check, not a congratulation</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Every counted conversation is listed and openable</li><li>Weekly report open rate above 60%</li><li>A zero-traffic week triggers a forwarding check</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-17">
+<header class="phead">
+<p class="peyebrow">Flow 17 · Business console</p>
+<h1 class="ptitle">Billing &amp; Mobile Money</h1>
+<p class="ppurpose">Pay the way this market already pays — prepaid, mobile money, Rwandan francs, no surprises.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 Owner</dd></div>
+<div><dt>Entry</dt><dd>Credit · low-balance alert · statement</dd></div>
+<div><dt>Exit</dt><dd>Topped up · lapsed</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-h">High</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">Balance shown as DAYS REMAINING</span><span class="nsub">not francs — that is the question they are actually asking</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Top up with MoMo</span><span class="nsub">preset amounts, prompt on their phone, live pending state</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">20% → amber · 5% → WhatsApp · zero → grace</span><span class="nsub">three warnings before anything stops</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">AGENT PAUSES — BUT CALLS STILL RING THE OWNER</span><span class="nsub">forwarding is not removed. Subiza simply declines and the carrier falls through</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">MONTHLY: cost and value in one message</span><span class="nsub">&quot;You paid 20,000. Subiza recovered 89 you&#x27;d have missed.&quot;</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Never a card anywhere: 5.8M active MoMo users, marginal card penetration</li><li>An aggregator outage automatically extends the grace period — never punish a customer for our failure</li><li>Downgrade has the same number of taps as upgrade</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Lapsed credit never blocks calls reaching the owner</li><li>Top-up completes in under 60 seconds, above 95% success</li><li>No card required anywhere in the product</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-18">
+<header class="phead">
+<p class="peyebrow">Flow 18 · Business console</p>
+<h1 class="ptitle">Team &amp; Permissions</h1>
+<p class="ppurpose">Bring staff in so escalations reach the right person — entirely optional, since most tenants are one person.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 invites · A6/A7/A8 accept</dd></div>
+<div><dt>Entry</dt><dd>Settings → Team · escalation setup</dd></div>
+<div><dt>Exit</dt><dd>Member active · removed</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-i">Important</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">INVITE by phone number</span><span class="nsub">roles described as jobs: &quot;Answer customers&quot;, not &quot;Agent role&quot;</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">ACCEPT — states what they will NOT see</span><span class="nsub">reassures against surveillance</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">FIRST-RUN CARD 3: &quot;You can pause Subiza at any time&quot;</span><span class="nsub">gives the front-desk employee the kill switch on day one</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">ESCALATION ROTA</span><span class="nsub">order · hours · skills · language · always a fallback</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">REMOVE — immediate, and the person is notified</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>80.7% of Rwandan enterprises are 1–3 people: team features must never block or nag a solo owner</li><li>No staff performance scoring, ever — the moment it becomes surveillance, staff route around it</li><li>Offered at the one moment its value is self-evident: setting up escalation</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>A solo owner is never blocked or nagged by team features</li><li>Any team member can pause the AI; only Owner or Manager can resume</li><li>A rota gap always falls back to message-and-promise</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-19">
+<header class="phead">
+<p class="peyebrow">Flow 19 · Business console</p>
+<h1 class="ptitle">Compliance, Consent &amp; Data Rights</h1>
+<p class="ppurpose">Make Subiza lawful to operate and trustworthy to use. Built with the critical set, because consent and residency cannot be retrofitted onto data already collected.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A1 · A2 · A3 · A4 · A5 · DPO</dd></div>
+<div><dt>Entry</dt><dd>Runtime · public form · Settings → Privacy</dd></div>
+<div><dt>Exit</dt><dd>Consent captured · request fulfilled</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">CRITICAL</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">RUNTIME — every conversation</span><span class="nsub">business name · this is an AI · this may be recorded · a human is available</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Caller objects to recording</span><span class="nsub">no-record mode, or a human — logged as a consent event</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">RIGHTS REQUEST</span><span class="nsub">public form · in conversation · via the business</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Identity verified by OTP</span><span class="nsub">using data we already hold, not identity documents</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">FULFIL ACROSS EVERY STORE</span><span class="nsub">database · recordings · transcripts · VECTOR EMBEDDINGS · training corpus · backups</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">RESIDENCY</span><span class="nsub">a deployment placing personal data outside Rwanda without authorisation FAILS THE PIPELINE</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">Confirm to the subject</span><span class="nsub">consent record retained as evidence, and that is explained</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Law 058/2021: rectification within 30 days, breach notified within 48 hours, full report within 72</li><li>Penalties reach 7–10 years imprisonment and RWF 20–25 million for unlawful sensitive-data processing</li><li>Tenants can see every time Subiza staff accessed their account — a frightening capability turned into a trust signal</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>AI disclosure on every conversation, and tenants cannot disable it</li><li>Personal data Rwanda-resident by default; unauthorised cross-border processing blocked in the pipeline</li><li>Deletion reaches every store including embeddings and training data</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-20">
+<header class="phead">
+<p class="peyebrow">Flow 20 · Admin console</p>
+<h1 class="ptitle">Admin Console &amp; Operations</h1>
+<p class="ppurpose">One place to see whether the business is healthy, the product is working, and who needs help right now.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A9 Platform staff</dd></div>
+<div><dt>Entry</dt><dd>admin.subiza.rw · an alert</dd></div>
+<div><dt>Exit</dt><dd>Awareness · action · escalation</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-i">Important</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">🔴 NEEDS ATTENTION</span><span class="nsub">stuck tenants · agent paused after go-live · WhatsApp slots running out</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">PLATFORM HEALTH</span><span class="nsub">latency p95 · answer rate · containment · incidents</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">FUNNEL</span><span class="nsub">signups → activated → live → paying, and time to first value</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">BUSINESS</span><span class="nsub">tenants · MRR · churn · margin per minute</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">QUEUES</span><span class="nsub">onboarding stuck · support · quality · voice consent · trust &amp; safety · DSAR</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">AUDIT: resource.object.verb, with before and after state</span><span class="nsub">7-year retention</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Onboarding Operations is a first-class section — nobody in the category treats stuck tenants as an internal product</li><li>Our tenants&#x27; data contains their customers&#x27; regulated data, so access rules are stricter than typical B2B SaaS</li><li>The WhatsApp 10-per-7-days onboarding cap is a growth constraint and needs an alert</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Every consequential action audited with before and after state</li><li>Impersonation follows all nine rules and appears in the tenant&#x27;s audit log</li><li>Engineers have no ambient conversation access; break-glass alerts the DPO</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-21">
+<header class="phead">
+<p class="peyebrow">Flow 21 · Admin console</p>
+<h1 class="ptitle">Tenant Lifecycle &amp; Support</h1>
+<p class="ppurpose">Get stuck tenants unstuck. The highest-leverage operational work in the company, because the category&#x27;s worst friction lives here.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>Onboarding · Support · Billing</dd></div>
+<div><dt>Entry</dt><dd>Queues · a support request · a churn signal</dd></div>
+<div><dt>Exit</dt><dd>Unstuck · resolved · suspended</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-i">Important</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">ONBOARDING OPS — THE STUCK QUEUE</span><span class="nsub">&quot;Salon Bella, stuck 7d, Meta rejected: document name mismatch. Next: call and explain the fix&quot;</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node"><span class="ntitle">Day 1 automated</span><span class="nsub">referencing the exact step</span></div><div class="node"><span class="ntitle">Day 7 a human messages</span></div><div class="node"><span class="ntitle">Day 14 a human calls</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">Day 30</span><span class="nsub">archive as unactivated — automated reactivation past this point converts under 5%</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">THE GUIDED DIAGNOSTIC</span><span class="nsub">checks agent, credit, forwarding, channels and escalation — and produces a next action, not a diagnosis</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">Suspension never removes forwarding</span><span class="nsub">even a suspended business gets its calls back</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Content is masked by default — a billing question does not justify reading a clinic&#x27;s conversations</li><li>Assisted setup calls for forwarding are the highest-value human intervention available</li><li>Offboarding includes forwarding-removal instructions, or the business quietly breaks its own line</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Stuck tenants contacted within 1 business day, above 95%</li><li>Every impersonation session reasoned, time-boxed and logged</li><li>Suspension never blocks calls reaching the owner</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-22">
+<header class="phead">
+<p class="peyebrow">Flow 22 · Admin console</p>
+<h1 class="ptitle">AI Operations</h1>
+<p class="ppurpose">Manage the models, prompts and evaluations behind every tenant&#x27;s agent — and make sure a change that helps one thing never quietly breaks another.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>ML Engineer · Quality Reviewer</dd></div>
+<div><dt>Entry</dt><dd>Operations home · quality alert · a change</dd></div>
+<div><dt>Exit</dt><dd>Published · rolled back · blocked</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-i">Important</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node"><span class="ntitle">MONITOR</span><span class="nsub">latency per stage · understanding per language · containment · hallucinations · cost</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">REVIEW</span><span class="nsub">100% of flagged, ~1% random — the only way to know the true rate, not the complaint rate</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">FIX SYSTEMICALLY, NOT INDIVIDUALLY</span><span class="nsub">a mispronounced place name goes into the TEMPLATE for every tenant of that type</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">CHANGE</span><span class="nsub">model · prompt · template · retrieval · thresholds — all versioned</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">EVALUATE — THE GATE</span><span class="nsub">replay suite of real conversations. A regression BLOCKS the release</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">ROLL OUT</span><span class="nsub">internal → design partners → 5% → 25% → all · revert in minutes</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Prompts and models are releases: versioned, reviewed, staged, revertible</li><li>Per-language results always — an improvement in English that costs Kinyarwanda is a regression for this company</li><li>Every tenant&#x27;s failure becomes a permanent regression test, improving the product for every future tenant</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>No change ships with a replay-suite regression</li><li>The safety suite passes completely before any rollout</li><li>Rollback completes in under 5 minutes</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-23">
+<header class="phead">
+<p class="peyebrow">Flow 23 · Admin console</p>
+<h1 class="ptitle">Trust, Safety &amp; Quality</h1>
+<p class="ppurpose">Make sure the platform is not used to harm anyone — through voice cloning without consent, AI configured to deceive, or data going where it must not.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>T&amp;S Officer · DPO · Reviewer</dd></div>
+<div><dt>Entry</dt><dd>Voice consent queue · abuse detection · a report</dd></div>
+<div><dt>Exit</dt><dd>Verified · warned · suspended · appealed</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">🎙 VOICE CONSENT QUEUE</span><span class="nsub">reject when uncertain — a false approval could mean a real person&#x27;s voice cloned without their knowledge</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">⚠ POLICY VIOLATIONS</span><span class="nsub">scope · deception · prohibited content · consent · abuse · fraud</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">DECEPTION BLOCKED AT PUBLISH</span><span class="nsub">&quot;This is Claudine&quot; vs &quot;This is Claudine&#x27;s assistant&quot; — detected before a customer ever hears it</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Warning → restrict → suspend → permanent → report</span><span class="nsub">evidence attached, appeal path, second reviewer</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">🌍 RESIDENCY</span><span class="nsub">an expiring authorisation stops the processing. Fails closed</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">PREVALENCE — 1% random sample</span><span class="nsub">complaints measure the complaint rate; only sampling measures the violation rate</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Verification instead of attestation — the industry norm is a checkbox</li><li>Even permanent suspension leaves the business&#x27;s calls reaching their own phone</li><li>Appeal overturn rates are tracked as a measure of our own accuracy, not of tenant luck</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>No voice model without a verified consent artefact</li><li>Deceptive configurations blocked before publish, 100%</li><li>Zero unauthorised cross-border processing</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-24">
+<header class="phead">
+<p class="peyebrow">Flow 24 · Cross-cutting</p>
+<h1 class="ptitle">Errors, Degradation &amp; Edge Cases</h1>
+<p class="ppurpose">What happens when something breaks — which is constantly. In a phone call there is no error page and no retry button.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>All</dd></div>
+<div><dt>Entry</dt><dd>Any failure, anywhere</dd></div>
+<div><dt>Exit</dt><dd>Recovered · degraded · handed over · fallen back</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-c">Critical</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">LAW 1 — SUBIZA MUST NEVER MAKE A BUSINESS LESS REACHABLE THAN BEFORE</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow frow-multi"><div class="node node-key"><span class="ntitle">LAW 2 — DEGRADE, DO NOT DIE</span></div><div class="node node-key"><span class="ntitle">LAW 3 — NEVER GUESS TO AVOID AN ERROR</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">Full service</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">→ DTMF + fast-path answers</span><span class="nsub">speech recognition failed</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">→ Fast-path answers only</span><span class="nsub">the model failed</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">→ Message taking only</span><span class="nsub">retrieval failed</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">→ Immediate escalation to a human</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">→ CALLS RING THE OWNER&#x27;S OWN PHONE, AS BEFORE SUBIZA</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Never say error, system or API to a caller — they are a customer of a salon, not of a software platform</li><li>Tell the owner what happened, what it means for their business, and the one thing to do</li><li>The conversation runtime is unaffected by the owner&#x27;s own connectivity — only their visibility into it</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Every failure mode has a defined, tested behaviour</li><li>Platform failure never blocks calls reaching the owner</li><li>The system never generates an answer when retrieval fails</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-25">
+<header class="phead">
+<p class="peyebrow">Flow 25 · Cross-cutting</p>
+<h1 class="ptitle">Notifications</h1>
+<p class="ppurpose">Bring the right person back at the right moment, without becoming noise they mute.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>A5 · A6 · A7 · A3</dd></div>
+<div><dt>Entry</dt><dd>Any event worth interrupting someone for</dd></div>
+<div><dt>Exit</dt><dd>Delivered · acted on · muted</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-h">High</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">WHATSAPP IS PRIMARY, NOT PUSH</span><span class="nsub">the notification is itself an instance of the product working</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">ESCALATION — CALL FIRST, NOT A MESSAGE</span><span class="nsub">the owner is running a shop; their phone is in their pocket</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">20s no answer → WhatsApp with full context and the phone number in the message</span><span class="nsub">actionable on a bad connection without loading anything</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">60s → push → next on the rota → MESSAGE AND PROMISE</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">WEEKLY REPORT</span><span class="nsub">under 60 words · Monday morning · their language · one number</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-gate"><span class="ntitle">CAP: 3 non-urgent per owner per week</span><span class="nsub">the mute button is the churn event we cannot see</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">Replies route to support</span><span class="nsub">people will reply; a reply into a void is a bad experience</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Every notification names a specific real event and deep-links to it — never &quot;check your dashboard&quot;</li><li>Our own volume must never degrade a tenant&#x27;s WhatsApp tier or quality rating</li><li>Escalations cannot be switched off — but the rota can be changed</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Escalation notifications reach a human or become a promise, 100%</li><li>Weekly report open rate above 60%</li><li>Our notification volume never degrades a tenant&#x27;s WhatsApp tier</li></ul></section>
+</div>
+</section>
+<section class="panel" id="f-26">
+<header class="phead">
+<p class="peyebrow">Flow 26 · Cross-cutting</p>
+<h1 class="ptitle">Success Criteria &amp; Acceptance Tests</h1>
+<p class="ppurpose">The build checklist. Every criterion in the atlas, collected, so that done is a matter of evidence rather than opinion.</p>
+<dl class="pmeta">
+<div><dt>Actor</dt><dd>Engineering · product</dd></div>
+<div><dt>Entry</dt><dd>—</dd></div>
+<div><dt>Exit</dt><dd>Build gate · release gate · dashboard</dd></div>
+<div><dt>Criticality</dt><dd><span class="pill crit-f">Foundation</span></dd></div>
+</dl>
+</header>
+<div class="diagram"><div class="frow"><div class="node node-key"><span class="ntitle">THE SEVEN THAT MATTER MOST</span><span class="nsub">time to first value · activation rate · Kinyarwanda understanding · never unreachable · auditable value number · every escalation lands · no voice without consent</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">BLOCKING — safety and legal</span><span class="nsub">disclosure · residency · consent · tenant isolation</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">BLOCKING — reliability</span><span class="nsub">never unreachable · never guess · every escalation lands</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node"><span class="ntitle">BLOCKING — quality</span><span class="nsub">no replay regression · safety suite passes · per-language results</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-key"><span class="ntitle">SEVEN UNKNOWNS, FOUR RESOLVABLE IN A WEEK</span><span class="nsub">Kinyarwanda WER · forwarding behaviour · Article 50 · voiceprint classification · OCR in the field · MoMo fees · Meta templates</span></div></div><div class="fconn" aria-hidden="true"></div><div class="frow"><div class="node node-term"><span class="ntitle">BUILD ORDER: skeleton → real customers → legal → business → channels → operable → depth</span></div></div></div>
+<div class="cols">
+<section class="col"><h2>Constraints that shape this flow</h2><ul class="bul"><li>Voice cloning is stage 7, not stage 1 — the most legally exposed feature, and not required for any customer to get value</li><li>Four separate criteria say the same thing about reachability, deliberately: billing, suspension, platform failure and forwarding are each tested separately</li></ul></section>
+<section class="col"><h2>Success criteria</h2><ul class="bul bul-check"><li>Time to first value under 10 minutes</li><li>Activation rate above 60%</li><li>Every failure mode has a defined, tested behaviour</li></ul></section>
+</div>
+</section></main>
+</div>
+
+<script>
+(function(){
+  var panels=document.querySelectorAll('.panel'), links=document.querySelectorAll('.navlink');
+  function show(id,scroll){
+    var found=false;
+    panels.forEach(function(p){var on=p.id===id; p.classList.toggle('is-shown',on); if(on)found=true;});
+    if(!found){panels[0].classList.add('is-shown'); id=panels[0].id;}
+    links.forEach(function(a){a.classList.toggle('is-active',a.getAttribute('data-target')===id);});
+    if(scroll)window.scrollTo(0,0);
+    var act=document.querySelector('.navlink.is-active');
+    if(act&&window.innerWidth<=980&&act.scrollIntoView)act.scrollIntoView({block:'nearest',inline:'center'});
+  }
+  function route(s){var h=(location.hash||'').replace('#',''); show(h.indexOf('f-')===0?h:'f-01',s);}
+  window.addEventListener('hashchange',function(){route(true);});
+  route(false);
+})();
+</script>

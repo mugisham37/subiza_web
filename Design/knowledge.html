@@ -1,0 +1,1533 @@
+<title>Subiza — What your agent knows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUBIZA DESIGN SYSTEM
+   Tokens are declared once, in full, on :root — the light theme.
+   Dark redefines only what changes, twice: once for the system
+   preference, once for the explicit toggle. No hex is ever inverted.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── Ground & surface ─────────────────────────────────────────── */
+  --ground:#FAF9F4;          /* warm paper. never pure white */
+  --surface:#FFFFFF;
+  --surface-2:#F2F1EA;       /* sunken: inputs, wells, code */
+  --surface-3:#EAE9E0;       /* hover on surface-2 */
+  --overlay:rgba(20,21,15,.42);
+
+  /* ── Ink ──────────────────────────────────────────────────────── */
+  --ink:#14150F;             /* 17.4:1 on ground */
+  --ink-2:#4A4C42;           /* 8.3:1  */
+  --ink-3:#6E7063;           /* 4.8:1 — the floor. nothing lighter carries text */
+  --ink-inv:#FAF9F4;
+
+  /* ── Hairlines. this system draws with lines, not shadows ─────── */
+  --rule:rgba(20,21,15,.09);
+  --rule-2:rgba(20,21,15,.16);
+  --rule-3:rgba(20,21,15,.28);
+
+  /* ── Signal: the lime. A FILL. NEVER A TEXT COLOUR. ───────────── */
+  --signal:#C6F24E;          /* 1.2:1 on ground — unusable as text, by design */
+  --signal-hi:#D3F86B;       /* hover */
+  --signal-lo:#B3E033;       /* pressed */
+  --signal-ink:#14150F;      /* 14.2:1 on signal — what sits ON the lime */
+  --signal-soft:#EEF9CE;     /* the wash: selected rows, soft callouts */
+  --signal-edge:#D6E9A0;
+  --signal-text:#3D5C10;     /* 7.3:1 — the ONLY green allowed to be text */
+
+  /* ── Panel: the deep surface. inverted regions, not dark mode ─── */
+  --panel:#1C2A12;
+  --panel-2:#26361A;
+  --panel-ink:#FFFFFF;       /* 15.1:1 */
+  --panel-ink-2:#B9C7A6;
+  --panel-rule:rgba(255,255,255,.14);
+
+  /* ── Status ───────────────────────────────────────────────────── */
+  --ok:#3D5C10; --ok-fill:#C6F24E; --ok-soft:#EEF9CE; --ok-edge:#D6E9A0;
+  --warn:#7A5300; --warn-fill:#F0B840; --warn-soft:#FCF0D6; --warn-edge:#EFD9A4;
+  --risk:#A6311D; --risk-fill:#C4442E; --risk-soft:#FBE7E2; --risk-edge:#F0C4B9;
+  --info:#2C4A6B; --info-fill:#5B87B8; --info-soft:#E4EDF6; --info-edge:#C0D5E8;
+  --live:#C4442E;            /* the on-air dot. red because a call is live */
+
+  /* ── Type ─────────────────────────────────────────────────────── */
+  --f-display:'Bricolage Grotesque','Bricolage Grotesque Fallback',Georgia,serif;
+  --f-body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --t-d1:clamp(2.6rem,1.6rem + 4.4vw,4.75rem);
+  --t-d2:clamp(2.1rem,1.45rem + 2.9vw,3.5rem);
+  --t-h1:clamp(1.7rem,1.3rem + 1.8vw,2.5rem);
+  --t-h2:clamp(1.35rem,1.15rem + .9vw,1.75rem);
+  --t-h3:1.125rem;
+  --t-h4:1rem;
+  --t-body-l:1.0625rem;
+  --t-body:.9375rem;
+  --t-body-s:.875rem;
+  --t-cap:.8125rem;
+  --t-label:.6875rem;
+
+  /* ── Space. 4px base, no arbitrary values anywhere ────────────── */
+  --s-1:2px;  --s-2:4px;  --s-3:6px;  --s-4:8px;  --s-5:12px;
+  --s-6:16px; --s-7:20px; --s-8:24px; --s-9:32px; --s-10:40px;
+  --s-11:56px;--s-12:72px;--s-13:96px;--s-14:128px;
+
+  /* ── Radius. three steps and a pill. deliberate, not uniform ──── */
+  --r-sm:4px;   /* inputs, chips, tags, small tiles */
+  --r-md:12px;  /* cards, sheets, buttons */
+  --r-lg:24px;  /* feature panels, media, the hero */
+  --r-pill:999px;
+
+  /* ── Elevation. four levels; three of them have no shadow ─────── */
+  --e-0:none;
+  --e-1:none;                                  /* hairline only */
+  --e-2:0 1px 2px rgba(20,21,15,.05);          /* raised, still grounded */
+  --e-3:0 6px 16px -4px rgba(20,21,15,.10),0 2px 4px rgba(20,21,15,.05);   /* menus */
+  --e-4:0 24px 48px -12px rgba(20,21,15,.20),0 8px 16px -8px rgba(20,21,15,.10); /* modal */
+
+  /* ── Motion. ceiling is 300ms. exits run ~20% faster than entries ─ */
+  --t-micro:120ms;  /* hover, focus, colour */
+  --t-ui:200ms;     /* the default: expand, slide, reveal */
+  --t-panel:280ms;  /* sheets, modals, drawers */
+  --t-exit:160ms;
+  --e-out:cubic-bezier(.22,1,.36,1);
+  --e-in:cubic-bezier(.55,0,1,.45);
+  --e-inout:cubic-bezier(.65,0,.35,1);
+  --e-spring:linear(0,.42 8.7%,.75 17.5%,.96 25.4%,1.06 32.1%,1.09 39.3%,1.06 47.5%,1.01 60.2%,.99 76.2%,1);
+
+  --nav-w:264px;
+  --measure:70ch;
+}
+
+:root:not([data-theme=light]){ @media (prefers-color-scheme:dark){
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}}
+:root[data-theme=dark]{
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}
+
+/* ═══ Base ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--f-body); font-size:var(--t-body); line-height:1.6;
+  font-feature-settings:"cv05" 1,"ss01" 1;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--f-display); font-weight:600; letter-spacing:-.022em; line-height:1.12; margin:0; text-wrap:balance}
+h1{font-size:var(--t-h1); font-variation-settings:"opsz" 40}
+h2{font-size:var(--t-h2); font-variation-settings:"opsz" 28}
+h3{font-size:var(--t-h3); font-variation-settings:"opsz" 18; letter-spacing:-.012em}
+h4{font-size:var(--t-h4); font-variation-settings:"opsz" 14; letter-spacing:-.006em}
+p{margin:0 0 var(--s-5)}
+a{color:inherit}
+svg{display:block}
+code{font-family:var(--f-mono); font-size:.85em; background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r-sm); padding:.1em .38em}
+::selection{background:var(--signal); color:var(--signal-ink)}
+
+/* Focus. Dual-tone so it survives any background it lands on.
+   WCAG 2.2 §2.4.13: perimeter ≥ 2px, ≥3:1 against adjacent colours. */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--ink); outline-offset:2px;
+  box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink);
+  border-radius:var(--r-sm);
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Button ─────────────────────────────────────────────────────── */
+.btn{
+  --bh:44px;
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-4);
+  height:var(--bh);padding:0 var(--s-7);border-radius:var(--r-pill);
+  font-family:var(--f-body);font-size:var(--t-body-s);font-weight:600;letter-spacing:-.008em;
+  border:1px solid transparent;background:none;color:var(--ink);
+  cursor:pointer;text-decoration:none;white-space:nowrap;position:relative;
+  transition:background var(--t-micro) var(--e-out),border-color var(--t-micro),
+             color var(--t-micro),transform var(--t-micro) var(--e-out),opacity var(--t-micro);
+}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:17px;height:17px;flex:none}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.42;pointer-events:none}
+
+.btn-primary{background:var(--signal);color:var(--signal-ink);border-color:var(--signal-lo)}
+.btn-primary:hover{background:var(--signal-hi)}
+.btn-primary:active{background:var(--signal-lo)}
+
+.btn-solid{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-solid:hover{background:var(--ink-2);border-color:var(--ink-2)}
+
+.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--rule-2)}
+.btn-secondary:hover{background:var(--surface-2);border-color:var(--rule-3)}
+
+.btn-ghost{color:var(--ink-2)}
+.btn-ghost:hover{background:var(--surface-2);color:var(--ink)}
+
+.btn-danger{background:var(--risk-fill);color:#fff;border-color:var(--risk-fill)}
+.btn-danger:hover{filter:brightness(1.08)}
+
+.btn-sm{--bh:34px;padding:0 var(--s-5);font-size:var(--t-cap);gap:var(--s-3)}
+.btn-sm svg{width:15px;height:15px}
+.btn-lg{--bh:54px;padding:0 var(--s-8);font-size:var(--t-body-l)}
+.btn-lg svg{width:19px;height:19px}
+.btn-icon{padding:0;width:var(--bh);border-radius:var(--r-pill)}
+.btn-block{display:flex;width:100%}
+
+/* loading: the label stays, so width never jumps */
+.btn-load{color:transparent!important;pointer-events:none}
+.btn-load::after{
+  content:"";position:absolute;inset:0;margin:auto;width:17px;height:17px;
+  border:2px solid currentColor;border-radius:50%;
+  border-top-color:transparent;color:var(--signal-ink);
+  animation:spin .7s linear infinite;
+}
+.btn-secondary.btn-load::after,.btn-ghost.btn-load::after{color:var(--ink)}
+.btn-solid.btn-load::after{color:var(--ground)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Chip / filter / tag ────────────────────────────────────────── */
+.chip{
+  display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);
+  border:1px solid var(--rule-2);border-radius:var(--r-pill);background:var(--surface);
+  font-size:var(--t-cap);font-weight:500;color:var(--ink-2);cursor:pointer;
+  transition:all var(--t-micro) var(--e-out);
+}
+.chip:hover{border-color:var(--rule-3);color:var(--ink)}
+.chip[aria-pressed=true],.chip.on{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink);font-weight:600}
+.chip svg{width:14px;height:14px}
+.chip .ct{display:inline-block;min-width:17px;height:17px;line-height:17px;text-align:center;border-radius:var(--r-pill);background:var(--surface-2);font-family:var(--f-mono);font-size:10px;padding:0 4px}
+.chip.on .ct{background:rgba(20,21,15,.14)}
+
+.tag{display:inline-flex;align-items:center;gap:var(--s-2);padding:2px var(--s-4);border-radius:var(--r-sm);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.06em;text-transform:uppercase;font-weight:500;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2)}
+.tag-ok{background:var(--ok-soft);border-color:var(--ok-edge);color:var(--ok)}
+.tag-warn{background:var(--warn-soft);border-color:var(--warn-edge);color:var(--warn)}
+.tag-risk{background:var(--risk-soft);border-color:var(--risk-edge);color:var(--risk)}
+.tag-info{background:var(--info-soft);border-color:var(--info-edge);color:var(--info)}
+
+/* status dot — shape as well as colour, so it is not colour-only */
+.dot{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);font-weight:500}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot-ok::before{background:var(--ok-fill);box-shadow:0 0 0 3px var(--ok-soft)}
+.dot-warn::before{background:var(--warn-fill);box-shadow:0 0 0 3px var(--warn-soft);border-radius:2px}
+.dot-risk::before{background:var(--risk-fill);box-shadow:0 0 0 3px var(--risk-soft);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0;width:9px;height:9px}
+.dot-live::before{background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in oklab,var(--live) 55%,transparent)}55%{box-shadow:0 0 0 6px transparent}}
+
+/* ── Field ──────────────────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:var(--s-3);margin-bottom:var(--s-6)}
+.field > label{font-size:var(--t-body-s);font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4)}
+.field > label .opt{font-weight:400;color:var(--ink-3);font-size:var(--t-cap)}
+.hint{font-size:var(--t-cap);color:var(--ink-3);margin:0}
+.inp{
+  height:48px;padding:0 var(--s-5);width:100%;
+  background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  font-family:var(--f-body);font-size:var(--t-body);color:var(--ink);
+  transition:border-color var(--t-micro),background var(--t-micro),box-shadow var(--t-micro);
+}
+textarea.inp{height:auto;padding:var(--s-5);min-height:110px;line-height:1.6;resize:vertical}
+.inp::placeholder{color:var(--ink-3)}
+.inp:hover{border-color:var(--rule-3)}
+.inp:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.inp:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed}
+.inp[aria-invalid=true]{border-color:var(--risk-fill);background:var(--risk-soft)}
+.inp[aria-invalid=true]:focus{box-shadow:0 0 0 3px var(--risk-soft)}
+.err{display:flex;align-items:flex-start;gap:var(--s-3);font-size:var(--t-cap);color:var(--risk);margin:0}
+.err svg{width:14px;height:14px;flex:none;margin-top:2px}
+.inpwrap{position:relative;display:flex;align-items:center}
+.inpwrap .lead{position:absolute;left:var(--s-5);color:var(--ink-3);pointer-events:none}
+.inpwrap .lead svg{width:17px;height:17px}
+.inpwrap .lead + .inp{padding-left:42px}
+.inpwrap .trail{position:absolute;right:var(--s-3)}
+
+/* phone field — country code is a real control, not decoration */
+.phonefield{display:flex;border:1px solid var(--rule-2);border-radius:var(--r-sm);background:var(--surface);overflow:hidden;transition:border-color var(--t-micro),box-shadow var(--t-micro)}
+.phonefield:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.phonefield .cc{display:flex;align-items:center;gap:var(--s-3);height:48px;padding:0 var(--s-5);border-right:1px solid var(--rule);background:var(--surface-2);font-family:var(--f-mono);font-size:var(--t-body-s);color:var(--ink);cursor:pointer;border-0:none;flex:none}
+.phonefield .inp{border:none;background:none;box-shadow:none!important;font-family:var(--f-mono);letter-spacing:.04em}
+
+/* OTP — ONE input, six slots.
+   The six slots are decoration; the control underneath is a single
+   <input>, because a six-input field breaks paste, breaks iOS autofill
+   and is named as a failure example in the WCAG 2.2 SC 3.3.8
+   Understanding document. See the Forms section for the full reasoning. */
+.otp{position:relative;display:flex;gap:var(--s-4)}
+.otp > input{
+  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  border:none;background:none;padding:0;margin:0;
+  font-family:var(--f-mono);font-size:1.35rem;letter-spacing:1em;text-indent:.5em;
+  color:transparent;caret-color:transparent;
+}
+.otp > input:focus{outline:none}
+.otp .slot{
+  flex:1;min-width:0;height:58px;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:1.35rem;font-weight:600;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  transition:background var(--t-micro),border-color var(--t-micro),transform var(--t-micro) var(--e-out);
+}
+.otp .slot.filled{background:var(--signal-soft);border-color:var(--signal-edge)}
+.otp > input:focus ~ .slots .slot.cursor,.otp .slots .slot.cursor{border-color:var(--ink);background:var(--surface);transform:translateY(-2px)}
+.otp .slot.cursor::after{content:"";width:2px;height:24px;background:var(--ink);border-radius:1px;animation:caret 1.1s steps(1) infinite}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.otp .slot.cursor::after{animation:none}}
+.otp .slots{display:flex;gap:var(--s-4);width:100%}
+.otp:focus-within{border-radius:var(--r-sm);outline:2px solid var(--ink);outline-offset:4px;box-shadow:0 0 0 6px var(--ground),0 0 0 8px var(--ink)}
+.otp[aria-invalid=true] .slot{border-color:var(--risk-fill);background:var(--risk-soft)}
+
+/* toggle */
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+
+/* choice card — a radio you can actually hit on a phone */
+.choice{display:block;position:relative;cursor:pointer}
+.choice input{position:absolute;opacity:0;width:0;height:0}
+.choice .cbody{
+  display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);transition:all var(--t-ui) var(--e-out);height:100%;
+}
+.choice:hover .cbody{border-color:var(--rule-3);background:var(--surface-2)}
+.choice input:checked + .cbody{border-color:var(--signal-lo);background:var(--signal-soft);box-shadow:inset 0 0 0 1px var(--signal-lo)}
+.choice input:focus-visible + .cbody{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.choice .cico{width:38px;height:38px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none;transition:background var(--t-ui)}
+.choice input:checked + .cbody .cico{background:var(--signal);color:var(--signal-ink)}
+.choice .cico svg{width:19px;height:19px}
+.choice h4{margin-bottom:2px}
+.choice .cd{font-size:var(--t-cap);color:var(--ink-2);margin:0;line-height:1.5}
+.choice .cmark{position:absolute;top:var(--s-6);right:var(--s-6);width:20px;height:20px;border:1px solid var(--rule-3);border-radius:50%;display:grid;place-items:center;transition:all var(--t-micro)}
+.choice input:checked ~ .cbody .cmark,.choice input:checked + .cbody .cmark{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.choice .cmark svg{width:12px;height:12px;opacity:0;transition:opacity var(--t-micro)}
+.choice input:checked + .cbody .cmark svg{opacity:1}
+
+/* ── Card ───────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.card-i{padding:0;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);padding:var(--s-6) var(--s-7);border-bottom:1px solid var(--rule)}
+.card-bd{padding:var(--s-7)}
+.card-ft{padding:var(--s-5) var(--s-7);border-top:1px solid var(--rule);background:var(--surface-2);display:flex;gap:var(--s-4);align-items:center;justify-content:space-between}
+.card-link{display:block;text-decoration:none;transition:border-color var(--t-ui) var(--e-out),transform var(--t-ui) var(--e-out)}
+.card-link:hover{border-color:var(--rule-3);transform:translateY(-2px)}
+
+/* stat */
+.stat{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-6) var(--s-7);position:relative;overflow:hidden}
+.stat .sl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+.stat .sv{font-family:var(--f-display);font-size:2.35rem;font-variation-settings:"opsz" 36;font-weight:600;letter-spacing:-.035em;line-height:1;display:flex;align-items:baseline;gap:var(--s-3)}
+.stat .sv small{font-size:.95rem;font-weight:500;color:var(--ink-3);letter-spacing:0;font-family:var(--f-body)}
+.stat .sd{display:flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-4)}
+.stat .sd svg{width:13px;height:13px}
+.stat .up{color:var(--signal-text);font-weight:600}
+.stat .down{color:var(--risk);font-weight:600}
+.stat-key{background:var(--signal-soft);border-color:var(--signal-edge)}
+
+/* banner */
+.banner{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);align-items:flex-start}
+.banner svg.bi{width:19px;height:19px;flex:none;margin-top:1px}
+.banner h4{margin-bottom:2px}
+.banner p{font-size:var(--t-body-s);color:var(--ink-2);margin:0}
+.banner .ba{margin-left:auto;flex:none}
+.banner-ok{background:var(--ok-soft);border-color:var(--ok-edge)} .banner-ok svg.bi{color:var(--ok)}
+.banner-warn{background:var(--warn-soft);border-color:var(--warn-edge)} .banner-warn svg.bi{color:var(--warn)}
+.banner-risk{background:var(--risk-soft);border-color:var(--risk-edge)} .banner-risk svg.bi{color:var(--risk)}
+.banner-info{background:var(--info-soft);border-color:var(--info-edge)} .banner-info svg.bi{color:var(--info)}
+
+/* toast */
+.toast{display:flex;align-items:center;gap:var(--s-5);background:var(--panel);color:var(--panel-ink);border:1px solid var(--panel-rule);border-radius:var(--r-md);padding:var(--s-5) var(--s-6);box-shadow:var(--e-3);max-width:400px}
+.toast svg{width:18px;height:18px;flex:none;color:var(--signal)}
+.toast .tt{font-size:var(--t-body-s);font-weight:500}
+.toast button{margin-left:auto;background:none;border:none;color:var(--panel-ink-2);cursor:pointer;padding:var(--s-2);display:grid;place-items:center;border-radius:var(--r-sm)}
+.toast button:hover{color:var(--panel-ink);background:rgba(255,255,255,.1)}
+
+/* empty state */
+.empty{text-align:center;padding:var(--s-11) var(--s-7);max-width:420px;margin:0 auto}
+.empty .eart{margin:0 auto var(--s-7);width:112px;height:84px}
+.empty h3{margin-bottom:var(--s-4)}
+.empty p{font-size:var(--t-body-s);color:var(--ink-2);margin-bottom:var(--s-7)}
+
+/* skeleton */
+.sk{background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface-3) 37%,var(--surface-2) 63%);
+  background-size:400% 100%;animation:shim 1.4s ease-in-out infinite;border-radius:var(--r-sm)}
+@keyframes shim{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none;background:var(--surface-2)}}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRODUCT COMPONENTS
+   The parts that only exist because Subiza answers phones.
+   Nothing here is a repurposed generic; nothing here is stock art.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Live call card ─────────────────────────────────────────────── */
+.callcard{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-7);position:relative;overflow:hidden;isolation:isolate}
+.callcard::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(120% 90% at 88% -12%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.cc-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-live{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);font-weight:600}
+.cc-live i{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+.cc-time{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2);font-variant-numeric:tabular-nums}
+.cc-who{display:flex;align-items:center;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-av{width:44px;height:44px;border-radius:50%;background:var(--panel-2);border:1px solid var(--panel-rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:1rem;flex:none}
+.cc-who b{display:block;font-size:var(--t-body-l);font-weight:600;letter-spacing:-.01em}
+.cc-who span{display:block;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2)}
+.cc-acts{display:flex;gap:var(--s-4);margin-top:var(--s-6)}
+.cc-acts .btn-secondary{background:var(--panel-2);border-color:var(--panel-rule);color:var(--panel-ink)}
+.cc-acts .btn-secondary:hover{background:#314323;border-color:rgba(255,255,255,.24)}
+
+/* the waveform. bars are driven by CSS custom props, not a canvas —
+   it survives 2G, costs nothing, and honours reduced motion. */
+.wave{display:flex;align-items:center;justify-content:space-between;gap:3px;height:44px;padding:0 var(--s-2)}
+.wave i{flex:0 1 4px;min-width:2px;max-width:4px;border-radius:var(--r-pill);background:var(--signal);
+  height:var(--h,20%);transform-origin:center;
+  animation:wv 1.15s var(--e-inout) infinite alternate;animation-delay:var(--d,0s)}
+@keyframes wv{from{transform:scaleY(.28)}to{transform:scaleY(1)}}
+.wave.muted i{background:var(--panel-ink-2);animation:none;transform:scaleY(.3)}
+@media (prefers-reduced-motion:reduce){.wave i{animation:none}}
+
+/* ── Transcript stream ──────────────────────────────────────────── */
+.tscript{display:flex;flex-direction:column;gap:var(--s-5)}
+.turn{display:flex;gap:var(--s-5);max-width:100%}
+.turn .tav{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.02em}
+.turn.ai .tav{background:var(--signal);color:var(--signal-ink)}
+.turn.human .tav{background:var(--surface-3);color:var(--ink-2)}
+.turn .tb{flex:1;min-width:0}
+.turn .tmeta{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-3);flex-wrap:wrap}
+.turn .tmeta b{font-size:var(--t-cap);font-weight:600}
+.turn .tmeta time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.turn .tt{font-size:var(--t-body-s);line-height:1.62;color:var(--ink);background:var(--surface-2);border:1px solid var(--rule);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);margin:0}
+.turn.ai .tt{background:var(--signal-soft);border-color:var(--signal-edge)}
+.turn .tt em{font-style:normal;color:var(--ink-3)}
+/* the original-language line, always shown under a translation */
+.turn .torig{font-size:var(--t-cap);color:var(--ink-3);margin:var(--s-3) 0 0;padding-left:var(--s-5);border-left:2px solid var(--rule-2)}
+/* confidence: never a bare percentage, always a judgement */
+.conf{display:inline-flex;align-items:center;gap:var(--s-2);font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.conf i{display:flex;gap:1.5px}
+.conf i b{width:3px;height:9px;border-radius:1px;background:var(--rule-3)}
+.conf.hi i b:nth-child(-n+3){background:var(--signal-lo)}
+.conf.mid i b:nth-child(-n+2){background:var(--warn-fill)}
+.conf.lo i b:nth-child(1){background:var(--risk-fill)}
+/* the escalation marker in the stream */
+.tmark{display:flex;align-items:center;gap:var(--s-4);margin:var(--s-2) 0}
+.tmark::before,.tmark::after{content:"";height:1px;background:var(--risk-edge);flex:1}
+.tmark span{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--risk);font-weight:600;white-space:nowrap}
+.tmark svg{width:13px;height:13px}
+
+/* ── Channel tile ───────────────────────────────────────────────── */
+.chan{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);transition:all var(--t-ui) var(--e-out)}
+.chan:hover{border-color:var(--rule-3)}
+.chan .cico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:none;color:#fff}
+.chan .cico svg{width:21px;height:21px}
+.chan-wa .cico{background:#25D366;color:#0B2C17}
+.chan-ig .cico{background:linear-gradient(135deg,#F58529,#DD2A7B 52%,#8134AF)}
+.chan-tg .cico{background:#2AABEE}
+.chan-ph .cico{background:var(--ink);color:var(--ground)}
+.chan .cmeta{flex:1;min-width:0}
+.chan .cmeta b{display:block;font-size:var(--t-body-s);font-weight:600}
+.chan .cmeta span{display:block;font-size:var(--t-cap);color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chan.is-off{background:var(--surface-2);border-style:dashed}
+.chan.is-off .cico{filter:grayscale(1);opacity:.5}
+.chan.is-err{border-color:var(--risk-edge);background:var(--risk-soft)}
+
+/* ── Credit meter ───────────────────────────────────────────────── */
+.credit{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);padding:var(--s-7)}
+.credit-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-5)}
+.credit-v{font-family:var(--f-display);font-size:1.9rem;font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.03em;line-height:1}
+.credit-v small{font-family:var(--f-mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.06em;margin-left:6px}
+.meter{height:10px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;border-radius:var(--r-pill);background:var(--signal);
+  width:var(--pct,50%);transition:width 600ms var(--e-out)}
+.meter.warn i{background:var(--warn-fill)} .meter.risk i{background:var(--risk-fill)}
+/* the threshold ticks are visible, so "low" is a place, not a surprise */
+.meter::after{content:"";position:absolute;top:0;bottom:0;left:20%;width:1px;background:var(--rule-3)}
+.credit-ft{display:flex;justify-content:space-between;gap:var(--s-5);margin-top:var(--s-4);font-size:var(--t-cap);color:var(--ink-2)}
+.credit-ft b{font-weight:600;color:var(--ink)}
+
+/* ── Forwarding code card ───────────────────────────────────────── */
+/* the single most important object in activation: a dial string. */
+.fcode{border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.fcode-h{padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:var(--s-4);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.fcode-h svg{width:14px;height:14px}
+.fcode-b{padding:var(--s-7) var(--s-6);text-align:center;background:var(--surface-2)}
+.fcode-s{font-family:var(--f-mono);font-size:clamp(1.25rem,1rem + 1.2vw,1.75rem);font-weight:600;letter-spacing:.01em;color:var(--ink);line-height:1.3;overflow-wrap:break-word}
+.fcode-s span{display:inline-block;white-space:nowrap}
+.fcode-s b{color:var(--signal-text);font-weight:600;background:var(--signal-soft);border-radius:3px;padding:0 3px;box-decoration-break:clone}
+.fcode-n{font-size:var(--t-cap);color:var(--ink-2);margin:var(--s-5) 0 0}
+.fcode-a{display:flex;gap:var(--s-4);padding:var(--s-5) var(--s-6);border-top:1px solid var(--rule)}
+.fcode-a .btn{flex:1}
+.fcode-plat{display:flex;gap:var(--s-4);align-items:flex-start;margin:0;padding:0 var(--s-6) var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.fcode-plat svg{width:14px;height:14px;flex:none;margin-top:2px}
+.fcode-plat b{color:var(--ink-2);font-weight:600}
+
+/* ── Escalation ladder ──────────────────────────────────────────── */
+.ladder{display:flex;flex-direction:column;gap:0;counter-reset:rung}
+.rung{display:flex;gap:var(--s-6);padding:var(--s-5) 0;position:relative}
+.rung::before{counter-increment:rung;content:counter(rung);
+  width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:11px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-2);z-index:1}
+.rung::after{content:"";position:absolute;left:12.5px;top:34px;bottom:-8px;width:1px;background:var(--rule-2)}
+.rung:last-child::after{display:none}
+.rung.done::before{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.rung.now::before{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.rung.now{background:linear-gradient(90deg,var(--signal-soft),transparent 70%);border-radius:var(--r-sm);padding-left:var(--s-4);margin-left:calc(var(--s-4) * -1)}
+.rung .rb b{display:block;font-size:var(--t-body-s);font-weight:600}
+.rung .rb span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.rung .rt{margin-left:auto;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink-3);white-space:nowrap;padding-left:var(--s-5)}
+
+/* ── Weekly report — rendered as the WhatsApp message it actually is ─ */
+.wamsg{max-width:340px;background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden}
+.wamsg-h{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);background:#075E54;color:#fff}
+.wamsg-h .m{width:28px;height:28px;border-radius:50%;background:var(--signal);display:grid;place-items:center;color:var(--signal-ink);flex:none}
+.wamsg-h .m svg{width:15px;height:15px}
+.wamsg-h b{font-size:var(--t-body-s);font-weight:600}
+.wamsg-h span{display:block;font-size:10px;opacity:.8}
+.wamsg-b{padding:var(--s-6);background:var(--surface-2);background-image:radial-gradient(var(--rule) .5px,transparent .5px);background-size:12px 12px}
+.wabub{background:var(--surface);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);font-size:var(--t-body-s);line-height:1.6;box-shadow:var(--e-2);position:relative}
+.wabub .big{font-family:var(--f-display);font-size:1.6rem;font-variation-settings:"opsz" 26;font-weight:600;letter-spacing:-.03em;display:block;line-height:1.1;margin:var(--s-3) 0}
+.wabub a{color:var(--signal-text);font-weight:600}
+.wabub time{display:block;text-align:right;font-family:var(--f-mono);font-size:10px;color:var(--ink-3);margin-top:var(--s-3)}
+
+/* ── Coverage ring — "what your agent can actually answer" ──────── */
+.ring{display:flex;align-items:center;gap:var(--s-6)}
+.ring svg{width:76px;height:76px;flex:none;transform:rotate(-90deg)}
+.ring .rtrack{fill:none;stroke:var(--surface-3);stroke-width:9}
+.ring .rval{fill:none;stroke:var(--signal-lo);stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:var(--dash,201);stroke-dashoffset:var(--off,60);
+  transition:stroke-dashoffset 800ms var(--e-out)}
+.ring .rnum{font-family:var(--f-display);font-size:1.5rem;font-variation-settings:"opsz" 24;font-weight:600;letter-spacing:-.03em;line-height:1}
+.ring .rlab{font-size:var(--t-cap);color:var(--ink-2);margin-top:2px}
+
+/* ── Data viz. hand-drawn SVG. no chart library, no 90KB payload. ── */
+.spark{display:block;width:100%;height:40px;overflow:visible}
+.spark path.ln{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.spark path.ar{fill:var(--signal-soft);stroke:none}
+.spark circle{fill:var(--signal);stroke:var(--surface);stroke-width:2}
+.bars{display:flex;align-items:flex-end;gap:var(--s-3);height:120px}
+.bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:var(--s-3);height:100%}
+.bars .b i{width:100%;max-width:28px;background:var(--surface-3);border-radius:3px 3px 0 0;height:var(--h,20%);
+  transition:height 600ms var(--e-out),background var(--t-micro)}
+.bars .b.on i{background:var(--signal)}
+.bars .b:hover i{background:var(--signal-lo)}
+.bars .b span{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* ── Nav: desktop rail ──────────────────────────────────────────── */
+.applayout{display:grid;grid-template-columns:224px 1fr;min-height:340px;background:var(--ground);border-radius:var(--r-md);overflow:hidden;border:1px solid var(--rule)}
+.appnav{background:var(--surface);border-right:1px solid var(--rule);padding:var(--s-5)}
+.appnav a{display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:var(--t-body-s);font-weight:500;transition:all var(--t-micro)}
+.appnav a svg{width:16px;height:16px;opacity:.75}
+.appnav a:hover{background:var(--surface-2);color:var(--ink)}
+.appnav a.on{background:var(--signal);color:var(--signal-ink);font-weight:600}
+.appnav a.on svg{opacity:1}
+.appnav a .nb{margin-left:auto;font-family:var(--f-mono);font-size:10px;background:var(--risk-fill);color:#fff;border-radius:var(--r-pill);padding:1px 6px}
+.appbody{padding:var(--s-7)}
+
+/* ── Nav: the phone. NOT the rail, reflowed — a different component. ─ */
+.phone{width:290px;border:1px solid var(--rule-2);border-radius:26px;overflow:hidden;background:var(--ground);box-shadow:var(--e-3);flex:none}
+.phone-top{height:26px;background:var(--surface);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;padding:0 var(--s-5);font-family:var(--f-mono);font-size:9px;color:var(--ink-3)}
+.phone-bd{padding:var(--s-6);min-height:200px}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-3) var(--s-2) var(--s-5)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:var(--s-3) 0;text-decoration:none;color:var(--ink-3);font-size:9.5px;font-weight:600;position:relative;min-height:48px;justify-content:center;border-radius:8px;transition:color var(--t-micro)}
+.tabbar a svg{width:19px;height:19px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2.5px;border-radius:var(--r-pill);background:var(--signal-lo)}
+.tabbar a .nb{position:absolute;top:2px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;background:var(--risk-fill);border:1.5px solid var(--surface)}
+
+/* ── Sheet / modal ──────────────────────────────────────────────── */
+.sheet{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:var(--s-7);box-shadow:var(--e-4);position:relative}
+.sheet::before{content:"";position:absolute;top:var(--s-4);left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:var(--r-pill);background:var(--rule-3)}
+.sheet h3{margin:var(--s-5) 0 var(--s-4)}
+.modal{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg);padding:var(--s-8);box-shadow:var(--e-4);max-width:460px}
+
+/* ── Table → list, on small screens ─────────────────────────────── */
+.rowlist{border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.rowitem{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background var(--t-micro)}
+.rowitem:last-child{border-bottom:none}
+.rowitem:hover{background:var(--surface-2)}
+.rowitem .rav{width:36px;height:36px;border-radius:50%;background:var(--surface-2);border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.8rem;flex:none}
+.rowitem .rmain{flex:1;min-width:0}
+.rowitem .rmain b{display:block;font-size:var(--t-body-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rmain span{display:block;font-size:var(--t-cap);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rside{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:var(--s-2)}
+.rowitem .rside time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* shell */
+html{overflow-x:clip}
+body{overflow-x:clip}
+
+/* ── Studio toolbar (not part of the product) ───────────────────── */
+.bar{position:sticky;top:0;z-index:80;display:flex;align-items:center;flex-wrap:wrap;
+  gap:var(--s-4) var(--s-5);min-height:56px;padding:var(--s-4) var(--s-7);
+  background:var(--panel);color:var(--panel-ink);border-bottom:1px solid var(--panel-rule)}
+.bar > *{min-width:0}
+.bar .lg{display:flex;align-items:center;gap:var(--s-4);flex:none}
+.bar .lg .mk{width:26px;height:26px;border-radius:7px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.bar .lg .mk svg{width:15px;height:15px}
+.bar .lg b{font-family:var(--f-display);font-size:.95rem;font-weight:700;letter-spacing:-.022em}
+.bar .lg span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-ink-2);display:block;margin-top:-2px}
+.bar .sp{margin-left:auto}
+.seg{display:flex;gap:2px;background:rgba(255,255,255,.09);border-radius:var(--r-pill);padding:3px}
+.seg button{border:none;background:none;color:var(--panel-ink-2);font:inherit;font-size:var(--t-cap);font-weight:600;
+  padding:6px var(--s-6);border-radius:var(--r-pill);cursor:pointer;min-height:32px;transition:all var(--t-micro)}
+.seg button[aria-pressed=true]{background:var(--signal);color:var(--signal-ink)}
+.bar .mini{display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);border-radius:var(--r-pill);
+  border:1px solid var(--panel-rule);background:none;color:var(--panel-ink-2);font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all var(--t-micro)}
+.bar .mini:hover{color:var(--panel-ink);border-color:rgba(255,255,255,.3)}
+.bar .mini svg{width:13px;height:13px}
+.bar select{height:32px;max-width:min(230px,42vw);border-radius:var(--r-pill);border:1px solid var(--panel-rule);background:rgba(255,255,255,.06);
+  color:var(--panel-ink);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;padding:0 var(--s-4);cursor:pointer}
+.bar select option{color:var(--ink);background:var(--surface)}
+
+/* ── Modes ──────────────────────────────────────────────────────── */
+.mode{display:none} .mode.on{display:block}
+
+/* ── The product frame ──────────────────────────────────────────── */
+.auth{min-height:calc(100vh - 56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr)}
+.authmain{display:flex;flex-direction:column;padding:var(--s-9) var(--s-10) var(--s-11);background:var(--ground)}
+.authaside{background:var(--surface-2);border-left:1px solid var(--rule);padding:var(--s-9) var(--s-10);display:flex;flex-direction:column;justify-content:center;gap:var(--s-7)}
+.authhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-6);margin-bottom:var(--s-10)}
+.blogo{display:flex;align-items:center;gap:var(--s-4)}
+.blogo .mk{width:30px;height:30px;border-radius:8px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.blogo .mk svg{width:17px;height:17px}
+.blogo b{font-family:var(--f-display);font-size:1.05rem;font-weight:700;letter-spacing:-.026em}
+.authbody{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:440px;width:100%;margin:0 auto}
+.authfoot{margin-top:var(--s-10);max-width:440px;width:100%;margin-left:auto;margin-right:auto}
+
+/* progress: five marks, no numbers — the flow is short enough that a
+   counter is noise, but a shape that fills is reassurance */
+.prog{display:flex;gap:var(--s-3);margin-bottom:var(--s-9)}
+.prog i{flex:1;height:3px;border-radius:var(--r-pill);background:var(--surface-3);transition:background 400ms var(--e-out)}
+.prog i.done{background:var(--signal-lo)} .prog i.now{background:var(--signal)}
+
+.screen{display:none;animation:sin var(--t-panel) var(--e-out)}
+.screen.on{display:block}
+@keyframes sin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.screen.back{animation:sinb var(--t-panel) var(--e-out)}
+@keyframes sinb{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen,.screen.back{animation:none}}
+
+.screen h1{font-family:var(--f-display);font-size:clamp(1.55rem,1.3rem + 1.1vw,2rem);font-variation-settings:"opsz" 32;
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:0 0 var(--s-5);text-wrap:balance}
+.screen .sub{color:var(--ink-2);font-size:var(--t-body);margin:0 0 var(--s-8);line-height:1.6}
+.screen .sub a{color:var(--signal-text);font-weight:600}
+.microfoot{font-size:var(--t-cap);color:var(--ink-3);text-align:center;margin:var(--s-6) 0 0}
+.microfoot a{color:var(--signal-text);font-weight:600}
+.backlink{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);font-weight:600;color:var(--ink-2);
+  background:none;border:none;cursor:pointer;padding:var(--s-3) 0;margin-bottom:var(--s-6)}
+.backlink:hover{color:var(--ink)} .backlink svg{width:14px;height:14px}
+
+/* ── Entry banners ──────────────────────────────────────────────── */
+.entryb{display:flex;gap:var(--s-5);align-items:flex-start;padding:var(--s-5) var(--s-6);border-radius:var(--r-md);
+  background:var(--signal-soft);border:1px solid var(--signal-edge);margin-bottom:var(--s-8);font-size:var(--t-body-s)}
+.entryb svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--signal-text)}
+.entryb b{font-weight:600}
+.entryb p{margin:0;color:var(--ink)}
+
+/* ── Delivery fallbacks ─────────────────────────────────────────── */
+.fallbacks{margin-top:var(--s-7);border-top:1px solid var(--rule);padding-top:var(--s-6)}
+.fbrow{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-5);border:1px solid var(--rule-2);
+  border-radius:var(--r-sm);background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);
+  margin-bottom:var(--s-4);transition:all var(--t-micro) var(--e-out)}
+.fbrow:hover:not(:disabled){border-color:var(--rule-3);background:var(--surface-2)}
+.fbrow:disabled{opacity:.45;cursor:not-allowed}
+.fbrow .fi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none;background:var(--surface-2)}
+.fbrow .fi svg{width:16px;height:16px}
+.fbrow.wa .fi{background:#25D366;color:#0B2C17}
+.fbrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fbrow span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fbrow .fw{flex:1;min-width:0}
+.fbrow .ft{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);white-space:nowrap;text-transform:uppercase;letter-spacing:.08em}
+
+/* ── Greeting preview (aside) ───────────────────────────────────── */
+.gprev{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-8);position:relative;overflow:hidden}
+.gprev::before{content:"";position:absolute;inset:0;background:radial-gradient(110% 80% at 85% -10%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.gprev > *{position:relative}
+.gprev .gl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);margin-bottom:var(--s-6);display:flex;align-items:center;gap:var(--s-4)}
+.gprev .gl svg{width:14px;height:14px}
+.gprev .gq{font-family:var(--f-display);font-size:1.35rem;font-variation-settings:"opsz" 22;font-weight:500;letter-spacing:-.018em;line-height:1.35;margin:0}
+.gprev .gq mark{background:none;color:var(--signal);font-weight:600}
+.gprev .gt{font-size:var(--t-cap);color:var(--panel-ink-2);margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--panel-rule)}
+
+.asidecard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.asidecard h3{margin-bottom:var(--s-5);font-size:var(--t-h4)}
+.asidecard ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.asidecard li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink-2);line-height:1.55;align-items:flex-start}
+.asidecard li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--signal-text)}
+.asidecard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.asidepane{display:none} .asidepane.on{display:grid;gap:var(--s-6);animation:sin var(--t-panel) var(--e-out)}
+@media (prefers-reduced-motion:reduce){.asidepane.on{animation:none}}
+
+/* ── Consent ────────────────────────────────────────────────────── */
+.summ{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);padding:var(--s-7);margin-bottom:var(--s-7)}
+.summ ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.summ li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink);line-height:1.55;align-items:flex-start}
+.summ li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--ink-3)}
+.summ .sfoot{margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--rule);font-size:var(--t-cap);color:var(--ink-3)}
+.summ .sfoot a{color:var(--signal-text);font-weight:600}
+.consent{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);cursor:pointer;margin-bottom:var(--s-5);transition:all var(--t-ui) var(--e-out)}
+.consent:hover{border-color:var(--rule-3)}
+.consent input{position:absolute;opacity:0;width:0;height:0}
+.consent .cbx{width:22px;height:22px;border:1.5px solid var(--rule-3);border-radius:5px;flex:none;display:grid;place-items:center;
+  margin-top:1px;transition:all var(--t-micro) var(--e-out);background:var(--surface)}
+.consent .cbx svg{width:13px;height:13px;opacity:0;color:var(--signal-ink);transform:scale(.6);transition:all var(--t-micro) var(--e-out)}
+.consent input:checked ~ .cw .cbx,.consent input:checked + .cbx{background:var(--signal);border-color:var(--signal-lo)}
+.consent input:checked + .cbx svg{opacity:1;transform:none}
+.consent input:focus-visible + .cbx{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.consent input:checked ~ *{}
+.consent.checked{border-color:var(--signal-lo);background:var(--signal-soft)}
+.consent .cw b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.consent .cw span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.consent .req{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-left:var(--s-3)}
+.receipt{font-family:var(--f-mono);font-size:10.5px;line-height:1.7;color:var(--ink-3);background:var(--surface-2);
+  border:1px solid var(--rule);border-radius:var(--r-sm);padding:var(--s-5);margin:var(--s-6) 0 0;overflow-x:auto}
+.receipt b{color:var(--ink-2);font-weight:500}
+.notyet{display:flex;gap:var(--s-4);margin-top:var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.notyet svg{width:14px;height:14px;flex:none;margin-top:2px}
+
+/* ── Recovery hub ───────────────────────────────────────────────── */
+.recopt{display:flex;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);margin-bottom:var(--s-5);
+  transition:all var(--t-ui) var(--e-out)}
+.recopt:hover{border-color:var(--signal-lo);background:var(--signal-soft);transform:translateY(-1px)}
+.recopt .ri{width:36px;height:36px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.recopt .ri svg{width:18px;height:18px}
+.recopt b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.recopt span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.recopt .ra{margin-left:auto;align-self:center;color:var(--ink-3)}
+.recopt .ra svg{width:16px;height:16px}
+
+/* ── Workspace chooser ──────────────────────────────────────────── */
+.wsopt{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);
+  border-radius:var(--r-md);background:var(--surface);cursor:pointer;font:inherit;color:var(--ink);text-align:left;
+  margin-bottom:var(--s-4);transition:all var(--t-ui) var(--e-out)}
+.wsopt:hover{border-color:var(--signal-lo);background:var(--signal-soft)}
+.wsopt .wa{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--rule);
+  display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.9rem;flex:none}
+.wsopt b{display:block;font-size:var(--t-body-s);font-weight:600}
+.wsopt span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+
+/* ── Done ───────────────────────────────────────────────────────── */
+.donemark{width:76px;height:76px;border-radius:50%;background:var(--signal);color:var(--signal-ink);
+  display:grid;place-items:center;margin-bottom:var(--s-8);position:relative}
+.donemark svg{width:34px;height:34px;stroke-dasharray:32;stroke-dashoffset:32;animation:draw 520ms var(--e-out) 160ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.donemark::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--signal-lo);animation:ripple 1.6s var(--e-out) 2}
+@keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.donemark svg{animation:none;stroke-dashoffset:0}.donemark::after{animation:none;opacity:0}}
+
+/* ── SPEC MODE ──────────────────────────────────────────────────── */
+.specwrap{max-width:1120px;margin:0 auto;padding:var(--s-11) var(--s-10) var(--s-13)}
+.specwrap .sechd{margin:var(--s-13) 0 var(--s-7)}
+.specwrap .sechd:first-of-type{margin-top:var(--s-9)}
+.specwrap .sechd .n{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-5)}
+.specwrap .sechd .n::before{content:"";display:inline-block;width:18px;height:1px;background:var(--rule-3);vertical-align:middle;margin-right:var(--s-4)}
+.specwrap h2{font-family:var(--f-display);font-size:clamp(1.4rem,1.15rem + 1vw,1.85rem);font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.028em;margin:0}
+.specwrap > p,.sechd + p{max-width:70ch;color:var(--ink-2);margin:var(--s-5) 0 0}
+.stbl{width:100%;border-collapse:collapse;font-size:var(--t-body-s)}
+.stbl th{text-align:left;font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;padding:0 var(--s-5) var(--s-4);border-bottom:1px solid var(--rule-2);white-space:nowrap}
+.stbl td{padding:var(--s-5);border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.stbl td:first-child{color:var(--ink);font-weight:500}
+.stblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:var(--s-6) 0}
+.stblwrap .stbl{min-width:600px}
+.why2{display:flex;gap:var(--s-5);max-width:74ch;background:var(--signal-soft);border:1px solid var(--signal-edge);
+  border-radius:var(--r-md);padding:var(--s-5) var(--s-6);margin:var(--s-6) 0;font-size:var(--t-body-s);color:var(--ink)}
+.why2 svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--signal-text)}
+.why2 p{margin:0} .why2 b{font-weight:600}
+.why2.warn{background:var(--warn-soft);border-color:var(--warn-edge)} .why2.warn svg{color:var(--warn)}
+.sgrid{display:grid;gap:var(--s-6);grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));margin:var(--s-6) 0}
+.sgrid > *{min-width:0}
+.scard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.scard h4{margin-bottom:var(--s-4)}
+.scard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.scard .tagline{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+
+/* flow map */
+.fmap{display:grid;gap:0;margin:var(--s-7) 0;max-width:520px}
+.fnode{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);padding:var(--s-5) var(--s-6)}
+.fnode b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fnode span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fnode.key{background:var(--signal-soft);border-color:var(--signal-lo);border-width:2px}
+.fnode.term{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.fnode.term span{color:rgba(250,249,244,.72)}
+.fconn{width:1px;height:20px;margin:0 auto;background:var(--rule-3);position:relative}
+.fconn::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--rule-3)}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:980px){
+  .auth{grid-template-columns:minmax(0,1fr)}
+  .authaside{border-left:none;border-top:1px solid var(--rule);padding:var(--s-9) var(--s-8)}
+  .authmain{padding:var(--s-8) var(--s-8) var(--s-9)}
+  .specwrap{padding:var(--s-9) var(--s-8) var(--s-12)}
+}
+@media (max-width:640px){
+  .bar{padding:var(--s-4) var(--s-5)}
+  .bar .lg > span > span{display:none}
+  .bar .sp{margin-left:auto}
+  .bar .scen{order:5;width:100%}
+  .bar select{width:100%}
+  .auth{min-height:0}
+  .authmain{padding:var(--s-7) var(--s-6) var(--s-8)}
+  .authaside{padding:var(--s-8) var(--s-6)}
+  .specwrap{padding:var(--s-8) var(--s-6) var(--s-11)}
+  .authhead{margin-bottom:var(--s-8)}
+  .fallbacks .fbrow .ft{display:none}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   KNOWLEDGE — additions on the shared shell
+   ═══════════════════════════════════════════════════════════════════ */
+.authbody{max-width:620px} .authfoot{max-width:620px}
+.screen h1{margin-bottom:var(--s-4)}
+
+/* ── Tabs across the knowledge surfaces ─────────────────────────── */
+.ktabs{display:flex;gap:var(--s-3);overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:var(--s-3);margin-bottom:var(--s-7);scrollbar-width:none}
+.ktabs::-webkit-scrollbar{display:none}
+.ktabs button{display:inline-flex;align-items:center;gap:var(--s-3);min-height:36px;padding:0 var(--s-5);white-space:nowrap;
+  border:1px solid var(--rule-2);border-radius:var(--r-pill);background:var(--surface);font:inherit;font-size:var(--t-cap);
+  font-weight:600;color:var(--ink-2);cursor:pointer;transition:all var(--t-micro)}
+.ktabs button svg{width:14px;height:14px}
+.ktabs button[aria-pressed=true]{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.ktabs button .kn{font-family:var(--f-mono);font-size:10px;opacity:.7}
+
+/* ── The "what it knows" summary ────────────────────────────────── */
+.knows{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);overflow:hidden;margin-bottom:var(--s-7)}
+.krow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);
+  width:100%;text-align:left;font:inherit;color:inherit;background:none;border-left:none;border-right:none;border-top:none;cursor:pointer;
+  transition:background var(--t-micro)}
+.krow:last-child{border-bottom:none}
+.krow:hover{background:var(--surface-2)}
+.krow .ki{width:32px;height:32px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.krow .ki svg{width:16px;height:16px;color:var(--ink-2)}
+.krow .kk{flex:1;min-width:0}
+.krow .kk b{display:block;font-size:var(--t-body-s);font-weight:600}
+.krow .kk span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.krow .kv{flex:none;display:flex;align-items:center;gap:var(--s-4)}
+.krow.warn{background:var(--warn-soft)} .krow.warn:hover{background:var(--warn-soft)}
+.krow.warn .ki{background:var(--warn-fill);color:#14150F}
+.krow.warn .ki svg{color:#14150F}
+
+/* ── The ask box ────────────────────────────────────────────────── */
+.askbox{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.askbox .ah{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.askbox .ah svg{width:14px;height:14px}
+.askin{display:flex;gap:var(--s-4);padding:var(--s-6)}
+.askin input{flex:1;min-width:0;height:44px;padding:0 var(--s-5);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  background:var(--surface-2);font:inherit;font-size:var(--t-body-s);color:var(--ink)}
+.askin input:focus{outline:none;border-color:var(--ink);background:var(--surface);box-shadow:0 0 0 3px var(--signal-soft)}
+.answer{padding:0 var(--s-6) var(--s-6)}
+.abub{background:var(--signal-soft);border:1px solid var(--signal-edge);border-radius:2px var(--r-md) var(--r-md) var(--r-md);
+  padding:var(--s-5) var(--s-6);font-size:var(--t-body-s);line-height:1.6}
+.abub .aor{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-4);padding-left:var(--s-5);border-left:2px solid var(--signal-edge)}
+/* the citation is an edit affordance, not a trust badge */
+.cite{display:inline-flex;align-items:center;gap:var(--s-3);margin-top:var(--s-5);padding:5px var(--s-5);
+  border:1px solid var(--rule-2);border-radius:var(--r-pill);background:var(--surface);font-size:var(--t-cap);
+  font-weight:500;color:var(--ink);cursor:pointer;transition:all var(--t-micro)}
+.cite:hover{border-color:var(--signal-lo);background:var(--signal-soft)}
+.cite svg{width:13px;height:13px;color:var(--signal-text)}
+.cite .cx{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+.hedge{display:flex;align-items:flex-start;gap:var(--s-4);margin-top:var(--s-5);font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.hedge svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--warn)}
+
+/* ── The price table ────────────────────────────────────────────── */
+.ptbl{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.ptbl .ph{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.ptbl .ph b{font-size:var(--t-body-s);font-weight:600;flex:1;min-width:0}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 116px 28px;align-items:center;gap:var(--s-4);
+  padding:var(--s-4) var(--s-6);border-bottom:1px solid var(--rule);transition:background 400ms var(--e-out)}
+.prow:last-of-type{border-bottom:none}
+.prow.hit{background:var(--signal-soft)}
+.prow input{border:1px solid transparent;background:none;font:inherit;font-size:var(--t-body-s);color:var(--ink);
+  padding:6px var(--s-4);border-radius:var(--r-sm);width:100%;min-width:0;transition:all var(--t-micro)}
+.prow input:hover{background:var(--surface-2);border-color:var(--rule)}
+.prow input:focus{outline:none;background:var(--surface);border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.prow input.pp{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right}
+.prow .pd{width:28px;height:28px;border-radius:50%;border:none;background:none;color:var(--ink-3);cursor:pointer;
+  display:grid;place-items:center;opacity:0;transition:all var(--t-micro)}
+.prow:hover .pd,.prow:focus-within .pd{opacity:1}
+.prow .pd:hover{background:var(--risk-soft);color:var(--risk)}
+.prow .pd svg{width:14px;height:14px}
+.ptbl .pf{padding:var(--s-5) var(--s-6);border-top:1px solid var(--rule);background:var(--surface-2);
+  display:flex;align-items:center;gap:var(--s-5);flex-wrap:wrap}
+.neverline{display:flex;align-items:flex-start;gap:var(--s-4);padding:var(--s-5) var(--s-6);background:var(--signal-soft);
+  border-bottom:1px solid var(--signal-edge);font-size:var(--t-cap);color:var(--ink);line-height:1.55}
+.neverline svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--signal-text)}
+.neverline b{font-weight:600}
+
+/* ── Q&A pairs ──────────────────────────────────────────────────── */
+.qa{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden;margin-bottom:var(--s-5)}
+.qa .qq{display:flex;align-items:flex-start;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule)}
+.qa .qq svg{width:15px;height:15px;flex:none;margin-top:2px;color:var(--ink-3)}
+.qa .qq b{font-size:var(--t-body-s);font-weight:600;line-height:1.5}
+.qa .aa{padding:var(--s-5) var(--s-6)}
+.qa .aa textarea{width:100%;border:1px solid transparent;background:none;font:inherit;font-size:var(--t-body-s);
+  line-height:1.6;color:var(--ink);padding:var(--s-4);margin:calc(var(--s-4)*-1);border-radius:var(--r-sm);resize:vertical;min-height:24px}
+.qa .aa textarea:hover{background:var(--surface-2);border-color:var(--rule)}
+.qa .aa textarea:focus{outline:none;background:var(--surface);border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.qa.blank{border-style:dashed;background:var(--surface-2)}
+.qa.blank .aa textarea::placeholder{color:var(--ink-3);font-style:italic}
+.qa .qf{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-4) var(--s-6);border-top:1px solid var(--rule);background:var(--surface-2)}
+.origin{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ── Gap queue (Fin-style) ──────────────────────────────────────── */
+.gap{border:1px solid var(--warn-edge);border-radius:var(--r-md);background:var(--warn-soft);overflow:hidden;margin-bottom:var(--s-5)}
+.gap .gh{display:flex;align-items:flex-start;gap:var(--s-5);padding:var(--s-6)}
+.gap .gh svg{width:18px;height:18px;flex:none;margin-top:1px;color:var(--warn)}
+.gap .gh b{display:block;font-size:var(--t-body-s);font-weight:600;line-height:1.45}
+.gap .gh span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:3px}
+.gapsrc{background:var(--surface);border-top:1px solid var(--warn-edge);padding:var(--s-5) var(--s-6)}
+.gapq{display:flex;gap:var(--s-4);align-items:flex-start;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55;margin-bottom:var(--s-4)}
+.gapq:last-child{margin-bottom:0}
+.gapq .gt{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);flex:none;padding-top:1px}
+.gapfix{background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-6)}
+.gapfix label{display:block;font-size:var(--t-cap);font-weight:600;margin-bottom:var(--s-4)}
+.gapacts{display:flex;gap:var(--s-4);padding:var(--s-5) var(--s-6);background:var(--surface);border-top:1px solid var(--rule);flex-wrap:wrap}
+
+/* ── Sources with staleness ─────────────────────────────────────── */
+.src{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);margin-bottom:var(--s-5)}
+.src .si{width:36px;height:36px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.src .si svg{width:17px;height:17px;color:var(--ink-2)}
+.src .sm{flex:1;min-width:0}
+.src .sm b{display:block;font-size:var(--t-body-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.src .sm span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.src.stale{border-color:var(--warn-edge);background:var(--warn-soft)}
+.src.stale .si{background:var(--warn-fill)} .src.stale .si svg{color:#14150F}
+
+/* ── Conflict ───────────────────────────────────────────────────── */
+.srcconf{border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;background:var(--surface);margin-bottom:var(--s-6)}
+.srcconf .ch{display:flex;align-items:flex-start;gap:var(--s-5);padding:var(--s-6);background:var(--warn-soft);border-bottom:1px solid var(--warn-edge)}
+.srcconf .ch svg{width:18px;height:18px;flex:none;margin-top:1px;color:var(--warn)}
+.cline{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule)}
+.cline:last-child{border-bottom:none}
+.cline .cw{width:96px;flex:none;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.cline .cv{flex:1;min-width:0;font-size:var(--t-body-s)}
+.cline .cval{font-family:var(--f-mono);font-weight:600;font-variant-numeric:tabular-nums}
+.cline.wins{background:var(--signal-soft)}
+.cline.wins .cw{color:var(--signal-text)}
+.cline.loses .cv{color:var(--ink-3);text-decoration:line-through}
+
+/* ── Pronunciation ──────────────────────────────────────────────── */
+.lex{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.lexrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px;align-items:center;gap:var(--s-4);
+  padding:var(--s-4) var(--s-6);border-bottom:1px solid var(--rule)}
+.lexrow:last-of-type{border-bottom:none}
+.lexrow input{border:1px solid transparent;background:none;font:inherit;font-size:var(--t-body-s);color:var(--ink);
+  padding:6px var(--s-4);border-radius:var(--r-sm);width:100%;min-width:0}
+.lexrow input:hover{background:var(--surface-2);border-color:var(--rule)}
+.lexrow input:focus{outline:none;background:var(--surface);border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.lexrow input.say{font-family:var(--f-mono);color:var(--signal-text)}
+.lexrow .lp{width:32px;height:32px;border-radius:50%;border:1px solid var(--rule-2);background:var(--surface);
+  display:grid;place-items:center;cursor:pointer;color:var(--ink-2);transition:all var(--t-micro)}
+.lexrow .lp:hover{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.lexrow .lp.playing{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.lexrow .lp svg{width:14px;height:14px}
+.lexhead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 36px;gap:var(--s-4);padding:var(--s-4) var(--s-6);
+  border-bottom:1px solid var(--rule);background:var(--surface-2);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+.addrow{display:flex;align-items:center;gap:var(--s-4);width:100%;padding:var(--s-5) var(--s-6);border:none;background:none;
+  font:inherit;font-size:var(--t-body-s);font-weight:600;color:var(--ink-3);cursor:pointer;text-align:left;transition:all var(--t-micro)}
+.addrow:hover{background:var(--surface-2);color:var(--ink)}
+.addrow svg{width:15px;height:15px}
+
+/* .authbody is a column flex container, so its children would otherwise
+   refuse to shrink below their min-content width. */
+.authbody > *{min-width:0}
+.pane{min-width:0}
+.cline .cv{min-width:0;overflow-wrap:anywhere}
+.gapacts .btn{flex:1 1 auto;min-width:0}
+.pane{display:none} .pane.on{display:block;animation:sin var(--t-panel) var(--e-out)}
+@media (prefers-reduced-motion:reduce){.pane.on{animation:none}}
+
+@media (max-width:640px){
+  .authbody,.authfoot{max-width:none}
+  .prow{grid-template-columns:minmax(0,1fr) 28px;grid-template-areas:"n d" "p p";gap:var(--s-3) var(--s-4)}
+  .prow input:not(.pp){grid-area:n} .prow input.pp{grid-area:p;text-align:left}
+  .prow .pd{grid-area:d;opacity:1}
+  .lexrow{grid-template-columns:minmax(0,1fr) 36px;grid-template-areas:"w p" "s s";gap:var(--s-3) var(--s-4)}
+  .lexrow input:not(.say){grid-area:w} .lexrow input.say{grid-area:s} .lexrow .lp{grid-area:p}
+  .lexhead{display:none}
+  .cline{flex-wrap:wrap} .cline .cw{width:auto}
+}
+
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-audio-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-audio-lines" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /></symbol><symbol id="i-phone-call" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-phone-call" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 2a9 9 0 0 1 9 9" /> <path d="M13 6a5 5 0 0 1 5 5" /> <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-phone-forwarded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-phone-forwarded" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 6h8" /> <path d="m18 2 4 4-4 4" /> <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-mic" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 19v3" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <rect x="9" y="2" width="6" height="13" rx="3" /></symbol><symbol id="i-message-circle-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-message-circle-more" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /> <path d="M8 12h.01" /> <path d="M12 12h.01" /> <path d="M16 12h.01" /></symbol><symbol id="i-message-square-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-message-square-text" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /> <path d="M7 11h10" /> <path d="M7 15h6" /> <path d="M7 7h8" /></symbol><symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-send" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /></symbol><symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-image" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="18" height="18" x="3" y="3" rx="2" ry="2" /> <circle cx="9" cy="9" r="2" /> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /></symbol><symbol id="i-check-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-check-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 6 7 17l-5-5" /> <path d="m22 10-7.5 7.5L13 16" /></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol><symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-plus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="M12 5v14" /></symbol><symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-minus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /></symbol><symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-chevron-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m6 9 6 6 6-6" /></symbol><symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-chevron-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /></symbol><symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-chevron-left" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /></symbol><symbol id="i-chevron-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-chevron-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18 15-6-6-6 6" /></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-arrow-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></symbol><symbol id="i-arrow-up-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-arrow-up-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M7 7h10v10" /> <path d="M7 17 17 7" /></symbol><symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-arrow-left" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></symbol><symbol id="i-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-arrow-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v14" /> <path d="m19 12-7 7-7-7" /></symbol><symbol id="i-triangle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-triangle-alert" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol><symbol id="i-circle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-alert" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></symbol><symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-info" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></symbol><symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></symbol><symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol><symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-help" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /> <path d="M12 17h.01" /></symbol><symbol id="i-circle-dot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-dot" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="1" /> <circle cx="12" cy="12" r="10" /></symbol><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-search" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></symbol><symbol id="i-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-filter" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z" /></symbol><symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-settings" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></symbol><symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-user" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></symbol><symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-users" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></symbol><symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-store" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5" /> <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244" /> <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05" /></symbol><symbol id="i-building-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-building-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 12h4" /> <path d="M10 8h4" /> <path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /> <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></symbol><symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-bot" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></symbol><symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-sparkles" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></symbol><symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-zap" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></symbol><symbol id="i-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-book-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></symbol><symbol id="i-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-languages" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></symbol><symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-globe" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></symbol><symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-map-pin" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></symbol><symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /><rect x="2" y="4" width="20" height="16" rx="2" /></symbol><symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-wallet" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></symbol><symbol id="i-hand-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-hand-coins" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17" /> <path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" /> <path d="m2 16 6 6" /> <circle cx="16" cy="9" r="2.9" /> <circle cx="6" cy="5" r="3" /></symbol><symbol id="i-banknote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-banknote" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="20" height="12" x="2" y="6" rx="2" /> <circle cx="12" cy="12" r="2" /> <path d="M6 12h.01M18 12h.01" /></symbol><symbol id="i-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-receipt" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 17V7" /> <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8" /> <path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z" /></symbol><symbol id="i-coins" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-coins" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13.744 17.736a6 6 0 1 1-7.48-7.48" /> <path d="M15 6h1v4" /> <path d="m6.134 14.768.866-.5 2 3.464" /> <circle cx="16" cy="8" r="6" /></symbol><symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-shield" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></symbol><symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-shield-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-lock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol><symbol id="i-badge-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-badge-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /> <path d="m16 9-5.5 5.5L8 12" /></symbol><symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-clock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></symbol><symbol id="i-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-timer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="10" x2="14" y1="2" y2="2" /> <line x1="12" x2="15" y1="14" y2="11" /> <circle cx="12" cy="14" r="8" /></symbol><symbol id="i-hourglass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-hourglass" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 22h14" /> <path d="M5 2h14" /> <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" /> <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" /></symbol><symbol id="i-alarm-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-alarm-clock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="13" r="8" /> <path d="M12 9v4l2 2" /> <path d="M5 3 2 6" /> <path d="m22 6-3-3" /> <path d="M6.38 18.7 4 21" /> <path d="M17.64 18.67 20 21" /></symbol><symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-calendar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /></symbol><symbol id="i-calendar-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-calendar-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /> <path d="m9 15 2 2 4-4" /></symbol><symbol id="i-refresh-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-refresh-cw" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></symbol><symbol id="i-rotate-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-rotate-cw" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /></symbol><symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-copy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="14" height="14" x="8" y="8" rx="2" ry="2" /> <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol><symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-link" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol><symbol id="i-external-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-external-link" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol><symbol id="i-undo-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-undo-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 14 4 9l5-5" /> <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" /></symbol><symbol id="i-corner-down-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-corner-down-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 10 5 5-5 5" /> <path d="M4 4v7a4 4 0 0 0 4 4h12" /></symbol><symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-eye" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></symbol><symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-eye-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /> <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /> <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /> <path d="m2 2 20 20" /></symbol><symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-house" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol><symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 5h16" /> <path d="M4 12h16" /> <path d="M4 19h16" /></symbol><symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></symbol><symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-monitor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" /></symbol><symbol id="i-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-smartphone" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></symbol><symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-laptop" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" /></symbol><symbol id="i-signal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-signal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 20h.01" /> <path d="M7 20v-4" /> <path d="M12 20v-8" /> <path d="M17 20V8" /> <path d="M22 4v16" /></symbol><symbol id="i-wifi-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-wifi-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 20h.01" /> <path d="M8.5 16.429a5 5 0 0 1 7 0" /> <path d="M5 12.859a10 10 0 0 1 5.17-2.69" /> <path d="M19 12.859a10 10 0 0 0-2.007-1.523" /> <path d="M2 8.82a15 15 0 0 1 4.177-2.643" /> <path d="M22 8.82a15 15 0 0 0-11.288-3.764" /> <path d="m2 2 20 20" /></symbol><symbol id="i-radio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-radio" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16.247 7.761a6 6 0 0 1 0 8.478" /> <path d="M19.075 4.933a10 10 0 0 1 0 14.134" /> <path d="M4.925 19.067a10 10 0 0 1 0-14.134" /> <path d="M7.753 16.239a6 6 0 0 1 0-8.478" /> <circle cx="12" cy="12" r="2" /></symbol><symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-server" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="20" height="8" x="2" y="2" rx="2" ry="2" /> <rect width="20" height="8" x="2" y="14" rx="2" ry="2" /> <line x1="6" x2="6.01" y1="6" y2="6" /> <line x1="6" x2="6.01" y1="18" y2="18" /></symbol><symbol id="i-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-database" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-bell" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10.268 21a2 2 0 0 0 3.464 0" /> <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /></symbol><symbol id="i-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-file-text" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></symbol><symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-folder" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></symbol><symbol id="i-list-checks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-list-checks" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /></symbol><symbol id="i-clipboard-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-clipboard-list" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="M12 11h4" /> <path d="M12 16h4" /> <path d="M8 11h.01" /> <path d="M8 16h.01" /></symbol><symbol id="i-workflow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-workflow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /></symbol><symbol id="i-git-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-git-branch" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 6a9 9 0 0 0-9 9V3" /> <circle cx="18" cy="6" r="3" /> <circle cx="6" cy="18" r="3" /></symbol><symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-split" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 3h5v5" /> <path d="M8 3H3v5" /> <path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" /> <path d="m15 9 6-6" /></symbol><symbol id="i-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-trash-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></symbol><symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-pencil" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></symbol><symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-upload" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 3v12" /> <path d="m17 8-5-5-5 5" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></symbol><symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-download" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></symbol><symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></symbol><symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-trending-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></symbol><symbol id="i-trending-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-trending-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 17h6v-6" /> <path d="m22 17-8.5-8.5-5 5L2 7" /></symbol><symbol id="i-chart-column" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-chart-column" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></symbol><symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-activity" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol><symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-gauge" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></symbol><symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-target" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></symbol><symbol id="i-quote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-quote" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /> <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /></symbol><symbol id="i-log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-log-out" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m16 17 5-5-5-5" /> <path d="M21 12H9" /> <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /></symbol><symbol id="i-life-buoy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-life-buoy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m4.93 4.93 4.24 4.24" /> <path d="m14.83 9.17 4.24-4.24" /> <path d="m14.83 14.83 4.24 4.24" /> <path d="m9.17 14.83-4.24 4.24" /> <circle cx="12" cy="12" r="4" /></symbol><symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-leaf" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20" /> <path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13" /></symbol><symbol id="i-droplet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-droplet" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" /></symbol><symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-flame" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></symbol><symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-hand" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" /> <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" /> <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /> <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></symbol><symbol id="i-grip-vertical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-grip-vertical" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="9" cy="12" r="1" /> <circle cx="9" cy="5" r="1" /> <circle cx="9" cy="19" r="1" /> <circle cx="15" cy="12" r="1" /> <circle cx="15" cy="5" r="1" /> <circle cx="15" cy="19" r="1" /></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-play" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></symbol><symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect x="14" y="3" width="5" height="18" rx="1" /> <rect x="5" y="3" width="5" height="18" rx="1" /></symbol><symbol id="i-headphones" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-headphones" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" /></symbol><symbol id="i-volume-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-volume-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /> <path d="M16 9a5 5 0 0 1 0 6" /> <path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></symbol><symbol id="i-volume-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-volume-x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z" /> <path d="m16.5 14.5 5-5" /> <path d="m16.5 9.5 5 5" /></symbol><symbol id="i-ear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-ear" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0" /> <path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4" /></symbol><symbol id="i-chevrons-up-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-chevrons-up-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m7 15 5 5 5-5" /> <path d="m7 9 5-5 5 5" /></symbol><symbol id="i-move-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-move-horizontal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18 8 4 4-4 4" /> <path d="M2 12h20" /> <path d="m6 8-4 4 4 4" /></symbol><symbol id="i-accessibility" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-accessibility" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="16" cy="4" r="1" /> <path d="m18 19 1-7-6 1" /> <path d="m5 8 3-3 5.5 3-2.36 3.5" /> <path d="M4.24 14.5a5 5 0 0 0 6.88 6" /> <path d="M13.76 17.5a5 5 0 0 0-6.88-6" /></symbol><symbol id="i-type" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-type" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 4v16" /> <path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2" /> <path d="M9 20h6" /></symbol><symbol id="i-contrast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-contrast" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 18a6 6 0 0 0 0-12v12z" /></symbol><symbol id="i-loader-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-loader-circle" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21 12a9 9 0 1 1-6.219-8.56" /></symbol><symbol id="i-ellipsis" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-ellipsis" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="1" /> <circle cx="19" cy="12" r="1" /> <circle cx="5" cy="12" r="1" /></symbol><symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-star" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></symbol><symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-heart" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol><symbol id="i-thumbs-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-thumbs-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" /> <path d="M7 10v12" /></symbol><symbol id="i-thumbs-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-thumbs-down" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z" /> <path d="M17 14V2" /></symbol><symbol id="i-voicemail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-voicemail" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="6" cy="12" r="4" /> <circle cx="18" cy="12" r="4" /> <line x1="6" x2="18" y1="16" y2="16" /></symbol><symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></symbol><symbol id="i-scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4 8.12 15.88" /><path d="m14.47 14.48 5.53 5.52" /><path d="M8.12 8.12 12 12" /><circle cx="6" cy="6" r="3" /><circle cx="6" cy="18" r="3" /></symbol><symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></symbol><symbol id="i-circle-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><svg class="lucide lucide-circle-pause" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <line x1="10" x2="10" y1="15" y2="9" /> <line x1="14" x2="14" y1="15" y2="9" /></symbol></defs></svg>
+
+<div class="bar">
+  <span class="lg"><span class="mk"><svg><use href="#i-audio-lines"/></svg></span><span><b>Subiza</b><span>Flow 1.7 · knowledge</span></span></span>
+  <div class="sp"></div>
+  <select class="scen" id="scen" aria-label="Scenario">
+    <optgroup label="Normal"><option value="normal">What it knows</option>
+      <option value="prices">The price table</option>
+      <option value="ask">Asking it something</option></optgroup>
+    <optgroup label="Found for you"><option value="gaps">Gaps from real calls</option>
+      <option value="conflict">Two sources disagree</option>
+      <option value="stale">A source has gone stale</option></optgroup>
+    <optgroup label="Speech"><option value="lex">Pronunciation</option></optgroup>
+  </select>
+  <div class="seg" role="group" aria-label="Language">
+    <button data-lang="rw" aria-pressed="false">RW</button>
+    <button data-lang="en" aria-pressed="true">EN</button>
+  </div>
+  <div class="seg" role="group" aria-label="Mode">
+    <button data-mode="proto" aria-pressed="true">Prototype</button>
+    <button data-mode="spec" aria-pressed="false">Spec</button>
+  </div>
+</div>
+
+<div class="mode on" id="m-proto">
+<div class="auth">
+  <div class="authmain">
+    <div class="authhead">
+      <span class="blogo"><span class="mk"><svg><use href="#i-audio-lines"/></svg></span><b>Subiza</b></span>
+      <span class="tag" data-rw="Ubumenyi">Knowledge</span>
+    </div>
+    <div class="authbody">
+      <h1 data-rw="Icyo Subiza izi ku Salon Ubwiza">What Subiza knows about Salon Ubwiza</h1>
+      <p class="sub" data-rw="Iyi ni yo mipaka yayo. Ibitari hano ntibisubizwa — ikuzana aho gukeka.">This is also its boundary. Anything not here doesn't get answered — it fetches you instead of guessing, which is the whole design.</p>
+
+      <div class="ktabs" role="group" aria-label="Knowledge areas">
+        <button data-pane="p-sum" aria-pressed="true"><svg><use href="#i-list-checks"/></svg><span data-rw="Incamake">Overview</span></button>
+        <button data-pane="p-price" aria-pressed="false"><svg><use href="#i-hand-coins"/></svg><span data-rw="Ibiciro">Prices</span><span class="kn">14</span></button>
+        <button data-pane="p-qa" aria-pressed="false"><svg><use href="#i-circle-help"/></svg><span data-rw="Ibibazo">Questions</span><span class="kn">9·3</span></button>
+        <button data-pane="p-gaps" aria-pressed="false"><svg><use href="#i-triangle-alert"/></svg><span data-rw="Icyuho">Gaps</span><span class="kn">3</span></button>
+        <button data-pane="p-src" aria-pressed="false"><svg><use href="#i-file-text"/></svg><span data-rw="Inkomoko">Sources</span><span class="kn">2</span></button>
+        <button data-pane="p-lex" aria-pressed="false"><svg><use href="#i-volume-2"/></svg><span data-rw="Imvugo">Pronunciation</span><span class="kn">6</span></button>
+      </div>
+
+      <!-- ══ OVERVIEW ══ -->
+      <div class="pane on" id="p-sum">
+        <div class="knows">
+          <button class="krow" data-pane-go="p-price"><span class="ki"><svg><use href="#i-hand-coins"/></svg></span>
+            <span class="kk"><b data-rw="Ibiciro">Prices</b><span data-rw="Serivisi 14 · zisomwa uko ziri">14 services · read exactly as typed</span></span>
+            <span class="kv"><span class="dot dot-ok"></span></span></button>
+          <button class="krow" data-pane-go="p-sum"><span class="ki"><svg><use href="#i-clock"/></svg></span>
+            <span class="kk"><b data-rw="Amasaha">Hours</b><span>Mon–Sat 08:00–19:00</span></span>
+            <span class="kv"><span class="dot dot-ok"></span></span></button>
+          <button class="krow" data-pane-go="p-sum"><span class="ki"><svg><use href="#i-map-pin"/></svg></span>
+            <span class="kk"><b data-rw="Aho iherereye">Location</b><span data-rw="Remera, hafi ya Giporoso">Remera, near Giporoso</span></span>
+            <span class="kv"><span class="dot dot-ok"></span></span></button>
+          <button class="krow warn" data-pane-go="p-qa"><span class="ki"><svg><use href="#i-circle-help"/></svg></span>
+            <span class="kk"><b data-rw="Ibibazo">Questions</b><span data-rw="9 byasubijwe · 3 bitarasubizwa">9 answered · 3 still blank</span></span>
+            <span class="kv"><span class="tag tag-warn">3</span></span></button>
+          <button class="krow warn" data-pane-go="p-gaps"><span class="ki"><svg><use href="#i-triangle-alert"/></svg></span>
+            <span class="kk"><b data-rw="Ibyo abakiriya babajije bitasubijwe">What customers asked and it couldn't answer</b><span data-rw="Iki cyumweru">This week</span></span>
+            <span class="kv"><span class="tag tag-warn">3</span></span></button>
+          <button class="krow" data-pane-go="p-lex"><span class="ki"><svg><use href="#i-volume-2"/></svg></span>
+            <span class="kk"><b data-rw="Imvugo">Pronunciation</b><span data-rw="Amagambo 6">6 words</span></span>
+            <span class="kv"><span class="dot dot-ok"></span></span></button>
+          <button class="krow" data-pane-go="p-src"><span class="ki"><svg><use href="#i-file-text"/></svg></span>
+            <span class="kk"><b data-rw="Inyandiko n'urubuga">Documents and website</b><span data-rw="2 · rusomwe hashize iminsi 3">2 · last read 3 days ago</span></span>
+            <span class="kv"><span class="dot dot-warn"></span></span></button>
+        </div>
+
+        <div class="askbox">
+          <div class="ah"><svg><use href="#i-message-square-text"/></svg><span data-rw="Yibaze ikintu">Ask it something</span></div>
+          <div class="askin">
+            <input id="askq" value="How much for braids?" aria-label="Ask a question">
+            <button class="btn btn-primary" id="askBtn" data-rw="Baza">Ask</button>
+          </div>
+          <div class="answer" id="answer" hidden>
+            <div class="abub">
+              <span id="aTxt">Imfuruka ntoya ni 15,000, iz'ubunini ni 10,000. Ushaka gufata gahunda?</span>
+              <span class="aor" id="aOrig">Small braids are 15,000, large are 10,000. Would you like to book?</span>
+              <button class="cite" id="citeBtn"><svg><use href="#i-hand-coins"/></svg><span data-rw="Kuva mu rutonde rw'ibiciro">From your price list</span><span class="cx" data-rw="imirongo 1–2">rows 1–2</span></button>
+              <span class="hedge" id="hedge" hidden><svg><use href="#i-circle-alert"/></svg><span data-rw="Ntabwo iyi nteguye neza. Ntabwo ari mu biciro byawe — bityo iyi si igisubizo cyemewe, ni ugukeka.">This one isn't in your prices, so the agent wouldn't say it at all — it would fetch you. What you're seeing here is a guess, and guesses are exactly what it refuses to make on a real call.</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PRICES ══ -->
+      <div class="pane" id="p-price">
+        <div class="ptbl">
+          <div class="ph"><svg style="width:16px;height:16px;color:var(--ink-3)"><use href="#i-hand-coins"/></svg>
+            <b data-rw="Ibiciro">Prices</b>
+            <span class="tag tag-ok" data-rw="serivisi 14">14 services</span></div>
+          <div class="neverline"><svg><use href="#i-shield-check"/></svg>
+            <span data-rw-html="Ibi ni <b>imibare yanditse</b>, si inyandiko. Subiza irayisoma uko iri — ntabwo iyandika. Igiciro kitari hano ntikivugwa: ikuzana.">These are <b>typed numbers</b>, not text. Subiza reads them out exactly as they stand and never composes one. A price that isn't in this table is never spoken — the agent fetches you instead.</span></div>
+          <div id="priceRows"></div>
+          <button class="addrow" id="addPrice"><svg><use href="#i-plus"/></svg><span data-rw="Ongeraho serivisi">Add a service</span></button>
+          <div class="pf">
+            <button class="btn btn-secondary btn-sm"><svg><use href="#i-camera"/></svg><span data-rw="Fotora urundi rupapuro">Photograph another page</span></button>
+            <span class="hint" style="margin:0;margin-left:auto" data-rw="Byahinduwe ejo">Edited yesterday</span>
+          </div>
+        </div>
+        <div class="banner banner-info" style="margin-top:var(--s-6)">
+          <svg class="bi"><use href="#i-circle-alert"/></svg>
+          <div><h4 data-rw="Kuki tudareka ubwenge bukavuga ibiciro">Why we don't let the model say a price</h4>
+            <p data-rw-html="Ubwenge bwa AI buhinduranya imibare no mu gihe igisubizo cyiza kiri imbere yabwo — ni ikosa ryihariye ku mibare, si nk'iry'amagambo. Mu bushakashatsi bumwe, gushakisha mu nyandiko byatanze <b>0%</b> ku bibazo bisaba imibare nyayo, mu gihe kuyisoma mu mbonerahamwe byatanze 55%. Ni yo mpamvu igiciro ari umurongo w'imbonerahamwe, atari interuro.">Models misstate numbers even when the right one is in front of them — it's a distinct failure mode, not ordinary vagueness. In one benchmark, plain retrieval over text scored <b>0%</b> on questions needing exact figures, while reading from structured data scored 55%. That's why a price here is a table cell and not a sentence.</p></div>
+        </div>
+      </div>
+
+      <!-- ══ QUESTIONS ══ -->
+      <div class="pane" id="p-qa">
+        <div class="qa">
+          <div class="qq"><svg><use href="#i-circle-help"/></svg><b>Do you do braids for children?</b></div>
+          <div class="aa"><textarea rows="2">Yego, kuva ku myaka 5. Bimara isaha imwe kandi bitwara 4,000 RWF.</textarea></div>
+          <div class="qf"><span class="origin" data-rw="wowe">you</span><span class="hint" style="margin:0" data-rw="Byahinduwe hashize icyumweru">edited a week ago</span></div>
+        </div>
+        <div class="qa">
+          <div class="qq"><svg><use href="#i-circle-help"/></svg><b>Can I pay with MoMo?</b></div>
+          <div class="aa"><textarea rows="2">Yego, MTN MoMo na Airtel Money byombi birakorwa.</textarea></div>
+          <div class="qf"><span class="origin" data-rw="kuva mu ikosorwa">from a correction</span><span class="hint" style="margin:0" data-rw="Kuva ku kiganiro cyo ku wa gatatu">from Wednesday's call</span></div>
+        </div>
+        <div class="qa blank">
+          <div class="qq"><svg><use href="#i-circle-help"/></svg><b>Do you take walk-ins, or only bookings?</b></div>
+          <div class="aa"><textarea rows="2" placeholder="Andika igisubizo… (Ntirasubizwa — Subiza izana umuntu)"></textarea></div>
+          <div class="qf"><span class="origin" data-rw="mu ntangiriro">from the template</span><span class="tag tag-warn" data-rw="ntirasubizwa">unanswered</span></div>
+        </div>
+        <button class="btn btn-secondary btn-block"><svg><use href="#i-plus"/></svg><span data-rw="Ongeraho ikibazo n'igisubizo">Add a question and answer</span></button>
+        <div class="banner banner-info" style="margin-top:var(--s-6)">
+          <svg class="bi"><use href="#i-info"/></svg>
+          <div><h4 data-rw="Ibibazo bitarasubijwe si ikosa">A blank answer is not a failure</h4><p data-rw="Subiza ntiyigera ikeka. Ikibazo kitagira igisubizo gituma ikuzana — kandi ni cyo gikwiye. Ibibazo bitatu bitarasubizwa bivuze ko hari abakiriya batatu bazakuzanira.">A question with no answer means the agent fetches you rather than inventing something, which is correct. It also means three customers will reach you personally rather than being served — which is the trade you're making, stated plainly.</p></div>
+        </div>
+      </div>
+
+      <!-- ══ GAPS ══ -->
+      <div class="pane" id="p-gaps">
+        <p class="sub" data-rw="Ibi ntabwo turi kubikeka. Ni ibibazo abakiriya bawe babajije mu byumweru bibiri bishize, Subiza itabashije gusubiza.">We're not guessing at these. They're questions your own customers asked in the last fortnight that Subiza couldn't answer.</p>
+        <div class="gap">
+          <div class="gh"><svg><use href="#i-triangle-alert"/></svg>
+            <div><b data-rw="Abakiriya 3 babajije ku iparikingi">Three customers asked about parking</b>
+              <span data-rw="Ntabwo warigeze ubwira Subiza ku iparikingi.">You haven't told Subiza anything about parking.</span></div></div>
+          <div class="gapsrc">
+            <div class="gapq"><span class="gt">Tue 11:04</span><span>“Mufite aho gupaka imodoka?”</span></div>
+            <div class="gapq"><span class="gt">Thu 16:22</span><span>“Is there parking outside?”</span></div>
+            <div class="gapq"><span class="gt">Sat 09:41</span><span>“Nshobora gupaka hafi?”</span></div>
+          </div>
+          <div class="gapfix">
+            <label for="gapAns" data-rw="Igisubizo cyabo cyagombye kuba iki?">What should it have told them?</label>
+            <textarea class="inp" id="gapAns" rows="2" placeholder="Hari aho gupaka imodoka eshatu imbere y'isalon, ni ubuntu."></textarea>
+          </div>
+          <div class="gapacts">
+            <button class="btn btn-primary btn-sm" id="gapSave" data-rw-html="Bishyireho<svg><use href='#i-check'/></svg>">Add it<svg><use href="#i-check"/></svg></button>
+            <button class="btn btn-ghost btn-sm" data-rw="Ntabwo bikenewe">Not worth answering</button>
+          </div>
+        </div>
+        <div class="gap" style="border-color:var(--rule-2);background:var(--surface)">
+          <div class="gh"><svg style="color:var(--ink-3)"><use href="#i-circle-help"/></svg>
+            <div><b data-rw="Umukiriya umwe yabajije ku kwishyura buhoro buhoro">One customer asked about paying in instalments</b>
+              <span data-rw="Rimwe gusa. Birashoboka ko bidakenewe.">Asked once. Possibly not worth a rule.</span></div></div>
+          <div class="gapacts" style="border-top:1px solid var(--rule)">
+            <button class="btn btn-secondary btn-sm" data-rw="Ndabisubiza">Answer it</button>
+            <button class="btn btn-ghost btn-sm" data-rw="Bireke">Dismiss</button>
+          </div>
+        </div>
+        <div class="banner banner-ok" style="margin-top:var(--s-6)">
+          <svg class="bi"><use href="#i-target"/></svg>
+          <div><h4 data-rw="Kuki iki ari cyo kintu cyiza cyo kugusubiza hano">Why this is the best reason to come back</h4><p data-rw="Si ubutumwa busanzwe bwo kukwibutsa. Ni akazi k'iminota ibiri, kagaragajwe n'abakiriya bawe ubwabo, kandi gafite igisubizo kigaragara.">It isn't a nudge. It's a two-minute task, evidenced by your own customers, with a visible result — the next person who asks gets an answer instead of a callback.</p></div>
+        </div>
+      </div>
+
+      <!-- ══ SOURCES + CONFLICT ══ -->
+      <div class="pane" id="p-src">
+        <div class="srcconf" id="confCard">
+          <div class="ch"><svg><use href="#i-triangle-alert"/></svg>
+            <div><h4 data-rw="Inkomoko ebyiri zivuga ibitandukanye">Two sources disagree about braids</h4>
+              <p style="font-size:var(--t-cap);color:var(--ink-2);margin:3px 0 0;line-height:1.55" data-rw="Twahisemo mu mwanya wawe, kandi turakubwira icyo twirengagije.">We chose, and we're telling you which one we ignored.</p></div></div>
+          <div class="cline wins"><span class="cw" data-rw="Ikoreshwa">Used</span><span class="cv" data-rw-html="Urutonde rw'ibiciro — <span class='cval'>15,000</span>">Your price table — <span class="cval">15,000</span></span></div>
+          <div class="cline loses"><span class="cw" data-rw="Yirengagijwe">Ignored</span><span class="cv" data-rw-html="Urubuga rwawe — <span class='cval'>12,000</span>">Your website — <span class="cval">12,000</span></span></div>
+          <div class="cline"><span class="cw" data-rw="Impamvu">Why</span><span class="cv" style="font-size:var(--t-cap);color:var(--ink-2)" data-rw="Imibare yanditse itsinda inyandiko, buri gihe. Ntitureka ubwenge bwihitiramo.">Typed data always beats retrieved text. We never let the model decide which to believe.</span></div>
+          <div class="gapacts" style="border-top:1px solid var(--rule)">
+            <button class="btn btn-primary btn-sm" data-rw="Kosora urubuga">Fix the website</button>
+            <button class="btn btn-secondary btn-sm" data-rw="Hindura urutonde ube 12,000">Change the table to 12,000</button>
+          </div>
+        </div>
+        <div class="src stale">
+          <span class="si"><svg><use href="#i-globe"/></svg></span>
+          <span class="sm"><b>salonubwiza.rw</b><span data-rw="Rwasomwe hashize iminsi 34 · rwahindutse kuva icyo gihe">Last read 34 days ago · it has changed since</span></span>
+          <button class="btn btn-secondary btn-sm"><svg><use href="#i-refresh-cw"/></svg><span data-rw="Ongera usome">Re-read</span></button>
+        </div>
+        <div class="src">
+          <span class="si"><svg><use href="#i-file-text"/></svg></span>
+          <span class="sm"><b data-rw="Amabwiriza y'isalon.pdf">Salon policies.pdf</b><span data-rw="Byasomwe hashize iminsi 3 · ibice 4">Read 3 days ago · 4 sections</span></span>
+          <span class="dot dot-ok"></span>
+        </div>
+        <button class="btn btn-secondary btn-block" style="margin-top:var(--s-5)"><svg><use href="#i-plus"/></svg><span data-rw="Ongeraho inkomoko">Add a source</span></button>
+        <div class="banner banner-warn" style="margin-top:var(--s-6)">
+          <svg class="bi"><use href="#i-clock"/></svg>
+          <div><h4 data-rw="Ntituzi neza igihe ubumenyi bushaje">We don't actually know how fast this goes stale</h4><p data-rw="Nta bushakashatsi bwabaruye igihe ubumenyi bw'ubucuruzi buto bumara butarahinduka. Kwibutsa kwacu ni igereranyo gishyize mu gaciro, si icyemezo — kandi tuzabipima ku bakiriya bacu ba mbere.">There's no published research on how quickly a small business's own knowledge drifts out of date, or whether reminding people helps. This nudge is a reasonable guess, and we'll measure it on real tenants rather than pretend otherwise.</p></div>
+        </div>
+      </div>
+
+      <!-- ══ PRONUNCIATION ══ -->
+      <div class="pane" id="p-lex">
+        <p class="sub" data-rw="Ikinyarwanda ntikiri mu ndimi zishyigikiwe n'ibikoresho bikuru byo kuvuga. Amazina y'ubucuruzi, ay'ahantu n'ay'abantu azavugwa nabi keretse ubikosoye hano.">Kinyarwanda isn't supported by the mainstream speech engines. Business names, place names and people's names get mangled by default, using English or French approximations — so this isn't an advanced setting, it's part of the main flow.</p>
+        <div class="lex">
+          <div class="lexhead"><span data-rw="Ijambo">The word</span><span data-rw="Uko rivugwa">How to say it</span><span></span></div>
+          <div class="lexrow"><input value="Ubwiza"><input class="say" value="oo-BWEE-za"><button class="lp" aria-label="Preview"><svg><use href="#i-play"/></svg></button></div>
+          <div class="lexrow"><input value="Nyabugogo"><input class="say" value="nya-boo-GO-go"><button class="lp" aria-label="Preview"><svg><use href="#i-play"/></svg></button></div>
+          <div class="lexrow"><input value="Remera"><input class="say" value="reh-MEH-ra"><button class="lp" aria-label="Preview"><svg><use href="#i-play"/></svg></button></div>
+          <div class="lexrow"><input value="Kimironko"><input class="say" value="kee-mee-RON-ko"><button class="lp" aria-label="Preview"><svg><use href="#i-play"/></svg></button></div>
+          <div class="lexrow"><input value="Aline"><input class="say" value="ah-LEE-neh"><button class="lp" aria-label="Preview"><svg><use href="#i-play"/></svg></button></div>
+          <div class="lexrow"><input value="Giporoso"><input class="say" value="gee-po-RO-so"><button class="lp" aria-label="Preview"><svg><use href="#i-play"/></svg></button></div>
+          <button class="addrow"><svg><use href="#i-plus"/></svg><span data-rw="Ongeraho ijambo">Add a word</span></button>
+        </div>
+        <div class="banner banner-info" style="margin-top:var(--s-6)">
+          <svg class="bi"><use href="#i-type"/></svg>
+          <div><h4 data-rw="Wandika uko ryumvikana, si mu bimenyetso by'ubuhanga">You write it the way it sounds</h4><p data-rw="Nta bumenyi bw'ibimenyetso by'imvugo ukeneye. Wandika ijambo mu buryo bwumvikana, ukanda ▶ wumve, ugerageze ubundi bwandikire nibiba ngombwa. Ni ko ibikoresho bikuru bibikora ku ndimi bishyigikiye.">No phonetic alphabet to learn. Write it the way it sounds, press play, try a different spelling if it's still wrong. That respelling approach is exactly what the major engines document for words they mispronounce — the difference here is that we put it in the main flow instead of a settings page.</p></div>
+        </div>
+        <div class="banner banner-warn" style="margin-top:var(--s-6)">
+          <svg class="bi"><use href="#i-circle-alert"/></svg>
+          <div><h4 data-rw="Ikibazo kitarakemuka">An open question we haven't closed</h4><p data-rw="Uku gukosora kuzwi ko gukora ku ndimi zishyigikiwe. Ku Kinyarwanda, biterwa n'igikoresho tuzahitamo — kandi ntitwaramenya niba ari na cyo cyemera ubu buryo. Ni ikibazo cyo kubaza uwo tuzakorana.">Respelling is documented to work on languages these engines already support. Whether a Kinyarwanda-capable engine exposes any override at all is unknown — it isn't published anywhere, and it's a question to put to whichever provider we build on before this screen ships.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="authfoot">
+      <p class="microfoot" style="text-align:left"><span data-rw="Buri mpinduka ibikwa mu buryo bwa verisiyo, kandi irasubirwaho">Every change is versioned and revertible</span></p>
+    </div>
+  </div>
+
+  <aside class="authaside">
+    <div class="asidepane on" id="as-p-sum">
+      <div class="asidecard"><h3 data-rw="Ubumenyi ni yo mipaka">Knowledge is the boundary</h3><p data-rw="Ntabwo ari ububiko gusa. Ni cyo kigena ibyo umufasha ashobora gusubiza — kandi ni na ko amabwiriza ya WhatsApp yo kubuza ubwenge busanzwe yubahirizwa: ntabwo ari itegeko ryanditse, ni uko nta kindi izi.">This isn't a filing cabinet. It defines what the agent can answer at all — which is also how WhatsApp's prohibition on general-purpose assistants is honoured structurally rather than by policy. There is nothing outside this to answer from.</p></div>
+      <div class="asidecard"><h3 data-rw="Ibice bibiri, kandi itandukaniro ni ryo shingiro">Two layers, and the difference is the point</h3><p data-rw="Ibiciro, amasaha, aho iherereye n'amabwiriza ni imibare yanditse — isomwa, ntiyandikwe. Ibindi byose bishakishwa mu nyandiko bikagira aho biva. Ikibazo gishobora gusubizwa n'igice cya mbere, buri gihe gisubizwa na cyo.">Prices, hours, location and policies are typed fields — read, never composed. Everything else is retrieved from text with a source attached. A question the first layer can answer is always answered by it.</p></div>
+    </div>
+    <div class="asidepane" id="as-p-price">
+      <div class="asidecard"><h3 data-rw="Icyuho nyacyo mu isoko">The actual gap in the market</h3><p data-rw="Nta gicuruzwa na kimwe muri iki cyiciro gifata urutonde rw'ibiciro nk'imibare yanditse. Bose barushyira mu nyandiko. Ni yo mpamvu ibiciro by'ikinyoma bivuka — kandi ni cyo kintu kibi cyane iki gicuruzwa cyakora ku bucuruzi buto.">Not one product in this category treats a price list as structured data. They all flatten it into text. That is where invented prices come from, and quoting a wrong price is the single most damaging thing this product could do to a small business.</p></div>
+      <div class="asidecard"><h3 data-rw="Imibare inanirwa ukundi">Numbers fail differently</h3><p data-rw="Si ukuvuga ko ubwenge butumva neza. Ni uko imibare ifite ikibazo cyayo bwite: hari ubushakashatsi bwerekanye ko bwibeshya ku mibare no mu gihe iri imbere yabwo, kandi ko bwiganza imibare mito. Ntabwo ari amakosa asanzwe.">This isn't general vagueness. Research shows models systematically favour certain digits and misstate figures even when the correct one is in the context they were given. Numeric error is its own failure mode with its own shape — which is why the answer is to stop generating numbers, not to prompt more carefully.</p></div>
+    </div>
+    <div class="asidepane" id="as-p-qa">
+      <div class="asidecard"><h3 data-rw="Ibibazo n'ibisubizo bikorwa neza kuruta inyandiko ndende">Question-and-answer beats a document</h3><p data-rw="Inyandiko ndende zicibwamo ibice, kandi ibyo bice bikunze gucamo interuro hagati — bigatuma gushakisha binanirwa. Ikibazo n'igisubizo ni igice cyuzuye ubwacyo, nta gucibwamo. Ntabwo hari ubushakashatsi bugereranya ibyo bibiri neza, ariko impamvu iragaragara.">Long documents get chopped into chunks, and those boundaries routinely cut through the middle of a fact — which is a known cause of retrieval failure. A question and its answer is already a whole unit. There is no head-to-head study proving this, and we'd rather say so than pretend.</p></div>
+    </div>
+    <div class="asidepane" id="as-p-gaps">
+      <div class="asidecard"><h3 data-rw="Umufasha azi icyo atashoboye">The agent knows what it couldn't do</h3><p data-rw="Buri kibazo yananiwe gusubiza kirabikwa. Bitatu byabajijwe inshuro nyinshi bikaba ikintu cyo gukora, si ubutumwa bwo kwibutsa. Intercom ni yo yonyine dusanze ikora ibi neza — kandi ni cyo cyerekana n'ibiganzwa nyabyo aho kuvuga umubare gusa.">Every question it couldn't answer is recorded. Three of the same one becomes a task rather than a nudge. Intercom's Fin is the only comparable product we found doing this properly — and the detail worth copying is showing the actual conversations underneath, not just a count.</p></div>
+      <div class="asidecard"><h3 data-rw="Ikigereranyo, si ikimenyetso">A pattern, not a proven number</h3><p data-rw="Iyi nzira irakoreshwa mu isoko, ariko nta mubare wigenga wemeza ko yongera ibisubizo. Turayikoresha kuko ifite ishingiro, tuzayipima.">The pattern is shipped by real products, but no independent measurement of its effect on resolution exists — every figure we found came from a vendor's own marketing. We use it because the logic is sound, and we'll measure it ourselves.</p></div>
+    </div>
+    <div class="asidepane" id="as-p-src">
+      <div class="asidecard"><h3 data-rw="Ntitureka ubwenge bwihitiramo">We never let the model arbitrate</h3><p data-rw="Iyo inkomoko ebyiri zivuguruzanya, ubwenge busanzwe buhitamo nabi. Mu bushakashatsi ku bibazo bifite inkomoko zivuguruzanya, ubwenge bwiza bwatsinze ku kigero cya 34% gusa. Bityo urutonde rw'ibiciro rutsinda buri gihe, kandi ni itegeko ryanditse mu ikoranabuhanga.">When two sources disagree, general models choose badly and inconsistently — on a benchmark built from conflicting evidence, the best model reached about 34%. So the typed table wins, always, and that precedence is hard-coded rather than reasoned about.</p></div>
+      <div class="asidecard"><h3 data-rw="Kandi tuvuga icyo twirengagije">And we say what we ignored</h3><p data-rw="Ntabwo twabonye igicuruzwa na kimwe kibwira umuntu ko inkomoko imwe yirengagijwe. Kubihisha byaba byoroshye — ariko nyir'ubucuruzi wasanze urubuga rwe rutandukanye n'ibyo umufasha avuga akwiye kubimenya.">We found no product anywhere that tells a user which source was overridden. Hiding it would be easier — but an owner whose website says something different from their agent deserves to learn it from us.</p></div>
+    </div>
+    <div class="asidepane" id="as-p-lex">
+      <div class="asidecard"><h3 data-rw="Kuvuga nabi izina ry'ubucuruzi ni ikibazo cyihariye">Mangling the business's own name</h3><p data-rw="Nta kindi kibazo cy'ubuziranenge gisa na cyo. Umufasha uvuga nabi izina ry'isalon ahagarariye ni ikimwaro ku buryo bwihariye — ni yo mpamvu iyi ntambwe idashyirwa mu byo kwitondera, iri mu nzira nyamukuru.">No other quality problem embarrasses a business the way this does. An agent that mispronounces the name of the shop it represents undermines everything else it gets right — which is why this is in the main flow with a play button, not behind a settings menu.</p></div>
+      <div class="asidecard"><h3 data-rw="Icyo twasanze ku Kinyarwanda">What we found about Kinyarwanda</h3><p data-rw="Amazon Polly ntikirimo. Azure ntikirimo. Google birashoboka ko na yo. Hari uwitwa Proto ukorera mu Rwanda, ufite ubufatanye na Leta, akaba avuga ko akora ijwi ry'Ikinyarwanda — ni we ukwiye kubazwa mbere y'abandi.">Amazon Polly doesn't list it. Azure doesn't list it. Google almost certainly doesn't either. A Rwanda-focused provider called Proto does — with government and NGO deployments in Kinyarwanda — which makes them the first conversation to have, as a supplier or as a competitor.</p></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<div class="mode" id="m-spec">
+<div class="specwrap">
+  <div class="sechd"><span class="n">Flow 1.7 · atlas F-10</span><h2>Knowledge base</h2></div>
+  <p>Give the agent the facts about the business in a form it can answer from reliably, and let the owner see, correct and trust what it knows. The atlas's central claim — that prices should be structured data, never generated — turns out to be the best-evidenced idea in this whole programme. The transparency mechanism attached to it turns out to be the shakiest.</p>
+
+  <div class="sechd"><span class="n">01</span><h2>The claim that the research strongly supports</h2></div>
+  <div class="why2"><svg><use href="#i-hand-coins"/></svg><p><b>Table-Augmented Generation, CIDR 2025.</b> On a benchmark of natural-language questions over a database: Text2SQL <b>17%</b>, retrieval-plus-ranking <b>2%</b>, plain RAG over text <b>0%</b>, and reading from structured data <b>55%</b> — a 20 to 65 point spread. Their questions are harder than “what does a haircut cost”, so this isn't proof that retrieval fails on simple lookups. But it is direct evidence that free-text retrieval degrades catastrophically on exactly the class of question a price is.</p></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Finding</th><th>Why it matters here</th></tr></thead>
+    <tbody>
+      <tr><td><b>Numbers fail differently from prose.</b> A factual-hallucination benchmark found error rates of 48–82%, worst in numeric domains; on census data “all models display scores of 1 … a high rate of generating incorrect numbers”</td><td>Prompting more carefully does not fix a class of error that has its own mechanism</td></tr>
+      <tr><td><b>The failure is systematic, not noise.</b> Models over-produce the digit 1 and under-produce 8 and 9, tracking a distribution learned in pretraining, traced to digit-selective neurons in the final layers</td><td>A wrong price will not look random. It will look plausible, which is worse</td></tr>
+      <tr><td><b>Having the right answer in context is not enough.</b> Hallucination leaderboards measure exactly this — models summarising a retrieved document they were handed, still getting it wrong</td><td>“We gave it the price list” is not a guarantee. Reading a typed cell is</td></tr>
+    </tbody>
+  </table></div>
+  <div class="why2"><svg><use href="#i-check-check"/></svg><p><b>So the rule is: a price is a table cell, not a sentence.</b> The agent reads it out; it never composes one. A price that isn't in the table is never spoken — the agent fetches a person. That is the single highest-consequence hallucination class in this product, and it is removed by construction rather than mitigated by instruction.</p></div>
+
+  <div class="sechd"><span class="n">02</span><h2>The uncomfortable finding about citations</h2></div>
+  <p>Atlas question 10.e asks whether per-answer citation is meaningful to a shop owner or an engineer's idea of transparency. The research has an answer, and it is not the flattering one.</p>
+  <div class="why2 warn"><svg><use href="#i-circle-alert"/></svg><p><b>Citations raise trust even when they are random.</b> In a study accepted to AAAI-39: citations significantly increased trust in AI answers <i>even when the citations were irrelevant</i>; one citation and five citations produced comparable trust; and users who actually clicked through and verified a citation reported <b>lower</b> trust afterwards. Once verified, random citations were trusted no more than no citation at all.</p></div>
+  <p style="max-width:70ch;color:var(--ink-2)">Read plainly: a citation is a trust signal that most people never check. It makes an answer feel more reliable regardless of whether it is. That is close to the opposite of what a transparency feature is supposed to do, and it means <b>a citation cannot be counted as a safety mechanism.</b></p>
+  <div class="sgrid">
+    <div class="scard" style="background:var(--signal-soft);border-color:var(--signal-edge)"><span class="tagline">So we changed what it is</span><h4>The citation is an edit affordance</h4><p>Not a badge. It's a button that jumps to the exact row and puts the cursor in it. Its job is to make a wrong price <b>fixable in two taps</b> — a use case the trust research doesn't cover and one that is unambiguously useful.</p></div>
+    <div class="scard"><span class="tagline">And we added what does work</span><h4>A hedge, where hedging is honest</h4><p>Separate research found that low-confidence, hedged language is one of the few things that reliably makes people push back on an AI answer — more so than a source link. So when the ask box answers from outside the structured layer, it says so in words rather than decorating the answer with a source.</p></div>
+  </div>
+  <div class="why2"><svg><use href="#i-circle-help"/></svg><p><b>What nobody has tested.</b> No study exists on this specific format — “from your price list, row 3” — shown to non-expert small-business owners. It remains a design bet. The difference is that it is now a bet on <i>editability</i>, which is checkable, rather than on <i>trust</i>, which the evidence says would be misplaced.</p></div>
+
+  <div class="sechd"><span class="n">03</span><h2>When two sources disagree</h2></div>
+  <div class="why2"><svg><use href="#i-split"/></svg><p><b>General models arbitrate badly.</b> On a benchmark built from genuinely conflicting evidence, the best model reached about <b>34% exact match</b>, and standard retrieval systems “either arbitrarily choose an answer or use parametric knowledge to break ties.” There is no principled precedence rule inside the model, so the product must supply one.</p></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Rule</th><th>Consequence</th></tr></thead>
+    <tbody>
+      <tr><td><b>Typed data always beats retrieved text</b></td><td>Hard-coded. The model never chooses between them</td></tr>
+      <tr><td><b>The owner is told which source was ignored</b></td><td>With both values shown, and one tap to fix either side</td></tr>
+      <tr><td>Newer never beats structured</td><td>A website updated yesterday still loses to a price table edited last month. Recency is not authority</td></tr>
+    </tbody>
+  </table></div>
+  <div class="why2"><svg><use href="#i-eye"/></svg><p><b>No product was found that does the second row.</b> Telling a user which source was overridden appears to be undocumented anywhere in the category. It is also the difference between a system that quietly resolves a contradiction and one that hands an owner a fact about their own business they didn't know — namely that their website is wrong.</p></div>
+
+  <div class="sechd"><span class="n">04</span><h2>Gaps mined from real calls</h2></div>
+  <p>The strongest re-engagement mechanic in the product, because it is a specific, evidenced, two-minute task derived from the owner's own customers rather than a generic prompt.</p>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Design choice</th><th>Where it comes from</th></tr></thead>
+    <tbody>
+      <tr><td>Show the actual conversations underneath the count</td><td>Intercom Fin's content suggestions put source conversations in a side drawer. A count is a statistic; three quoted customers asking about parking is a task</td></tr>
+      <tr><td>Accept, edit or reject each one</td><td>Same precedent — with a diff view before anything goes live</td></tr>
+      <tr><td>Rank by how many times it was asked</td><td>Three occurrences is a gap. One is a curiosity, and the UI says so rather than treating both as urgent</td></tr>
+      <tr><td>Dismissing is a first-class action</td><td>An owner who doesn't want to answer a question should be able to say so once and never see it again</td></tr>
+    </tbody>
+  </table></div>
+  <div class="why2 warn"><svg><use href="#i-chart-column"/></svg><p><b>Honest about the evidence.</b> The pattern is shipped by Intercom and Guru; Zendesk leaves it to third parties. But every quantified claim about its effect — deflection lifts of 20–30%, “3–5× more gaps than manual audits” — traces back to a single vendor's own marketing with undisclosed methodology. There is no independent measurement. We build it because the logic holds, not because someone proved it.</p></div>
+
+  <div class="sechd"><span class="n">05</span><h2>Pronunciation, and a supplier question</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Engine</th><th>Kinyarwanda</th><th>Pronunciation override</th></tr></thead>
+    <tbody>
+      <tr><td>Amazon Polly</td><td><b>Not supported</b></td><td>PLS lexicon files and SSML phoneme tags, plus whole-word alias substitution</td></tr>
+      <tr><td>Azure Speech</td><td><b>Not supported</b></td><td>SSML phoneme and substitution tags</td></tr>
+      <tr><td>Google Cloud TTS</td><td>Almost certainly not — not directly confirmed</td><td>SSML phoneme and substitution</td></tr>
+      <tr><td><b>Proto</b></td><td><b>Yes</b> — Rwanda-focused, with government and NGO deployments in Kinyarwanda</td><td><b>Unknown.</b> Not published anywhere</td></tr>
+      <tr><td>MBAZA-NLP, KinyaVA</td><td>Yes, research-stage</td><td>Unknown</td></tr>
+    </tbody>
+  </table></div>
+  <div class="why2"><svg><use href="#i-type"/></svg><p><b>The respelling approach is real and non-technical.</b> ElevenLabs' own documentation tells users to “write a word more phonetically,” using capitals and dashes for stress, rather than learning a phonetic alphabet. That is exactly the interface this screen offers — write it as it sounds, press play, try again. The mechanism is proven on languages these engines support.</p></div>
+  <div class="why2 warn"><svg><use href="#i-circle-alert"/></svg><p><b>And here is the risk, stated rather than buried.</b> Whether any Kinyarwanda-capable engine exposes an override at all is <b>unpublished</b>. This screen is designed against a capability we have not confirmed exists on the provider we will actually use. It is a question to put to Proto — or to whoever else — <b>before this ships</b>, not after. If the answer is no, the pronunciation dictionary becomes a feature request to a supplier rather than a screen in our product.</p></div>
+
+  <div class="sechd"><span class="n">06</span><h2>Every screen, every state</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Screen</th><th>States</th></tr></thead>
+    <tbody>
+      <tr><td>Overview</td><td>Complete · gaps flagged · a source gone stale · nothing added yet</td></tr>
+      <tr><td>Prices</td><td>Empty · populated · low-confidence rows from OCR · edited · large catalogue with search · no price list at all</td></tr>
+      <tr><td>Questions</td><td>Answered · blank from the template · added from a correction · suggested from a gap</td></tr>
+      <tr><td>Gaps</td><td>Asked repeatedly · asked once · answered · dismissed</td></tr>
+      <tr><td>Sources</td><td>Ready · re-reading · stale · unreachable · <b>in conflict with structured data</b></td></tr>
+      <tr><td>Pronunciation</td><td>Seeded from the template · edited · previewing · still wrong after several tries</td></tr>
+      <tr><td>Ask box</td><td>Idle · answering · answered from structured data with a jump-to-row · answered from retrieval with a hedge · would not answer at all</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sechd"><span class="n">07</span><h2>Success criteria</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>#</th><th>Criterion</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td>10.1</td><td>Price list captured by photograph rather than typing</td><td>&gt; 60%</td></tr>
+      <tr><td>10.2</td><td>OCR extractions accepted with ≤3 edits</td><td>&gt; 70%</td></tr>
+      <tr><td>10.3</td><td><b>Prices are never generated</b> — adversarial test, agent asked for an unlisted price</td><td>100% escalate</td></tr>
+      <tr><td>10.4</td><td>Every knowledge-derived answer is traceable to its source</td><td>100%</td></tr>
+      <tr><td>10.5</td><td>The ask box reflects an edit immediately</td><td>&lt; 5s</td></tr>
+      <tr><td>10.6</td><td>Conflicts between sources are surfaced, with the ignored source named</td><td>100% detected</td></tr>
+      <tr><td>10.7</td><td>Pronunciation dictionary populated at activation</td><td>&gt; 80% with ≥3 entries</td></tr>
+      <tr><td>10.8</td><td>Gap suggestions acted on</td><td>&gt; 30%</td></tr>
+      <tr><td>10.10</td><td>Photo upload completes on 3G</td><td>&lt; 30s for 2 MB</td></tr>
+      <tr><td><b>new</b></td><td>The citation jumps to the editable row, not to a read-only source view</td><td>Functional test</td></tr>
+      <tr><td><b>new</b></td><td>An answer from outside the structured layer carries a hedge, never a bare citation</td><td>Copy audit</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sechd"><span class="n">08</span><h2>What we still don't know</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Gap</th><th>How we'd close it</th></tr></thead>
+    <tbody>
+      <tr><td>How fast a small business's knowledge goes stale, and whether reminders help</td><td>No published research at all. Measure it on the pilot cohort</td></tr>
+      <tr><td>Whether curated question-and-answer pairs beat chunked documents for a small knowledge base</td><td>No head-to-head study exists. The chunking literature supports the mechanism, not the conclusion</td></tr>
+      <tr><td>Whether the gap queue actually improves resolution</td><td>Only vendor marketing numbers exist. Instrument it and find out</td></tr>
+      <tr><td>Whether a test-before-publish box helps</td><td>Every product ships one; nobody has measured it. Convergent convention, not evidence</td></tr>
+      <tr><td><b>Whether our TTS provider allows pronunciation overrides in Kinyarwanda</b></td><td>Ask them. This one blocks a screen</td></tr>
+    </tbody>
+  </table></div>
+</div>
+</div>
+
+<script>
+(function(){
+  var d=document, S={lang:'en'};
+
+  var PRICES=[
+    {n:'Braids — small', p:'15,000'},{n:'Braids — large', p:'10,000'},
+    {n:'Relaxer', p:'8,000'},{n:'Wash and blow-dry', p:'5,000'},
+    {n:'Weave installation', p:'25,000'},{n:'Nails — gel', p:'12,000'},
+    {n:'Nails — classic', p:'6,000'},{n:"Children's cut", p:'3,000'}
+  ];
+  function priceRows(hit){
+    d.getElementById('priceRows').innerHTML = PRICES.map(function(r,i){
+      return '<div class="prow'+(hit!=null&&(i===hit||i===hit+1)?' hit':'')+'" data-i="'+i+'">'+
+        '<input value="'+r.n.replace(/"/g,'&quot;')+'" aria-label="Service">'+
+        '<input class="pp" value="'+r.p+'" aria-label="Price">'+
+        '<button class="pd" aria-label="Delete"><svg><use href="#i-trash-2"/></svg></button></div>';
+    }).join('');
+  }
+
+  /* ── Panes ───────────────────────────────────────────────────── */
+  var ASIDE={'p-sum':'as-p-sum','p-price':'as-p-price','p-qa':'as-p-qa','p-gaps':'as-p-gaps','p-src':'as-p-src','p-lex':'as-p-lex'};
+  function pane(id){
+    [].forEach.call(d.querySelectorAll('.pane'),function(p){ p.classList.toggle('on',p.id===id); });
+    [].forEach.call(d.querySelectorAll('[data-pane]'),function(b){ b.setAttribute('aria-pressed',String(b.dataset.pane===id)); });
+    [].forEach.call(d.querySelectorAll('.asidepane'),function(p){ p.classList.toggle('on',p.id===(ASIDE[id]||'as-p-sum')); });
+    S.pane=id; scrollTo({top:0,behavior:'auto'});
+  }
+  d.addEventListener('click',function(e){
+    var t=e.target.closest('[data-pane]'); if(t){ pane(t.dataset.pane); }
+    var g=e.target.closest('[data-pane-go]'); if(g){ pane(g.dataset.paneGo); }
+  });
+
+  /* ── The ask box ─────────────────────────────────────────────── */
+  var KNOWN={
+    'how much for braids?':{i:0, rw:'Imfuruka ntoya ni 15,000, iz\'ubunini ni 10,000. Ushaka gufata gahunda?',
+      en:'Small braids are 15,000, large are 10,000. Would you like to book?',
+      or:'Small braids are 15,000, large are 10,000. Would you like to book?'},
+    'what time do you close?':{i:null, rw:'Dufunga saa kumi n\'ebyiri z\'umugoroba, kuva kuwa mbere kugeza kuwa gatandatu.',
+      en:'We close at 7pm, Monday to Saturday.', or:'We close at 7pm, Monday to Saturday.', src:'hours'}
+  };
+  d.getElementById('askBtn').addEventListener('click',function(){
+    var b=this, q=d.getElementById('askq').value.trim().toLowerCase();
+    b.classList.add('btn-load');
+    setTimeout(function(){
+      b.classList.remove('btn-load');
+      var hit=KNOWN[q], ans=d.getElementById('answer');
+      ans.hidden=false;
+      var t=d.getElementById('aTxt'), o=d.getElementById('aOrig'),
+          c=d.getElementById('citeBtn'), h=d.getElementById('hedge');
+      if(hit){
+        t.textContent = S.lang==='rw'?hit.rw:hit.rw;      /* the agent speaks Kinyarwanda */
+        o.textContent = hit.or; o.hidden=false;
+        c.hidden=false; h.hidden=true;
+        c.dataset.row = hit.i==null?'':hit.i;
+        var lab=c.querySelector('span:not(.cx)'), cx=c.querySelector('.cx');
+        lab.removeAttribute('data-en'); cx.removeAttribute('data-en');
+        if(hit.src==='hours'){
+          lab.textContent = S.lang==='rw'?'Kuva mu masaha yawe':'From your hours';
+          cx.textContent = S.lang==='rw'?'kuwa mbere–kuwa gatandatu':'Mon–Sat';
+        } else {
+          lab.textContent = S.lang==='rw'?'Kuva mu rutonde rw\'ibiciro':'From your price list';
+          cx.textContent = S.lang==='rw'?'imirongo 1–2':'rows 1–2';
+        }
+      } else {
+        /* Not in the structured layer. No citation — a hedge instead. */
+        t.textContent = S.lang==='rw'
+          ? 'Icyo sinshobora kukibemeza. Reka mbahamagarire Aline.'
+          : 'That\'s not something I can confirm. Let me get Aline for you.';
+        o.hidden=true; c.hidden=true; h.hidden=false;
+      }
+    },800);
+  });
+  d.getElementById('askq').addEventListener('keydown',function(e){
+    if(e.key==='Enter') d.getElementById('askBtn').click();
+  });
+  /* the citation's job: land the cursor on the row that is wrong */
+  d.getElementById('citeBtn').addEventListener('click',function(){
+    var r=this.dataset.row;
+    pane('p-price');
+    priceRows(r===''?null:+r);
+    setTimeout(function(){
+      var el=d.querySelector('.prow.hit input'); if(el){ el.focus(); el.select(); }
+      setTimeout(function(){ priceRows(null); },2400);
+    },260);
+  });
+
+  /* ── Prices ──────────────────────────────────────────────────── */
+  d.addEventListener('click',function(e){
+    var del=e.target.closest('.pd');
+    if(del){ var i=+del.closest('.prow').dataset.i; PRICES.splice(i,1); priceRows(null); }
+  });
+  d.getElementById('addPrice').addEventListener('click',function(){
+    PRICES.push({n:'',p:''}); priceRows(null);
+    var rows=d.querySelectorAll('.prow'); var last=rows[rows.length-1];
+    if(last) last.querySelector('input').focus();
+  });
+  d.addEventListener('input',function(e){
+    var row=e.target.closest('.prow');
+    if(row){ var i=+row.dataset.i;
+      if(e.target.classList.contains('pp')) PRICES[i].p=e.target.value; else PRICES[i].n=e.target.value; }
+  });
+
+  /* ── Gaps ────────────────────────────────────────────────────── */
+  d.getElementById('gapSave').addEventListener('click',function(){
+    var b=this, txt=d.getElementById('gapAns').value.trim();
+    if(!txt){ d.getElementById('gapAns').focus(); return; }
+    b.classList.add('btn-load');
+    setTimeout(function(){
+      b.classList.remove('btn-load');
+      var card=b.closest('.gap');
+      card.innerHTML='<div class="gh"><svg style="color:var(--signal-text)"><use href="#i-circle-check"/></svg>'+
+        '<div><b>'+(S.lang==='rw'?'Byashyizweho. Uzabaza ubutaha azasubizwa.':'Added. The next person who asks gets an answer.')+'</b>'+
+        '<span>'+(S.lang==='rw'?'Byanditswe mu bibazo n\'ibisubizo':'Saved into your questions')+'</span></div></div>';
+      card.style.background='var(--signal-soft)'; card.style.borderColor='var(--signal-edge)';
+    },900);
+  });
+
+  /* ── Pronunciation previews ──────────────────────────────────── */
+  d.addEventListener('click',function(e){
+    var p=e.target.closest('.lp'); if(!p) return;
+    [].forEach.call(d.querySelectorAll('.lp'),function(x){ x.classList.remove('playing');
+      x.innerHTML='<svg><use href="#i-play"/></svg>'; });
+    p.classList.add('playing'); p.innerHTML='<svg><use href="#i-circle-pause"/></svg>';
+    setTimeout(function(){ p.classList.remove('playing'); p.innerHTML='<svg><use href="#i-play"/></svg>'; },1600);
+  });
+
+  /* ── i18n ────────────────────────────────────────────────────── */
+  function setLang(l){
+    [].forEach.call(d.querySelectorAll('[data-rw]'),function(el){
+      if(!el.hasAttribute('data-en')) el.setAttribute('data-en', el.textContent);
+      el.textContent=(l==='rw')?el.getAttribute('data-rw'):el.getAttribute('data-en'); });
+    [].forEach.call(d.querySelectorAll('[data-rw-html]'),function(el){
+      if(!el.hasAttribute('data-en-html')) el.setAttribute('data-en-html', el.innerHTML);
+      el.innerHTML=(l==='rw')?el.getAttribute('data-rw-html'):el.getAttribute('data-en-html'); });
+    [].forEach.call(d.querySelectorAll('[data-lang]'),function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===l));});
+    d.documentElement.setAttribute('lang',l); S.lang=l;
+    d.getElementById('askq').value = l==='rw' ? 'Ni angahe ku mfuruka?' : 'How much for braids?';
+    if(l==='rw') KNOWN['ni angahe ku mfuruka?']=KNOWN['how much for braids?'];
+  }
+  d.addEventListener('click',function(e){
+    var b=e.target.closest('[data-lang]'); if(b) setLang(b.dataset.lang);
+    var m=e.target.closest('[data-mode]');
+    if(m){ [].forEach.call(d.querySelectorAll('[data-mode]'),function(x){x.setAttribute('aria-pressed',String(x===m));});
+      d.getElementById('m-proto').classList.toggle('on',m.dataset.mode==='proto');
+      d.getElementById('m-spec').classList.toggle('on',m.dataset.mode==='spec'); scrollTo({top:0}); }
+  });
+
+  /* ── Scenarios ───────────────────────────────────────────────── */
+  var MAP={normal:'p-sum',prices:'p-price',ask:'p-sum',gaps:'p-gaps',conflict:'p-src',stale:'p-src',lex:'p-lex'};
+  d.getElementById('scen').addEventListener('change',function(){
+    var v=this.value;
+    d.getElementById('answer').hidden = v!=='ask';
+    d.getElementById('confCard').hidden = v!=='conflict';
+    if(v==='ask'){ pane('p-sum'); setTimeout(function(){ d.getElementById('askBtn').click(); },120); }
+    else pane(MAP[v]||'p-sum');
+  });
+
+  setLang('en'); priceRows(null); pane('p-sum');
+  d.getElementById('confCard').hidden=true;
+})();
+</script>

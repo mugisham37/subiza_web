@@ -1,0 +1,2081 @@
+<title>Subiza — Language and switching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUBIZA DESIGN SYSTEM
+   Tokens are declared once, in full, on :root — the light theme.
+   Dark redefines only what changes, twice: once for the system
+   preference, once for the explicit toggle. No hex is ever inverted.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── Ground & surface ─────────────────────────────────────────── */
+  --ground:#FAF9F4;          /* warm paper. never pure white */
+  --surface:#FFFFFF;
+  --surface-2:#F2F1EA;       /* sunken: inputs, wells, code */
+  --surface-3:#EAE9E0;       /* hover on surface-2 */
+  --overlay:rgba(20,21,15,.42);
+
+  /* ── Ink ──────────────────────────────────────────────────────── */
+  --ink:#14150F;             /* 17.4:1 on ground */
+  --ink-2:#4A4C42;           /* 8.3:1  */
+  --ink-3:#6E7063;           /* 4.8:1 — the floor. nothing lighter carries text */
+  --ink-inv:#FAF9F4;
+
+  /* ── Hairlines. this system draws with lines, not shadows ─────── */
+  --rule:rgba(20,21,15,.09);
+  --rule-2:rgba(20,21,15,.16);
+  --rule-3:rgba(20,21,15,.28);
+
+  /* ── Signal: the lime. A FILL. NEVER A TEXT COLOUR. ───────────── */
+  --signal:#C6F24E;          /* 1.2:1 on ground — unusable as text, by design */
+  --signal-hi:#D3F86B;       /* hover */
+  --signal-lo:#B3E033;       /* pressed */
+  --signal-ink:#14150F;      /* 14.2:1 on signal — what sits ON the lime */
+  --signal-soft:#EEF9CE;     /* the wash: selected rows, soft callouts */
+  --signal-edge:#D6E9A0;
+  --signal-text:#3D5C10;     /* 7.3:1 — the ONLY green allowed to be text */
+
+  /* ── Panel: the deep surface. inverted regions, not dark mode ─── */
+  --panel:#1C2A12;
+  --panel-2:#26361A;
+  --panel-ink:#FFFFFF;       /* 15.1:1 */
+  --panel-ink-2:#B9C7A6;
+  --panel-rule:rgba(255,255,255,.14);
+
+  /* ── Status ───────────────────────────────────────────────────── */
+  --ok:#3D5C10; --ok-fill:#C6F24E; --ok-soft:#EEF9CE; --ok-edge:#D6E9A0;
+  --warn:#7A5300; --warn-fill:#F0B840; --warn-soft:#FCF0D6; --warn-edge:#EFD9A4;
+  --risk:#A6311D; --risk-fill:#C4442E; --risk-soft:#FBE7E2; --risk-edge:#F0C4B9;
+  --info:#2C4A6B; --info-fill:#5B87B8; --info-soft:#E4EDF6; --info-edge:#C0D5E8;
+  --live:#C4442E;            /* the on-air dot. red because a call is live */
+
+  /* ── Type ─────────────────────────────────────────────────────── */
+  --f-display:'Bricolage Grotesque','Bricolage Grotesque Fallback',Georgia,serif;
+  --f-body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --t-d1:clamp(2.6rem,1.6rem + 4.4vw,4.75rem);
+  --t-d2:clamp(2.1rem,1.45rem + 2.9vw,3.5rem);
+  --t-h1:clamp(1.7rem,1.3rem + 1.8vw,2.5rem);
+  --t-h2:clamp(1.35rem,1.15rem + .9vw,1.75rem);
+  --t-h3:1.125rem;
+  --t-h4:1rem;
+  --t-body-l:1.0625rem;
+  --t-body:.9375rem;
+  --t-body-s:.875rem;
+  --t-cap:.8125rem;
+  --t-label:.6875rem;
+
+  /* ── Space. 4px base, no arbitrary values anywhere ────────────── */
+  --s-1:2px;  --s-2:4px;  --s-3:6px;  --s-4:8px;  --s-5:12px;
+  --s-6:16px; --s-7:20px; --s-8:24px; --s-9:32px; --s-10:40px;
+  --s-11:56px;--s-12:72px;--s-13:96px;--s-14:128px;
+
+  /* ── Radius. three steps and a pill. deliberate, not uniform ──── */
+  --r-sm:4px;   /* inputs, chips, tags, small tiles */
+  --r-md:12px;  /* cards, sheets, buttons */
+  --r-lg:24px;  /* feature panels, media, the hero */
+  --r-pill:999px;
+
+  /* ── Elevation. four levels; three of them have no shadow ─────── */
+  --e-0:none;
+  --e-1:none;                                  /* hairline only */
+  --e-2:0 1px 2px rgba(20,21,15,.05);          /* raised, still grounded */
+  --e-3:0 6px 16px -4px rgba(20,21,15,.10),0 2px 4px rgba(20,21,15,.05);   /* menus */
+  --e-4:0 24px 48px -12px rgba(20,21,15,.20),0 8px 16px -8px rgba(20,21,15,.10); /* modal */
+
+  /* ── Motion. ceiling is 300ms. exits run ~20% faster than entries ─ */
+  --t-micro:120ms;  /* hover, focus, colour */
+  --t-ui:200ms;     /* the default: expand, slide, reveal */
+  --t-panel:280ms;  /* sheets, modals, drawers */
+  --t-exit:160ms;
+  --e-out:cubic-bezier(.22,1,.36,1);
+  --e-in:cubic-bezier(.55,0,1,.45);
+  --e-inout:cubic-bezier(.65,0,.35,1);
+  --e-spring:linear(0,.42 8.7%,.75 17.5%,.96 25.4%,1.06 32.1%,1.09 39.3%,1.06 47.5%,1.01 60.2%,.99 76.2%,1);
+
+  --nav-w:264px;
+  --measure:70ch;
+}
+
+:root:not([data-theme=light]){ @media (prefers-color-scheme:dark){
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}}
+:root[data-theme=dark]{
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}
+
+/* ═══ Base ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--f-body); font-size:var(--t-body); line-height:1.6;
+  font-feature-settings:"cv05" 1,"ss01" 1;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--f-display); font-weight:600; letter-spacing:-.022em; line-height:1.12; margin:0; text-wrap:balance}
+h1{font-size:var(--t-h1); font-variation-settings:"opsz" 40}
+h2{font-size:var(--t-h2); font-variation-settings:"opsz" 28}
+h3{font-size:var(--t-h3); font-variation-settings:"opsz" 18; letter-spacing:-.012em}
+h4{font-size:var(--t-h4); font-variation-settings:"opsz" 14; letter-spacing:-.006em}
+p{margin:0 0 var(--s-5)}
+a{color:inherit}
+svg{display:block}
+code{font-family:var(--f-mono); font-size:.85em; background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r-sm); padding:.1em .38em}
+::selection{background:var(--signal); color:var(--signal-ink)}
+
+/* Focus. Dual-tone so it survives any background it lands on.
+   WCAG 2.2 §2.4.13: perimeter ≥ 2px, ≥3:1 against adjacent colours. */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--ink); outline-offset:2px;
+  box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink);
+  border-radius:var(--r-sm);
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Button ─────────────────────────────────────────────────────── */
+.btn{
+  --bh:44px;
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-4);
+  height:var(--bh);padding:0 var(--s-7);border-radius:var(--r-pill);
+  font-family:var(--f-body);font-size:var(--t-body-s);font-weight:600;letter-spacing:-.008em;
+  border:1px solid transparent;background:none;color:var(--ink);
+  cursor:pointer;text-decoration:none;white-space:nowrap;position:relative;
+  transition:background var(--t-micro) var(--e-out),border-color var(--t-micro),
+             color var(--t-micro),transform var(--t-micro) var(--e-out),opacity var(--t-micro);
+}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:17px;height:17px;flex:none}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.42;pointer-events:none}
+
+.btn-primary{background:var(--signal);color:var(--signal-ink);border-color:var(--signal-lo)}
+.btn-primary:hover{background:var(--signal-hi)}
+.btn-primary:active{background:var(--signal-lo)}
+
+.btn-solid{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-solid:hover{background:var(--ink-2);border-color:var(--ink-2)}
+
+.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--rule-2)}
+.btn-secondary:hover{background:var(--surface-2);border-color:var(--rule-3)}
+
+.btn-ghost{color:var(--ink-2)}
+.btn-ghost:hover{background:var(--surface-2);color:var(--ink)}
+
+.btn-danger{background:var(--risk-fill);color:#fff;border-color:var(--risk-fill)}
+.btn-danger:hover{filter:brightness(1.08)}
+
+.btn-sm{--bh:34px;padding:0 var(--s-5);font-size:var(--t-cap);gap:var(--s-3)}
+.btn-sm svg{width:15px;height:15px}
+.btn-lg{--bh:54px;padding:0 var(--s-8);font-size:var(--t-body-l)}
+.btn-lg svg{width:19px;height:19px}
+.btn-icon{padding:0;width:var(--bh);border-radius:var(--r-pill)}
+.btn-block{display:flex;width:100%}
+
+/* loading: the label stays, so width never jumps */
+.btn-load{color:transparent!important;pointer-events:none}
+.btn-load::after{
+  content:"";position:absolute;inset:0;margin:auto;width:17px;height:17px;
+  border:2px solid currentColor;border-radius:50%;
+  border-top-color:transparent;color:var(--signal-ink);
+  animation:spin .7s linear infinite;
+}
+.btn-secondary.btn-load::after,.btn-ghost.btn-load::after{color:var(--ink)}
+.btn-solid.btn-load::after{color:var(--ground)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Chip / filter / tag ────────────────────────────────────────── */
+.chip{
+  display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);
+  border:1px solid var(--rule-2);border-radius:var(--r-pill);background:var(--surface);
+  font-size:var(--t-cap);font-weight:500;color:var(--ink-2);cursor:pointer;
+  transition:all var(--t-micro) var(--e-out);
+}
+.chip:hover{border-color:var(--rule-3);color:var(--ink)}
+.chip[aria-pressed=true],.chip.on{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink);font-weight:600}
+.chip svg{width:14px;height:14px}
+.chip .ct{display:inline-block;min-width:17px;height:17px;line-height:17px;text-align:center;border-radius:var(--r-pill);background:var(--surface-2);font-family:var(--f-mono);font-size:10px;padding:0 4px}
+.chip.on .ct{background:rgba(20,21,15,.14)}
+
+.tag{display:inline-flex;align-items:center;gap:var(--s-2);padding:2px var(--s-4);border-radius:var(--r-sm);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.06em;text-transform:uppercase;font-weight:500;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2)}
+.tag-ok{background:var(--ok-soft);border-color:var(--ok-edge);color:var(--ok)}
+.tag-warn{background:var(--warn-soft);border-color:var(--warn-edge);color:var(--warn)}
+.tag-risk{background:var(--risk-soft);border-color:var(--risk-edge);color:var(--risk)}
+.tag-info{background:var(--info-soft);border-color:var(--info-edge);color:var(--info)}
+
+/* status dot — shape as well as colour, so it is not colour-only */
+.dot{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);font-weight:500}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot-ok::before{background:var(--ok-fill);box-shadow:0 0 0 3px var(--ok-soft)}
+.dot-warn::before{background:var(--warn-fill);box-shadow:0 0 0 3px var(--warn-soft);border-radius:2px}
+.dot-risk::before{background:var(--risk-fill);box-shadow:0 0 0 3px var(--risk-soft);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0;width:9px;height:9px}
+.dot-live::before{background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in oklab,var(--live) 55%,transparent)}55%{box-shadow:0 0 0 6px transparent}}
+
+/* ── Field ──────────────────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:var(--s-3);margin-bottom:var(--s-6)}
+.field > label{font-size:var(--t-body-s);font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4)}
+.field > label .opt{font-weight:400;color:var(--ink-3);font-size:var(--t-cap)}
+.hint{font-size:var(--t-cap);color:var(--ink-3);margin:0}
+.inp{
+  height:48px;padding:0 var(--s-5);width:100%;
+  background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  font-family:var(--f-body);font-size:var(--t-body);color:var(--ink);
+  transition:border-color var(--t-micro),background var(--t-micro),box-shadow var(--t-micro);
+}
+textarea.inp{height:auto;padding:var(--s-5);min-height:110px;line-height:1.6;resize:vertical}
+.inp::placeholder{color:var(--ink-3)}
+.inp:hover{border-color:var(--rule-3)}
+.inp:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.inp:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed}
+.inp[aria-invalid=true]{border-color:var(--risk-fill);background:var(--risk-soft)}
+.inp[aria-invalid=true]:focus{box-shadow:0 0 0 3px var(--risk-soft)}
+.err{display:flex;align-items:flex-start;gap:var(--s-3);font-size:var(--t-cap);color:var(--risk);margin:0}
+.err svg{width:14px;height:14px;flex:none;margin-top:2px}
+.inpwrap{position:relative;display:flex;align-items:center}
+.inpwrap .lead{position:absolute;left:var(--s-5);color:var(--ink-3);pointer-events:none}
+.inpwrap .lead svg{width:17px;height:17px}
+.inpwrap .lead + .inp{padding-left:42px}
+.inpwrap .trail{position:absolute;right:var(--s-3)}
+
+/* phone field — country code is a real control, not decoration */
+.phonefield{display:flex;border:1px solid var(--rule-2);border-radius:var(--r-sm);background:var(--surface);overflow:hidden;transition:border-color var(--t-micro),box-shadow var(--t-micro)}
+.phonefield:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.phonefield .cc{display:flex;align-items:center;gap:var(--s-3);height:48px;padding:0 var(--s-5);border-right:1px solid var(--rule);background:var(--surface-2);font-family:var(--f-mono);font-size:var(--t-body-s);color:var(--ink);cursor:pointer;border:none;flex:none}
+.phonefield .inp{border:none;background:none;box-shadow:none!important;font-family:var(--f-mono);letter-spacing:.04em}
+
+/* OTP — ONE input, six slots.
+   The six slots are decoration; the control underneath is a single
+   <input>, because a six-input field breaks paste, breaks iOS autofill
+   and is named as a failure example in the WCAG 2.2 SC 3.3.8
+   Understanding document. See the Forms section for the full reasoning. */
+.otp{position:relative;display:flex;gap:var(--s-4)}
+.otp > input{
+  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  border:none;background:none;padding:0;margin:0;
+  font-family:var(--f-mono);font-size:1.35rem;letter-spacing:1em;text-indent:.5em;
+  color:transparent;caret-color:transparent;
+}
+.otp > input:focus{outline:none}
+.otp .slot{
+  flex:1;min-width:0;height:58px;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:1.35rem;font-weight:600;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  transition:background var(--t-micro),border-color var(--t-micro),transform var(--t-micro) var(--e-out);
+}
+.otp .slot.filled{background:var(--signal-soft);border-color:var(--signal-edge)}
+.otp > input:focus ~ .slots .slot.cursor,.otp .slots .slot.cursor{border-color:var(--ink);background:var(--surface);transform:translateY(-2px)}
+.otp .slot.cursor::after{content:"";width:2px;height:24px;background:var(--ink);border-radius:1px;animation:caret 1.1s steps(1) infinite}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.otp .slot.cursor::after{animation:none}}
+.otp .slots{display:flex;gap:var(--s-4);width:100%}
+.otp:focus-within{border-radius:var(--r-sm);outline:2px solid var(--ink);outline-offset:4px;box-shadow:0 0 0 6px var(--ground),0 0 0 8px var(--ink)}
+.otp[aria-invalid=true] .slot{border-color:var(--risk-fill);background:var(--risk-soft)}
+
+/* toggle */
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+
+/* choice card — a radio you can actually hit on a phone */
+.choice{display:block;position:relative;cursor:pointer}
+.choice input{position:absolute;opacity:0;width:0;height:0}
+.choice .cbody{
+  display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);transition:all var(--t-ui) var(--e-out);height:100%;
+}
+.choice:hover .cbody{border-color:var(--rule-3);background:var(--surface-2)}
+.choice input:checked + .cbody{border-color:var(--signal-lo);background:var(--signal-soft);box-shadow:inset 0 0 0 1px var(--signal-lo)}
+.choice input:focus-visible + .cbody{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.choice .cico{width:38px;height:38px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none;transition:background var(--t-ui)}
+.choice input:checked + .cbody .cico{background:var(--signal);color:var(--signal-ink)}
+.choice .cico svg{width:19px;height:19px}
+.choice h4{margin-bottom:2px}
+.choice .cd{font-size:var(--t-cap);color:var(--ink-2);margin:0;line-height:1.5}
+.choice .cmark{position:absolute;top:var(--s-6);right:var(--s-6);width:20px;height:20px;border:1px solid var(--rule-3);border-radius:50%;display:grid;place-items:center;transition:all var(--t-micro)}
+.choice input:checked ~ .cbody .cmark,.choice input:checked + .cbody .cmark{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.choice .cmark svg{width:12px;height:12px;opacity:0;transition:opacity var(--t-micro)}
+.choice input:checked + .cbody .cmark svg{opacity:1}
+
+/* ── Card ───────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.card-i{padding:0;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);padding:var(--s-6) var(--s-7);border-bottom:1px solid var(--rule)}
+.card-bd{padding:var(--s-7)}
+.card-ft{padding:var(--s-5) var(--s-7);border-top:1px solid var(--rule);background:var(--surface-2);display:flex;gap:var(--s-4);align-items:center;justify-content:space-between}
+.card-link{display:block;text-decoration:none;transition:border-color var(--t-ui) var(--e-out),transform var(--t-ui) var(--e-out)}
+.card-link:hover{border-color:var(--rule-3);transform:translateY(-2px)}
+
+/* stat */
+.stat{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-6) var(--s-7);position:relative;overflow:hidden}
+.stat .sl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+.stat .sv{font-family:var(--f-display);font-size:2.35rem;font-variation-settings:"opsz" 36;font-weight:600;letter-spacing:-.035em;line-height:1;display:flex;align-items:baseline;gap:var(--s-3)}
+.stat .sv small{font-size:.95rem;font-weight:500;color:var(--ink-3);letter-spacing:0;font-family:var(--f-body)}
+.stat .sd{display:flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-4)}
+.stat .sd svg{width:13px;height:13px}
+.stat .up{color:var(--signal-text);font-weight:600}
+.stat .down{color:var(--risk);font-weight:600}
+.stat-key{background:var(--signal-soft);border-color:var(--signal-edge)}
+
+/* banner */
+.banner{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);align-items:flex-start}
+.banner svg.bi{width:19px;height:19px;flex:none;margin-top:1px}
+.banner h4{margin-bottom:2px}
+.banner p{font-size:var(--t-body-s);color:var(--ink-2);margin:0}
+.banner .ba{margin-left:auto;flex:none}
+.banner-ok{background:var(--ok-soft);border-color:var(--ok-edge)} .banner-ok svg.bi{color:var(--ok)}
+.banner-warn{background:var(--warn-soft);border-color:var(--warn-edge)} .banner-warn svg.bi{color:var(--warn)}
+.banner-risk{background:var(--risk-soft);border-color:var(--risk-edge)} .banner-risk svg.bi{color:var(--risk)}
+.banner-info{background:var(--info-soft);border-color:var(--info-edge)} .banner-info svg.bi{color:var(--info)}
+
+/* toast */
+.toast{display:flex;align-items:center;gap:var(--s-5);background:var(--panel);color:var(--panel-ink);border:1px solid var(--panel-rule);border-radius:var(--r-md);padding:var(--s-5) var(--s-6);box-shadow:var(--e-3);max-width:400px}
+.toast svg{width:18px;height:18px;flex:none;color:var(--signal)}
+.toast .tt{font-size:var(--t-body-s);font-weight:500}
+.toast button{margin-left:auto;background:none;border:none;color:var(--panel-ink-2);cursor:pointer;padding:var(--s-2);display:grid;place-items:center;border-radius:var(--r-sm)}
+.toast button:hover{color:var(--panel-ink);background:rgba(255,255,255,.1)}
+
+/* empty state */
+.empty{text-align:center;padding:var(--s-11) var(--s-7);max-width:420px;margin:0 auto}
+.empty .eart{margin:0 auto var(--s-7);width:112px;height:84px}
+.empty h3{margin-bottom:var(--s-4)}
+.empty p{font-size:var(--t-body-s);color:var(--ink-2);margin-bottom:var(--s-7)}
+
+/* skeleton */
+.sk{background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface-3) 37%,var(--surface-2) 63%);
+  background-size:400% 100%;animation:shim 1.4s ease-in-out infinite;border-radius:var(--r-sm)}
+@keyframes shim{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none;background:var(--surface-2)}}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRODUCT COMPONENTS
+   The parts that only exist because Subiza answers phones.
+   Nothing here is a repurposed generic; nothing here is stock art.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Live call card ─────────────────────────────────────────────── */
+.callcard{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-7);position:relative;overflow:hidden;isolation:isolate}
+.callcard::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(120% 90% at 88% -12%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.cc-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-live{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);font-weight:600}
+.cc-live i{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+.cc-time{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2);font-variant-numeric:tabular-nums}
+.cc-who{display:flex;align-items:center;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-av{width:44px;height:44px;border-radius:50%;background:var(--panel-2);border:1px solid var(--panel-rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:1rem;flex:none}
+.cc-who b{display:block;font-size:var(--t-body-l);font-weight:600;letter-spacing:-.01em}
+.cc-who span{display:block;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2)}
+.cc-acts{display:flex;gap:var(--s-4);margin-top:var(--s-6)}
+.cc-acts .btn-secondary{background:var(--panel-2);border-color:var(--panel-rule);color:var(--panel-ink)}
+.cc-acts .btn-secondary:hover{background:#314323;border-color:rgba(255,255,255,.24)}
+
+/* the waveform. bars are driven by CSS custom props, not a canvas —
+   it survives 2G, costs nothing, and honours reduced motion. */
+.wave{display:flex;align-items:center;justify-content:space-between;gap:3px;height:44px;padding:0 var(--s-2)}
+.wave i{flex:0 1 4px;min-width:2px;max-width:4px;border-radius:var(--r-pill);background:var(--signal);
+  height:var(--h,20%);transform-origin:center;
+  animation:wv 1.15s var(--e-inout) infinite alternate;animation-delay:var(--d,0s)}
+@keyframes wv{from{transform:scaleY(.28)}to{transform:scaleY(1)}}
+.wave.muted i{background:var(--panel-ink-2);animation:none;transform:scaleY(.3)}
+@media (prefers-reduced-motion:reduce){.wave i{animation:none}}
+
+/* ── Transcript stream ──────────────────────────────────────────── */
+.tscript{display:flex;flex-direction:column;gap:var(--s-5)}
+.turn{display:flex;gap:var(--s-5);max-width:100%}
+.turn .tav{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.02em}
+.turn.ai .tav{background:var(--signal);color:var(--signal-ink)}
+.turn.human .tav{background:var(--surface-3);color:var(--ink-2)}
+.turn .tb{flex:1;min-width:0}
+.turn .tmeta{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-3);flex-wrap:wrap}
+.turn .tmeta b{font-size:var(--t-cap);font-weight:600}
+.turn .tmeta time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.turn .tt{font-size:var(--t-body-s);line-height:1.62;color:var(--ink);background:var(--surface-2);border:1px solid var(--rule);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);margin:0}
+.turn.ai .tt{background:var(--signal-soft);border-color:var(--signal-edge)}
+.turn .tt em{font-style:normal;color:var(--ink-3)}
+/* the original-language line, always shown under a translation */
+.turn .torig{font-size:var(--t-cap);color:var(--ink-3);margin:var(--s-3) 0 0;padding-left:var(--s-5);border-left:2px solid var(--rule-2)}
+/* confidence: never a bare percentage, always a judgement */
+.conf{display:inline-flex;align-items:center;gap:var(--s-2);font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.conf i{display:flex;gap:1.5px}
+.conf i b{width:3px;height:9px;border-radius:1px;background:var(--rule-3)}
+.conf.hi i b:nth-child(-n+3){background:var(--signal-lo)}
+.conf.mid i b:nth-child(-n+2){background:var(--warn-fill)}
+.conf.lo i b:nth-child(1){background:var(--risk-fill)}
+/* the escalation marker in the stream */
+.tmark{display:flex;align-items:center;gap:var(--s-4);margin:var(--s-2) 0}
+.tmark::before,.tmark::after{content:"";height:1px;background:var(--risk-edge);flex:1}
+.tmark span{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--risk);font-weight:600;white-space:nowrap}
+.tmark svg{width:13px;height:13px}
+
+/* ── Channel tile ───────────────────────────────────────────────── */
+.chan{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);transition:all var(--t-ui) var(--e-out)}
+.chan:hover{border-color:var(--rule-3)}
+.chan .cico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:none;color:#fff}
+.chan .cico svg{width:21px;height:21px}
+.chan-wa .cico{background:#25D366;color:#0B2C17}
+.chan-ig .cico{background:linear-gradient(135deg,#F58529,#DD2A7B 52%,#8134AF)}
+.chan-tg .cico{background:#2AABEE}
+.chan-ph .cico{background:var(--ink);color:var(--ground)}
+.chan .cmeta{flex:1;min-width:0}
+.chan .cmeta b{display:block;font-size:var(--t-body-s);font-weight:600}
+.chan .cmeta span{display:block;font-size:var(--t-cap);color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chan.is-off{background:var(--surface-2);border-style:dashed}
+.chan.is-off .cico{filter:grayscale(1);opacity:.5}
+.chan.is-err{border-color:var(--risk-edge);background:var(--risk-soft)}
+
+/* ── Credit meter ───────────────────────────────────────────────── */
+.credit{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);padding:var(--s-7)}
+.credit-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-5)}
+.credit-v{font-family:var(--f-display);font-size:1.9rem;font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.03em;line-height:1}
+.credit-v small{font-family:var(--f-mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.06em;margin-left:6px}
+.meter{height:10px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;border-radius:var(--r-pill);background:var(--signal);
+  width:var(--pct,50%);transition:width 600ms var(--e-out)}
+.meter.warn i{background:var(--warn-fill)} .meter.risk i{background:var(--risk-fill)}
+/* the threshold ticks are visible, so "low" is a place, not a surprise */
+.meter::after{content:"";position:absolute;top:0;bottom:0;left:20%;width:1px;background:var(--rule-3)}
+.credit-ft{display:flex;justify-content:space-between;gap:var(--s-5);margin-top:var(--s-4);font-size:var(--t-cap);color:var(--ink-2)}
+.credit-ft b{font-weight:600;color:var(--ink)}
+
+/* ── Forwarding code card ───────────────────────────────────────── */
+/* the single most important object in activation: a dial string. */
+.fcode{border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.fcode-h{padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:var(--s-4);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.fcode-h svg{width:14px;height:14px}
+.fcode-b{padding:var(--s-7) var(--s-6);text-align:center;background:var(--surface-2)}
+.fcode-s{font-family:var(--f-mono);font-size:clamp(1.25rem,1rem + 1.2vw,1.75rem);font-weight:600;letter-spacing:.01em;color:var(--ink);line-height:1.3;overflow-wrap:break-word}
+.fcode-s span{display:inline-block;white-space:nowrap}
+.fcode-s b{color:var(--signal-text);font-weight:600;background:var(--signal-soft);border-radius:3px;padding:0 3px;box-decoration-break:clone}
+.fcode-n{font-size:var(--t-cap);color:var(--ink-2);margin:var(--s-5) 0 0}
+.fcode-a{display:flex;gap:var(--s-4);padding:var(--s-5) var(--s-6);border-top:1px solid var(--rule)}
+.fcode-a .btn{flex:1}
+.fcode-plat{display:flex;gap:var(--s-4);align-items:flex-start;margin:0;padding:0 var(--s-6) var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.fcode-plat svg{width:14px;height:14px;flex:none;margin-top:2px}
+.fcode-plat b{color:var(--ink-2);font-weight:600}
+
+/* ── Escalation ladder ──────────────────────────────────────────── */
+.ladder{display:flex;flex-direction:column;gap:0;counter-reset:rung}
+.rung{display:flex;gap:var(--s-6);padding:var(--s-5) 0;position:relative}
+.rung::before{counter-increment:rung;content:counter(rung);
+  width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:11px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-2);z-index:1}
+.rung::after{content:"";position:absolute;left:12.5px;top:34px;bottom:-8px;width:1px;background:var(--rule-2)}
+.rung:last-child::after{display:none}
+.rung.done::before{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.rung.now::before{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.rung.now{background:linear-gradient(90deg,var(--signal-soft),transparent 70%);border-radius:var(--r-sm);padding-left:var(--s-4);margin-left:calc(var(--s-4) * -1)}
+.rung .rb b{display:block;font-size:var(--t-body-s);font-weight:600}
+.rung .rb span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.rung .rt{margin-left:auto;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink-3);white-space:nowrap;padding-left:var(--s-5)}
+
+/* ── Weekly report — rendered as the WhatsApp message it actually is ─ */
+.wamsg{max-width:340px;background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden}
+.wamsg-h{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);background:#075E54;color:#fff}
+.wamsg-h .m{width:28px;height:28px;border-radius:50%;background:var(--signal);display:grid;place-items:center;color:var(--signal-ink);flex:none}
+.wamsg-h .m svg{width:15px;height:15px}
+.wamsg-h b{font-size:var(--t-body-s);font-weight:600}
+.wamsg-h span{display:block;font-size:10px;opacity:.8}
+.wamsg-b{padding:var(--s-6);background:var(--surface-2);background-image:radial-gradient(var(--rule) .5px,transparent .5px);background-size:12px 12px}
+.wabub{background:var(--surface);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);font-size:var(--t-body-s);line-height:1.6;box-shadow:var(--e-2);position:relative}
+.wabub .big{font-family:var(--f-display);font-size:1.6rem;font-variation-settings:"opsz" 26;font-weight:600;letter-spacing:-.03em;display:block;line-height:1.1;margin:var(--s-3) 0}
+.wabub a{color:var(--signal-text);font-weight:600}
+.wabub time{display:block;text-align:right;font-family:var(--f-mono);font-size:10px;color:var(--ink-3);margin-top:var(--s-3)}
+
+/* ── Coverage ring — "what your agent can actually answer" ──────── */
+.ring{display:flex;align-items:center;gap:var(--s-6)}
+.ring svg{width:76px;height:76px;flex:none;transform:rotate(-90deg)}
+.ring .rtrack{fill:none;stroke:var(--surface-3);stroke-width:9}
+.ring .rval{fill:none;stroke:var(--signal-lo);stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:var(--dash,201);stroke-dashoffset:var(--off,60);
+  transition:stroke-dashoffset 800ms var(--e-out)}
+.ring .rnum{font-family:var(--f-display);font-size:1.5rem;font-variation-settings:"opsz" 24;font-weight:600;letter-spacing:-.03em;line-height:1}
+.ring .rlab{font-size:var(--t-cap);color:var(--ink-2);margin-top:2px}
+
+/* ── Data viz. hand-drawn SVG. no chart library, no 90KB payload. ── */
+.spark{display:block;width:100%;height:40px;overflow:visible}
+.spark path.ln{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.spark path.ar{fill:var(--signal-soft);stroke:none}
+.spark circle{fill:var(--signal);stroke:var(--surface);stroke-width:2}
+.bars{display:flex;align-items:flex-end;gap:var(--s-3);height:120px}
+.bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:var(--s-3);height:100%}
+.bars .b i{width:100%;max-width:28px;background:var(--surface-3);border-radius:3px 3px 0 0;height:var(--h,20%);
+  transition:height 600ms var(--e-out),background var(--t-micro)}
+.bars .b.on i{background:var(--signal)}
+.bars .b:hover i{background:var(--signal-lo)}
+.bars .b span{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* ── Nav: desktop rail ──────────────────────────────────────────── */
+.applayout{display:grid;grid-template-columns:224px 1fr;min-height:340px;background:var(--ground);border-radius:var(--r-md);overflow:hidden;border:1px solid var(--rule)}
+.appnav{background:var(--surface);border-right:1px solid var(--rule);padding:var(--s-5)}
+.appnav a{display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:var(--t-body-s);font-weight:500;transition:all var(--t-micro)}
+.appnav a svg{width:16px;height:16px;opacity:.75}
+.appnav a:hover{background:var(--surface-2);color:var(--ink)}
+.appnav a.on{background:var(--signal);color:var(--signal-ink);font-weight:600}
+.appnav a.on svg{opacity:1}
+.appnav a .nb{margin-left:auto;font-family:var(--f-mono);font-size:10px;background:var(--risk-fill);color:#fff;border-radius:var(--r-pill);padding:1px 6px}
+.appbody{padding:var(--s-7)}
+
+/* ── Nav: the phone. NOT the rail, reflowed — a different component. ─ */
+.phone{width:290px;border:1px solid var(--rule-2);border-radius:26px;overflow:hidden;background:var(--ground);box-shadow:var(--e-3);flex:none}
+.phone-top{height:26px;background:var(--surface);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;padding:0 var(--s-5);font-family:var(--f-mono);font-size:9px;color:var(--ink-3)}
+.phone-bd{padding:var(--s-6);min-height:200px}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-3) var(--s-2) var(--s-5)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:var(--s-3) 0;text-decoration:none;color:var(--ink-3);font-size:9.5px;font-weight:600;position:relative;min-height:48px;justify-content:center;border-radius:8px;transition:color var(--t-micro)}
+.tabbar a svg{width:19px;height:19px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2.5px;border-radius:var(--r-pill);background:var(--signal-lo)}
+.tabbar a .nb{position:absolute;top:2px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;background:var(--risk-fill);border:1.5px solid var(--surface)}
+
+/* ── Sheet / modal ──────────────────────────────────────────────── */
+.sheet{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:var(--s-7);box-shadow:var(--e-4);position:relative}
+.sheet::before{content:"";position:absolute;top:var(--s-4);left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:var(--r-pill);background:var(--rule-3)}
+.sheet h3{margin:var(--s-5) 0 var(--s-4)}
+.modal{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg);padding:var(--s-8);box-shadow:var(--e-4);max-width:460px}
+
+/* ── Table → list, on small screens ─────────────────────────────── */
+.rowlist{border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.rowitem{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background var(--t-micro)}
+.rowitem:last-child{border-bottom:none}
+.rowitem:hover{background:var(--surface-2)}
+.rowitem .rav{width:36px;height:36px;border-radius:50%;background:var(--surface-2);border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.8rem;flex:none}
+.rowitem .rmain{flex:1;min-width:0}
+.rowitem .rmain b{display:block;font-size:var(--t-body-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rmain span{display:block;font-size:var(--t-cap);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rside{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:var(--s-2)}
+.rowitem .rside time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* shell */
+html{overflow-x:clip}
+body{overflow-x:clip}
+
+/* ── Studio toolbar (not part of the product) ───────────────────── */
+.bar{position:sticky;top:0;z-index:80;display:flex;align-items:center;flex-wrap:wrap;
+  gap:var(--s-4) var(--s-5);min-height:56px;padding:var(--s-4) var(--s-7);
+  background:var(--panel);color:var(--panel-ink);border-bottom:1px solid var(--panel-rule)}
+.bar > *{min-width:0}
+.bar .lg{display:flex;align-items:center;gap:var(--s-4);flex:none}
+.bar .lg .mk{width:26px;height:26px;border-radius:7px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.bar .lg .mk svg{width:15px;height:15px}
+.bar .lg b{font-family:var(--f-display);font-size:.95rem;font-weight:700;letter-spacing:-.022em}
+.bar .lg span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-ink-2);display:block;margin-top:-2px}
+.bar .sp{margin-left:auto}
+.seg{display:flex;gap:2px;background:rgba(255,255,255,.09);border-radius:var(--r-pill);padding:3px}
+.seg button{border:none;background:none;color:var(--panel-ink-2);font:inherit;font-size:var(--t-cap);font-weight:600;
+  padding:6px var(--s-6);border-radius:var(--r-pill);cursor:pointer;min-height:32px;transition:all var(--t-micro)}
+.seg button[aria-pressed=true]{background:var(--signal);color:var(--signal-ink)}
+.bar .mini{display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);border-radius:var(--r-pill);
+  border:1px solid var(--panel-rule);background:none;color:var(--panel-ink-2);font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all var(--t-micro)}
+.bar .mini:hover{color:var(--panel-ink);border-color:rgba(255,255,255,.3)}
+.bar .mini svg{width:13px;height:13px}
+.bar select{height:32px;max-width:min(230px,42vw);border-radius:var(--r-pill);border:1px solid var(--panel-rule);background:rgba(255,255,255,.06);
+  color:var(--panel-ink);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;padding:0 var(--s-4);cursor:pointer}
+.bar select option{color:var(--ink);background:var(--surface)}
+
+/* ── Modes ──────────────────────────────────────────────────────── */
+.mode{display:none} .mode.on{display:block}
+
+/* ── The product frame ──────────────────────────────────────────── */
+.auth{min-height:calc(100vh - 56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr)}
+.authmain{display:flex;flex-direction:column;padding:var(--s-9) var(--s-10) var(--s-11);background:var(--ground)}
+.authaside{background:var(--surface-2);border-left:1px solid var(--rule);padding:var(--s-9) var(--s-10);display:flex;flex-direction:column;justify-content:center;gap:var(--s-7)}
+.authhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-6);margin-bottom:var(--s-10)}
+.blogo{display:flex;align-items:center;gap:var(--s-4)}
+.blogo .mk{width:30px;height:30px;border-radius:8px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.blogo .mk svg{width:17px;height:17px}
+.blogo b{font-family:var(--f-display);font-size:1.05rem;font-weight:700;letter-spacing:-.026em}
+.authbody{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:440px;width:100%;margin:0 auto}
+.authfoot{margin-top:var(--s-10);max-width:440px;width:100%;margin-left:auto;margin-right:auto}
+
+/* progress: five marks, no numbers — the flow is short enough that a
+   counter is noise, but a shape that fills is reassurance */
+.prog{display:flex;gap:var(--s-3);margin-bottom:var(--s-9)}
+.prog i{flex:1;height:3px;border-radius:var(--r-pill);background:var(--surface-3);transition:background 400ms var(--e-out)}
+.prog i.done{background:var(--signal-lo)} .prog i.now{background:var(--signal)}
+
+.screen{display:none;animation:sin var(--t-panel) var(--e-out)}
+.screen.on{display:block}
+@keyframes sin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.screen.back{animation:sinb var(--t-panel) var(--e-out)}
+@keyframes sinb{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen,.screen.back{animation:none}}
+
+.screen h1{font-family:var(--f-display);font-size:clamp(1.55rem,1.3rem + 1.1vw,2rem);font-variation-settings:"opsz" 32;
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:0 0 var(--s-5);text-wrap:balance}
+.screen .sub{color:var(--ink-2);font-size:var(--t-body);margin:0 0 var(--s-8);line-height:1.6}
+.screen .sub a{color:var(--signal-text);font-weight:600}
+.microfoot{font-size:var(--t-cap);color:var(--ink-3);text-align:center;margin:var(--s-6) 0 0}
+.microfoot a{color:var(--signal-text);font-weight:600}
+.backlink{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);font-weight:600;color:var(--ink-2);
+  background:none;border:none;cursor:pointer;padding:var(--s-3) 0;margin-bottom:var(--s-6)}
+.backlink:hover{color:var(--ink)} .backlink svg{width:14px;height:14px}
+
+/* ── Entry banners ──────────────────────────────────────────────── */
+.entryb{display:flex;gap:var(--s-5);align-items:flex-start;padding:var(--s-5) var(--s-6);border-radius:var(--r-md);
+  background:var(--signal-soft);border:1px solid var(--signal-edge);margin-bottom:var(--s-8);font-size:var(--t-body-s)}
+.entryb svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--signal-text)}
+.entryb b{font-weight:600}
+.entryb p{margin:0;color:var(--ink)}
+
+/* ── Delivery fallbacks ─────────────────────────────────────────── */
+.fallbacks{margin-top:var(--s-7);border-top:1px solid var(--rule);padding-top:var(--s-6)}
+.fbrow{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-5);border:1px solid var(--rule-2);
+  border-radius:var(--r-sm);background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);
+  margin-bottom:var(--s-4);transition:all var(--t-micro) var(--e-out)}
+.fbrow:hover:not(:disabled){border-color:var(--rule-3);background:var(--surface-2)}
+.fbrow:disabled{opacity:.45;cursor:not-allowed}
+.fbrow .fi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none;background:var(--surface-2)}
+.fbrow .fi svg{width:16px;height:16px}
+.fbrow.wa .fi{background:#25D366;color:#0B2C17}
+.fbrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fbrow span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fbrow .fw{flex:1;min-width:0}
+.fbrow .ft{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);white-space:nowrap;text-transform:uppercase;letter-spacing:.08em}
+
+/* ── Greeting preview (aside) ───────────────────────────────────── */
+.gprev{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-8);position:relative;overflow:hidden}
+.gprev::before{content:"";position:absolute;inset:0;background:radial-gradient(110% 80% at 85% -10%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.gprev > *{position:relative}
+.gprev .gl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);margin-bottom:var(--s-6);display:flex;align-items:center;gap:var(--s-4)}
+.gprev .gl svg{width:14px;height:14px}
+.gprev .gq{font-family:var(--f-display);font-size:1.35rem;font-variation-settings:"opsz" 22;font-weight:500;letter-spacing:-.018em;line-height:1.35;margin:0}
+.gprev .gq mark{background:none;color:var(--signal);font-weight:600}
+.gprev .gt{font-size:var(--t-cap);color:var(--panel-ink-2);margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--panel-rule)}
+
+.asidecard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.asidecard h3{margin-bottom:var(--s-5);font-size:var(--t-h4)}
+.asidecard ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.asidecard li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink-2);line-height:1.55;align-items:flex-start}
+.asidecard li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--signal-text)}
+.asidecard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.asidepane{display:none} .asidepane.on{display:grid;gap:var(--s-6);animation:sin var(--t-panel) var(--e-out)}
+@media (prefers-reduced-motion:reduce){.asidepane.on{animation:none}}
+
+/* ── Consent ────────────────────────────────────────────────────── */
+.summ{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);padding:var(--s-7);margin-bottom:var(--s-7)}
+.summ ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.summ li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink);line-height:1.55;align-items:flex-start}
+.summ li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--ink-3)}
+.summ .sfoot{margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--rule);font-size:var(--t-cap);color:var(--ink-3)}
+.summ .sfoot a{color:var(--signal-text);font-weight:600}
+.consent{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);cursor:pointer;margin-bottom:var(--s-5);transition:all var(--t-ui) var(--e-out)}
+.consent:hover{border-color:var(--rule-3)}
+.consent input{position:absolute;opacity:0;width:0;height:0}
+.consent .cbx{width:22px;height:22px;border:1.5px solid var(--rule-3);border-radius:5px;flex:none;display:grid;place-items:center;
+  margin-top:1px;transition:all var(--t-micro) var(--e-out);background:var(--surface)}
+.consent .cbx svg{width:13px;height:13px;opacity:0;color:var(--signal-ink);transform:scale(.6);transition:all var(--t-micro) var(--e-out)}
+.consent input:checked ~ .cw .cbx,.consent input:checked + .cbx{background:var(--signal);border-color:var(--signal-lo)}
+.consent input:checked + .cbx svg{opacity:1;transform:none}
+.consent input:focus-visible + .cbx{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.consent input:checked ~ *{}
+.consent.checked{border-color:var(--signal-lo);background:var(--signal-soft)}
+.consent .cw b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.consent .cw span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.consent .req{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-left:var(--s-3)}
+.receipt{font-family:var(--f-mono);font-size:10.5px;line-height:1.7;color:var(--ink-3);background:var(--surface-2);
+  border:1px solid var(--rule);border-radius:var(--r-sm);padding:var(--s-5);margin:var(--s-6) 0 0;overflow-x:auto}
+.receipt b{color:var(--ink-2);font-weight:500}
+.notyet{display:flex;gap:var(--s-4);margin-top:var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.notyet svg{width:14px;height:14px;flex:none;margin-top:2px}
+
+/* ── Recovery hub ───────────────────────────────────────────────── */
+.recopt{display:flex;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);margin-bottom:var(--s-5);
+  transition:all var(--t-ui) var(--e-out)}
+.recopt:hover{border-color:var(--signal-lo);background:var(--signal-soft);transform:translateY(-1px)}
+.recopt .ri{width:36px;height:36px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.recopt .ri svg{width:18px;height:18px}
+.recopt b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.recopt span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.recopt .ra{margin-left:auto;align-self:center;color:var(--ink-3)}
+.recopt .ra svg{width:16px;height:16px}
+
+/* ── Workspace chooser ──────────────────────────────────────────── */
+.wsopt{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);
+  border-radius:var(--r-md);background:var(--surface);cursor:pointer;font:inherit;color:var(--ink);text-align:left;
+  margin-bottom:var(--s-4);transition:all var(--t-ui) var(--e-out)}
+.wsopt:hover{border-color:var(--signal-lo);background:var(--signal-soft)}
+.wsopt .wa{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--rule);
+  display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.9rem;flex:none}
+.wsopt b{display:block;font-size:var(--t-body-s);font-weight:600}
+.wsopt span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+
+/* ── Done ───────────────────────────────────────────────────────── */
+.donemark{width:76px;height:76px;border-radius:50%;background:var(--signal);color:var(--signal-ink);
+  display:grid;place-items:center;margin-bottom:var(--s-8);position:relative}
+.donemark svg{width:34px;height:34px;stroke-dasharray:32;stroke-dashoffset:32;animation:draw 520ms var(--e-out) 160ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.donemark::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--signal-lo);animation:ripple 1.6s var(--e-out) 2}
+@keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.donemark svg{animation:none;stroke-dashoffset:0}.donemark::after{animation:none;opacity:0}}
+
+/* ── SPEC MODE ──────────────────────────────────────────────────── */
+.specwrap{max-width:1120px;margin:0 auto;padding:var(--s-11) var(--s-10) var(--s-13)}
+.specwrap .sechd{margin:var(--s-13) 0 var(--s-7)}
+.specwrap .sechd:first-of-type{margin-top:var(--s-9)}
+.specwrap .sechd .n{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-5)}
+.specwrap .sechd .n::before{content:"";display:inline-block;width:18px;height:1px;background:var(--rule-3);vertical-align:middle;margin-right:var(--s-4)}
+.specwrap h2{font-family:var(--f-display);font-size:clamp(1.4rem,1.15rem + 1vw,1.85rem);font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.028em;margin:0}
+.specwrap > p,.sechd + p{max-width:70ch;color:var(--ink-2);margin:var(--s-5) 0 0}
+.stbl{width:100%;border-collapse:collapse;font-size:var(--t-body-s)}
+.stbl th{text-align:left;font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;padding:0 var(--s-5) var(--s-4);border-bottom:1px solid var(--rule-2);white-space:nowrap}
+.stbl td{padding:var(--s-5);border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.stbl td:first-child{color:var(--ink);font-weight:500}
+.stblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:var(--s-6) 0}
+.stblwrap .stbl{min-width:600px}
+.why2{display:flex;gap:var(--s-5);max-width:74ch;background:var(--signal-soft);border:1px solid var(--signal-edge);
+  border-radius:var(--r-md);padding:var(--s-5) var(--s-6);margin:var(--s-6) 0;font-size:var(--t-body-s);color:var(--ink)}
+.why2 svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--signal-text)}
+.why2 p{margin:0} .why2 b{font-weight:600}
+.why2.warn{background:var(--warn-soft);border-color:var(--warn-edge)} .why2.warn svg{color:var(--warn)}
+.sgrid{display:grid;gap:var(--s-6);grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));margin:var(--s-6) 0}
+.sgrid > *{min-width:0}
+.scard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.scard h4{margin-bottom:var(--s-4)}
+.scard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.scard .tagline{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+
+/* flow map */
+.fmap{display:grid;gap:0;margin:var(--s-7) 0;max-width:520px}
+.fnode{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);padding:var(--s-5) var(--s-6)}
+.fnode b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fnode span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fnode.key{background:var(--signal-soft);border-color:var(--signal-lo);border-width:2px}
+.fnode.term{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.fnode.term span{color:rgba(250,249,244,.72)}
+.fconn{width:1px;height:20px;margin:0 auto;background:var(--rule-3);position:relative}
+.fconn::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--rule-3)}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:980px){
+  .auth{grid-template-columns:minmax(0,1fr)}
+  .authaside{border-left:none;border-top:1px solid var(--rule);padding:var(--s-9) var(--s-8)}
+  .authmain{padding:var(--s-8) var(--s-8) var(--s-9)}
+  .specwrap{padding:var(--s-9) var(--s-8) var(--s-12)}
+}
+@media (max-width:640px){
+  .bar{padding:var(--s-4) var(--s-5)}
+  .bar .lg > span > span{display:none}
+  .bar .sp{margin-left:auto}
+  .bar .scen{order:5;width:100%}
+  .bar select{width:100%}
+  .auth{min-height:0}
+  .authmain{padding:var(--s-7) var(--s-6) var(--s-8)}
+  .authaside{padding:var(--s-8) var(--s-6)}
+  .specwrap{padding:var(--s-8) var(--s-6) var(--s-11)}
+  .authhead{margin-bottom:var(--s-8)}
+  .fallbacks .fbrow .ft{display:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LANGUAGE — additions on the shared shell
+
+   The owner configures something she will never hear: calls, in a
+   language she may not be able to judge, to people she never meets.
+   So no setting in this file appears without the evidence of what it
+   did — and no capability is claimed that we have not measured.
+   ═══════════════════════════════════════════════════════════════════ */
+.authbody{max-width:640px} .authfoot{max-width:640px}
+.screen h1{margin-bottom:var(--s-4)}
+
+/* ── A language, and what we can honestly say about it ──────────── */
+.lwrap{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-4);transition:border-color var(--t-micro)}
+.lwrap.on{border-color:var(--signal-lo)}
+.lrow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);
+  transition:background var(--t-micro)}
+.lwrap.on .lrow{background:var(--signal-soft)}
+.lname{flex:1;min-width:0}
+.lname b{display:block;font-size:var(--t-body-s);font-weight:600}
+.lname .nat{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:1px}
+.lwrap.off .lname b{color:var(--ink-2)}
+.lprime{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--signal-text);background:var(--surface);border:1px solid var(--signal-edge);
+  border-radius:var(--r-pill);padding:2px var(--s-4);flex:none}
+
+/* channel scope — the only honest way to say "chat only" at a glance.
+   One badge per language would be a lie: an 8 kHz call and a wideband
+   voice note are not the same problem. */
+.chscope{display:inline-flex;align-items:center;gap:var(--s-3);flex:none}
+.chscope i{width:28px;height:28px;border-radius:8px;background:var(--surface-2);border:1px solid var(--rule);
+  display:grid;place-items:center;color:var(--ink-2);position:relative}
+.chscope i svg{width:14px;height:14px}
+.chscope i.yes{background:var(--signal-soft);border-color:var(--signal-edge);color:var(--signal-text)}
+.chscope i.no{opacity:.55}
+.chscope i.no::after{content:"";position:absolute;left:5px;right:5px;top:50%;height:1.5px;
+  background:var(--ink-3);border-radius:1px;transform:rotate(-24deg)}
+
+/* the quality badge. a word, a shape and a colour — in that order,
+   and never a percentage we have not measured. */
+.qbadge{display:inline-flex;align-items:center;gap:var(--s-3);flex:none;cursor:pointer;
+  font-family:var(--f-mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+  border-radius:var(--r-pill);padding:4px var(--s-4);border:1px solid transparent;
+  background:none;transition:all var(--t-micro)}
+.qbadge i{width:8px;height:8px;flex:none;border-radius:50%}
+.qbadge.good{background:var(--ok-soft);border-color:var(--ok-edge);color:var(--ok)}
+.qbadge.good i{background:var(--ok-fill)}
+.qbadge.improving{background:var(--warn-soft);border-color:var(--warn-edge);color:var(--warn)}
+.qbadge.improving i{background:var(--warn-fill);border-radius:2px}
+.qbadge.chatonly{background:var(--info-soft);border-color:var(--info-edge);color:var(--info)}
+.qbadge.chatonly i{background:var(--info-fill);border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.qbadge.unmeasured{background:var(--surface-2);border-color:var(--rule-2);color:var(--ink-3)}
+.qbadge.unmeasured i{background:var(--rule-3);border-radius:1px;transform:rotate(45deg);width:7px;height:7px}
+.qbadge:hover{border-color:var(--rule-3)}
+
+/* the honest line beneath a language that is not fully ready */
+.qwhy{padding:var(--s-5) var(--s-6);border-top:1px dashed var(--rule-2);background:var(--surface-2);
+  font-size:var(--t-cap);color:var(--ink-2);line-height:1.55;display:flex;gap:var(--s-4)}
+.qwhy svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--ink-3)}
+.qwhy b{color:var(--ink);font-weight:600}
+.qwhy a{color:var(--signal-text);font-weight:600}
+
+/* the refusal when you try to turn off the language the greeting uses */
+.refuse{padding:var(--s-5) var(--s-6);border-top:1px solid var(--warn-edge);background:var(--warn-soft);
+  font-size:var(--t-cap);color:var(--ink);line-height:1.55;display:flex;gap:var(--s-4)}
+.refuse svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--warn)}
+.refuse b{font-weight:600}
+
+/* ── How switching works: behaviour, not settings ───────────────── */
+.modes{display:grid;gap:var(--s-4);margin-bottom:var(--s-7)}
+.mode3{display:flex;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);
+  border-radius:var(--r-md);background:var(--surface);text-align:left;cursor:pointer;font:inherit;
+  color:var(--ink);position:relative;transition:all var(--t-ui) var(--e-out)}
+.mode3:hover{border-color:var(--signal-lo);background:var(--signal-soft)}
+.mode3 input{position:absolute;opacity:0;width:0;height:0}
+.mode3:has(input:checked){border-color:var(--signal-lo);background:var(--signal-soft)}
+.mode3:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.mode3 .mi{width:36px;height:36px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.mode3:has(input:checked) .mi{background:var(--surface)}
+.mode3 .mi svg{width:18px;height:18px;color:var(--ink-2)}
+.mode3 .mw{flex:1;min-width:0}
+.mode3 b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.mode3 .md{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+/* the consequence is on the card, never in a tooltip — touch has no hover */
+.mode3 .mcon{display:block;font-size:var(--t-cap);color:var(--ink-3);line-height:1.5;margin-top:var(--s-4);
+  padding-top:var(--s-4);border-top:1px solid var(--rule)}
+.mrec{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--signal-text);margin-left:var(--s-3)}
+
+/* the two signals that are never a setting */
+.always{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface-2);
+  overflow:hidden;margin-bottom:var(--s-7)}
+.arow2{display:flex;align-items:flex-start;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule)}
+.arow2:last-child{border-bottom:none}
+.arow2 .ai{width:28px;height:28px;border-radius:8px;background:var(--surface);border:1px solid var(--rule-2);
+  display:grid;place-items:center;flex:none;color:var(--ink-2);margin-top:1px}
+.arow2 .ai svg{width:14px;height:14px}
+.arow2 .aw{flex:1;min-width:0}
+.arow2 b{display:block;font-size:var(--t-body-s);font-weight:600}
+.arow2 span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5;margin-top:1px}
+.arow2 .alock{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);display:inline-flex;align-items:center;gap:var(--s-3);flex:none;align-self:center}
+.arow2 .alock svg{width:12px;height:12px}
+
+/* ── What it says, in each language ─────────────────────────────── */
+.phrase{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-5)}
+.phrase .ph{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-4) var(--s-6);
+  background:var(--surface-2);border-bottom:1px solid var(--rule)}
+.phrase .ph b{font-size:var(--t-cap);font-weight:600;flex:1;min-width:0}
+.phrase .pb{padding:var(--s-6)}
+.phrase.needs{border-color:var(--warn-edge)}
+.phrase.needs .ph{background:var(--warn-soft);border-bottom-color:var(--warn-edge)}
+/* ── The quality sheet: what a label actually means ─────────────── */
+.qsheet{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-7)}
+.qsheet .qh{padding:var(--s-6);border-bottom:1px solid var(--rule);background:var(--surface-2);
+  display:flex;align-items:center;gap:var(--s-5);flex-wrap:wrap}
+.qsheet .qh b{font-family:var(--f-display);font-size:1.1rem;font-variation-settings:"opsz" 18;
+  font-weight:600;letter-spacing:-.018em}
+.qsheet .qb{padding:var(--s-6)}
+.qsheet .qb p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.qsheet dl{display:grid;gap:var(--s-5);margin:0 0 var(--s-6)}
+.qsheet dl div{display:grid;grid-template-columns:136px minmax(0,1fr);gap:var(--s-5);font-size:var(--t-body-s)}
+.qsheet dt{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink-3);letter-spacing:.04em}
+.qsheet dd{margin:0;color:var(--ink)}
+
+/* in review the TARGET language leads: it is the thing being judged.
+   This inverts the transcript, where the original always leads. */
+.plead{font-family:var(--f-display);font-size:1.08rem;font-variation-settings:"opsz" 18;font-weight:500;
+  letter-spacing:-.012em;line-height:1.45;margin:0;color:var(--ink)}
+.psrc{font-size:var(--t-cap);color:var(--ink-3);margin:var(--s-5) 0 0;padding-left:var(--s-5);
+  border-left:2px solid var(--rule-2)}
+.pfoot{display:flex;align-items:center;gap:var(--s-4);flex-wrap:wrap;margin-top:var(--s-6)}
+.plen{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums;flex:none}
+.plen.over{color:var(--warn);font-weight:600}
+.punrev{width:7px;height:7px;border-radius:50%;background:var(--warn-fill);flex:none}
+.mtag{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:9.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);flex:none}
+.mtag svg{width:12px;height:12px}
+.mtag.done{color:var(--signal-text)}
+
+/* ── Evidence: what actually happened on the calls ──────────────── */
+.measline{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);
+  margin:0 0 var(--s-6);display:flex;align-items:center;gap:var(--s-4);flex-wrap:wrap}
+.measline svg{width:12px;height:12px;flex:none}
+/* the one number that matters, named on screen with its own target */
+.headnum{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-7) var(--s-6);margin-bottom:var(--s-6)}
+.headnum .hl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:var(--s-5);display:flex;align-items:center;gap:var(--s-4)}
+.headnum .hl svg{width:13px;height:13px}
+.headnum .hv{font-family:var(--f-display);font-size:2.35rem;font-variation-settings:"opsz" 40;font-weight:600;
+  letter-spacing:-.03em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.headnum .hv.none{font-size:1.2rem;color:var(--ink-3);font-weight:500;letter-spacing:-.016em;line-height:1.4}
+.headnum .ht{font-size:var(--t-cap);color:var(--ink-2);margin:var(--s-5) 0 0;line-height:1.55}
+.headnum .htgt{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);margin-top:var(--s-4);display:block}
+
+/* below thirty calls the meter is REPLACED, not greyed — a number we
+   cannot stand behind is worse than no number */
+.enough{display:flex;gap:var(--s-4);padding:var(--s-6);border:1px dashed var(--rule-3);border-radius:var(--r-md);
+  background:var(--surface-2);font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6;margin-bottom:var(--s-6)}
+.enough svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--ink-3)}
+.enough b{color:var(--ink);font-weight:600}
+
+.lbars{display:grid;gap:var(--s-6);margin-bottom:var(--s-7)}
+.lbar{display:grid;grid-template-columns:112px minmax(0,1fr) 62px;align-items:center;gap:var(--s-5)}
+.lbar .bl{font-size:var(--t-cap);color:var(--ink-2)}
+.lbar .bt{height:8px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden}
+.lbar .bt i{display:block;height:100%;width:var(--w,0%);border-radius:var(--r-pill);background:var(--signal);
+  transition:width 700ms var(--e-out)}
+.lbar .bt i.low{background:var(--warn-fill)}
+.lbar .bt.thin{background:repeating-linear-gradient(90deg,var(--surface-3) 0 4px,transparent 4px 8px)}
+.lbar .bv{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink);text-align:right;
+  font-variant-numeric:tabular-nums}
+.lbar .bv.none{color:var(--ink-3);font-size:10px}
+
+.evid{display:grid;gap:var(--s-4);margin-bottom:var(--s-7)}
+.erow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);border:1px solid var(--rule);
+  border-radius:var(--r-md);background:var(--surface);width:100%;text-align:left;font:inherit;color:inherit;
+  cursor:pointer;transition:background var(--t-micro),border-color var(--t-micro)}
+.erow:hover{background:var(--surface-2);border-color:var(--rule-2)}
+.erow .ew{flex:1;min-width:0}
+.erow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.erow span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:1px;line-height:1.5}
+.erow .en{font-family:var(--f-mono);font-size:1.05rem;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;flex:none}
+.erow .ea{color:var(--ink-3);flex:none}
+.erow .ea svg{width:16px;height:16px}
+.erow.warn{border-color:var(--warn-edge);background:var(--warn-soft)}
+.erow.warn:hover{background:var(--warn-soft)}
+
+/* ── Language markers inside a transcript excerpt ───────────────── */
+.lchip{display:inline-flex;align-items:center;gap:var(--s-2);font-family:var(--f-mono);font-size:9.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);background:var(--surface-2);
+  border:1px solid var(--rule);border-radius:var(--r-pill);padding:1px var(--s-3);flex:none}
+.lchip.mix{background:var(--info-soft);border-color:var(--info-edge);color:var(--info)}
+/* a word from the other language inside one sentence. Underlined, never
+   flagged: this is how Kigali speaks, and the UI must not call it an event. */
+.mx{border-bottom:1.5px dotted var(--info-fill);padding-bottom:1px}
+/* a sustained switch. Carries what caused it. */
+.swmark{display:flex;align-items:center;gap:var(--s-4);margin:var(--s-4) 0}
+.swmark::before,.swmark::after{content:"";height:1px;background:var(--rule-2);flex:1}
+.swmark span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);display:inline-flex;align-items:center;gap:var(--s-3);flex:none}
+.swmark svg{width:12px;height:12px}
+.swmark.locked span{color:var(--warn)}
+.swmark.spur span{color:var(--risk)}
+.trig{font-family:var(--f-mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;
+  border-radius:var(--r-pill);padding:1px var(--s-3);border:1px solid var(--rule-2);
+  background:var(--surface);color:var(--ink-3)}
+.trig.asked{border-color:var(--signal-edge);color:var(--signal-text);background:var(--signal-soft)}
+.trig.keypad{border-color:var(--info-edge);color:var(--info);background:var(--info-soft)}
+.trig.detected{border-color:var(--warn-edge);color:var(--warn);background:var(--warn-soft)}
+
+/* ── The first three seconds, and the ladder after it ───────────── */
+.beats{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);overflow:hidden;margin-bottom:var(--s-6)}
+.beat{display:flex;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule)}
+.beat:last-child{border-bottom:none}
+.beat.last{background:var(--surface-2)}
+.beat .bn{width:24px;height:24px;border-radius:50%;background:var(--surface-2);border:1px solid var(--rule-2);
+  display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;font-weight:600;color:var(--ink-3);
+  flex:none;margin-top:1px}
+.beat.last .bn{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.beat .bw{flex:1;min-width:0}
+.beat b{display:block;font-size:var(--t-body-s);font-weight:600}
+.beat .bd{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5;margin-top:1px}
+.beat q{display:block;font-size:var(--t-cap);color:var(--ink);line-height:1.55;quotes:none;margin-top:var(--s-4);
+  padding-left:var(--s-5);border-left:2px solid var(--rule-2);font-style:italic}
+.beat .block{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);display:inline-flex;align-items:center;gap:var(--s-3);flex:none;align-self:center}
+.beat .block svg{width:12px;height:12px}
+
+.keys{display:flex;gap:var(--s-4);margin-top:var(--s-5);flex-wrap:wrap;align-items:center}
+.key{width:34px;height:34px;border-radius:var(--r-sm);border:1px solid var(--rule-2);background:var(--surface-2);
+  display:grid;place-items:center;font-family:var(--f-mono);font-size:var(--t-body-s);font-weight:600;
+  color:var(--ink);flex:none}
+.keylab{font-size:var(--t-cap);color:var(--ink-2)}
+
+/* ── The save bar. Changes land on the NEXT call, never this one. ── */
+.savebar{position:sticky;bottom:0;z-index:5;display:flex;align-items:center;gap:var(--s-5);flex-wrap:wrap;
+  padding:var(--s-5) var(--s-6);margin:var(--s-8) calc(var(--s-6) * -1) 0;
+  background:color-mix(in oklab,var(--ground) 92%,transparent);backdrop-filter:blur(10px);
+  border-top:1px solid var(--rule-2)}
+.savebar .sv{flex:1;min-width:160px;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.savebar .sv b{color:var(--ink);font-weight:600}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:640px){
+  .qsheet dl div{grid-template-columns:1fr;gap:var(--s-2)}
+  /* The language row carries a name, a channel pair, a quality badge
+     and a toggle. At 360 those cannot share a line without the badge
+     truncating — and a truncated honesty label is worse than none.
+     So the row becomes a stacked card: name, then scope and badge on
+     their own line, then the toggle. A reflow would have hidden the
+     quality column, which is this screen's entire argument. */
+  .lrow{flex-wrap:wrap;row-gap:var(--s-5)}
+  .lname{flex:1 0 60%;order:1}
+  .lrow .tgl{order:2}
+  .chscope{order:3} .qbadge{order:4} .lprime{order:5}
+
+  /* Three columns of per-language numbers becomes label-and-value on
+     one line with the bar beneath, so the number is never pushed off. */
+  .lbar{grid-template-columns:1fr auto;gap:var(--s-3)}
+  .lbar .bl{grid-column:1} .lbar .bv{grid-column:2;text-align:right}
+  .lbar .bt{grid-column:1 / -1}
+
+  /* Source beside target dies below 560: the pair stacks, target above. */
+  .phrase .pb{padding:var(--s-6) var(--s-5)}
+  .plead{font-size:1rem}
+
+  .mode3{flex-wrap:wrap}
+  .erow{flex-wrap:wrap} .erow .ew{flex:1 0 62%}
+  .headnum .hv{font-size:2rem}
+  .arow2{flex-wrap:wrap} .arow2 .alock{order:3;width:100%;padding-left:calc(28px + var(--s-5))}
+  .beat{flex-wrap:wrap} .beat .block{order:3;width:100%;padding-left:calc(24px + var(--s-5))}
+  .savebar{margin-inline:calc(var(--s-6) * -1)}
+  .keys{gap:var(--s-3)}
+}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol><symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></symbol><symbol id="i-audio-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /></symbol><symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></symbol><symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></symbol><symbol id="i-check-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 7 17l-5-5" /> <path d="m22 10-7.5 7.5L13 16" /></symbol><symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></symbol><symbol id="i-circle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></symbol><symbol id="i-circle-dot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /> <circle cx="12" cy="12" r="10" /></symbol><symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /> <path d="M12 17h.01" /></symbol><symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol><symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></symbol><symbol id="i-git-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6a9 9 0 0 0-9 9V3" /> <circle cx="18" cy="6" r="3" /> <circle cx="6" cy="18" r="3" /></symbol><symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></symbol><symbol id="i-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol><symbol id="i-message-circle-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /> <path d="M8 12h.01" /> <path d="M12 12h.01" /> <path d="M16 12h.01" /></symbol><symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19v3" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <rect x="9" y="2" width="6" height="13" rx="3" /></symbol><symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></symbol><symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-phone-call" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2a9 9 0 0 1 9 9" /> <path d="M13 6a5 5 0 0 1 5 5" /> <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></symbol><symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5" /> <path d="M8 3H3v5" /> <path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3" /> <path d="m15 9 6-6" /></symbol><symbol id="i-triangle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol><symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></symbol><symbol id="i-volume-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /> <path d="M16 9a5 5 0 0 1 0 6" /> <path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></symbol></defs></svg>
+<div class="bar">
+  <span class="lg"><span class="mk"><svg><use href="#i-audio-lines"/></svg></span><span><b>Subiza</b><span>Flow 1.9 · language</span></span></span>
+  <div class="sp"></div>
+  <select class="scen" id="scen" aria-label="Scenario">
+    <optgroup label="Setting it up">
+      <option value="normal">Four languages, as they ship</option>
+      <option value="nokin">Kinyarwanda on calls — never measured</option>
+      <option value="chatonly">No Kinyarwanda voice yet — chat only</option>
+      <option value="offprimary">Turning off the greeting's language</option>
+    </optgroup>
+    <optgroup label="How it switches">
+      <option value="switching">The three modes</option>
+      <option value="ladder">When it doesn't understand</option>
+    </optgroup>
+    <optgroup label="What it says">
+      <option value="phrases">Machine translations, unreviewed</option>
+      <option value="toolong">A greeting too long to say</option>
+    </optgroup>
+    <optgroup label="What happened">
+      <option value="thin">Too few calls to say anything</option>
+      <option value="measured">Enough calls to be honest</option>
+      <option value="mixed">One sentence, two languages</option>
+      <option value="switched">A caller asked for English</option>
+      <option value="spurious">It switched on its own</option>
+      <option value="locked">Locked after three switches</option>
+      <option value="swahili">Callers speaking a language you haven't turned on</option>
+      <option value="notes">Messages and voice notes</option>
+    </optgroup>
+  </select>
+  <div class="seg" role="group" aria-label="Language">
+    <button data-lang="rw" aria-pressed="false">RW</button>
+    <button data-lang="en" aria-pressed="true">EN</button>
+  </div>
+  <div class="seg" role="group" aria-label="Mode">
+    <button data-mode="proto" aria-pressed="true">Prototype</button>
+    <button data-mode="spec" aria-pressed="false">Spec</button>
+  </div>
+</div>
+
+<div class="mode on" id="m-proto">
+<div class="auth">
+  <div class="authmain">
+    <div class="authhead">
+      <span class="blogo"><span class="mk"><svg><use href="#i-audio-lines"/></svg></span><b>Subiza</b></span>
+      <span class="tag" data-rw="Indimi">Languages</span>
+    </div>
+    <div class="authbody">
+
+      <!-- ═══════════ l1 · THE LANGUAGE BOARD ═══════════ -->
+      <section class="screen on" id="l1">
+        <h1 data-rw="Indimi umufasha wawe avuga">The languages your agent speaks</h1>
+        <p class="sub" data-rw="Buri rurimi rufite imimerere ibiri: ku telefone, no mu butumwa. Ntabwo bimwe — guhamagara bifite ubuziranenge buke, kandi tubikubwira uko biri.">Each language has two states: on the phone, and in messages. They are not the same — a call carries much less sound than a voice note, and we tell you which is which.</p>
+
+        <div id="board">
+          <div class="lwrap on" data-l="rw">
+            <div class="lrow">
+              <span class="lname"><b>Ikinyarwanda</b><span class="nat" data-rw="Ururimi rw'ibanze — ni rwo ijambo ry'ubwakire rivugwamo">Your main language — the greeting is said in this</span></span>
+              <span class="lprime" data-rw="iry'ibanze">primary</span>
+              <span class="chscope" aria-label="On calls: yes. In messages: yes.">
+                <i class="yes" title="On calls"><svg><use href="#i-phone"/></svg></i>
+                <i class="yes" title="In messages"><svg><use href="#i-message-circle-more"/></svg></i>
+              </span>
+              <button class="qbadge unmeasured" data-q="rw" aria-label="Kinyarwanda quality — open details"><i></i><span data-rw="Ntirapimwa">Not yet measured</span></button>
+              <label class="tgl"><input type="checkbox" checked data-lt="rw" aria-label="Kinyarwanda on"><span class="track"><span class="tl"></span></span></label>
+            </div>
+            <p class="qwhy"><svg><use href="#i-info"/></svg><span data-rw-html="Ntitwigeze dupima Ikinyarwanda ku murongo wa telefone, kuko nta n'umwe wabikoze — iyo mibare ntayo isohotse ahantu na hamwe. <b>Tuzakwereka iyawe bwite</b> nitumara kubona guhamagara makumyabiri.">We have never measured Kinyarwanda on a telephone line, because nobody has — that figure isn't published anywhere, for any speech system. <b>We'll show you the number from your own calls</b> as soon as we have twenty of them.</span></p>
+          </div>
+
+          <div class="lwrap on" data-l="en">
+            <div class="lrow">
+              <span class="lname"><b>English</b><span class="nat" data-rw="Icyongereza">English</span></span>
+              <span class="chscope" aria-label="On calls: yes. In messages: yes.">
+                <i class="yes"><svg><use href="#i-phone"/></svg></i>
+                <i class="yes"><svg><use href="#i-message-circle-more"/></svg></i>
+              </span>
+              <button class="qbadge good" data-q="en" aria-label="English quality — open details"><i></i><span data-rw="Rirakora neza">Good</span></button>
+              <label class="tgl"><input type="checkbox" checked data-lt="en" aria-label="English on"><span class="track"><span class="tl"></span></span></label>
+            </div>
+            <p class="qwhy"><svg><use href="#i-circle-alert"/></svg><span data-rw-html="Gikora neza muri rusange. Ariko <b>Icyongereza kivugwa mu Rwanda</b> ni ahantu hazwi ho gukomera kuri buri sisitemu y'ijwi, kandi nta we utangaza imibare yaho — bityo tugapima iyawe.">Strong for English generally. But <b>Rwandan-accented English</b> is a known weak spot in every speech system, and nobody publishes a figure for it — so we measure yours.</span></p>
+          </div>
+
+          <div class="lwrap" data-l="fr">
+            <div class="lrow">
+              <span class="lname"><b>Français</b><span class="nat" data-rw="Igifaransa">French</span></span>
+              <span class="chscope" aria-label="On calls: yes. In messages: yes.">
+                <i class="yes"><svg><use href="#i-phone"/></svg></i>
+                <i class="yes"><svg><use href="#i-message-circle-more"/></svg></i>
+              </span>
+              <button class="qbadge good" data-q="fr" aria-label="French quality — open details"><i></i><span data-rw="Rirakora neza">Good</span></button>
+              <label class="tgl"><input type="checkbox" data-lt="fr" aria-label="French on"><span class="track"><span class="tl"></span></span></label>
+            </div>
+          </div>
+
+          <div class="lwrap" data-l="sw">
+            <div class="lrow">
+              <span class="lname"><b>Kiswahili</b><span class="nat" data-rw="Igiswahili">Swahili</span></span>
+              <span class="chscope" aria-label="On calls: improving. In messages: yes.">
+                <i class="yes"><svg><use href="#i-phone"/></svg></i>
+                <i class="yes"><svg><use href="#i-message-circle-more"/></svg></i>
+              </span>
+              <button class="qbadge improving" data-q="sw" aria-label="Swahili quality — open details"><i></i><span data-rw="Rirategurwa">Improving</span></button>
+              <label class="tgl"><input type="checkbox" data-lt="sw" aria-label="Swahili on"><span class="track"><span class="tl"></span></span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="banner banner-info" id="swSuggest" hidden>
+          <svg class="bi"><use href="#i-users"/></svg>
+          <div><b data-rw="Abakiriya batanu bavuze Igiswahili muri uku kwezi">Five callers spoke Swahili this month</b>
+          <p data-rw="Ntabwo ari benshi, ariko ntabwo ari zeru. Umufasha wabasabye imbabazi mu Kinyarwanda maze akuzana. Ushobora kurufungura — cyangwa ukareka, kandi tukazakubwira niba umubare wiyongera.">Not many, but not none. The agent apologised in Kinyarwanda and fetched you. You can turn it on — or leave it, and we'll tell you if the number grows.</p>
+          <div style="display:flex;gap:var(--s-4);margin-top:var(--s-5);flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" id="swOn"><span data-rw="Fungura Igiswahili">Turn on Swahili</span></button>
+            <button class="btn btn-ghost btn-sm" data-goto="l8"><span data-rw="Reba izo nyandiko">See those calls</span></button>
+          </div></div>
+        </div>
+
+        <button class="erow" data-goto="l3" style="margin-top:var(--s-7)">
+          <span class="ew"><b data-rw="Uko rihindura ururimi">How it decides which language to speak</b>
+          <span data-rw="Ubu: rikurikira umukiriya">Right now: it follows the customer</span></span>
+          <span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+        </button>
+        <button class="erow" data-goto="l4">
+          <span class="ew"><b data-rw="Icyo rivuga muri buri rurimi">What it says in each language</b>
+          <span id="unrevNote" data-rw="Interuro 3 ntizirasuzumwa">3 lines not reviewed yet</span></span>
+          <span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+        </button>
+        <button class="erow" data-goto="l5">
+          <span class="ew"><b data-rw="Ese irabumva?">Is it understanding them?</b>
+          <span data-rw="Kuva ku wa 3 Werurwe · guhamagara 41">Measuring since 3 March · 41 calls</span></span>
+          <span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+        </button>
+
+        <div class="savebar" id="saveBar" hidden>
+          <span class="sv"><b data-rw="Impinduka zikorwa ku muhamagara ukurikira.">Changes apply to the next call.</b> <span data-rw="Guhamagara kuri ubu ntikugira icyo guhinduka.">A call happening now is not affected.</span></span>
+          <button class="btn btn-primary btn-sm" id="saveBtn"><span data-rw="Bika">Save</span></button>
+        </div>
+        <p class="microfoot" data-rw-html="Amakuru bwite abikwa mu Rwanda · <a href='#'>Amabwiriza y'ibanga</a>">Personal data stored in Rwanda · <a href="#">Privacy notice</a></p>
+      </section>
+
+      <!-- ═══════════ l2 · WHAT THE LABEL MEANS ═══════════ -->
+      <section class="screen" id="l2">
+        <button class="backlink" data-back="l1"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira ku ndimi">Back to languages</span></button>
+        <h1 id="l2h" data-rw="Ikinyarwanda, ku telefone">Kinyarwanda, on the phone</h1>
+        <p class="sub" id="l2sub" data-rw="Dore icyo iyi nyandiko isobanura, n'icyo tutaramenya.">Here's what that label means, and what we don't yet know.</p>
+
+        <div class="qsheet" id="qsheet">
+          <div class="qh">
+            <span class="qbadge unmeasured" id="l2badge"><i></i><span data-rw="Ntirapimwa">Not yet measured</span></span>
+            <b id="l2title" data-rw="Ikinyarwanda ku telefone">Kinyarwanda on the phone</b>
+          </div>
+          <div class="qb">
+            <dl id="l2dl">
+              <div><dt data-rw="bivuze iki">what it means</dt><dd data-rw="Ntabwo turamenya neza uko rikora ku murongo wa telefone.">We don't yet know how well it works on a telephone line.</dd></div>
+              <div><dt data-rw="byapimwe ryari">measured when</dt><dd data-rw="Ntibirapimwa">Not yet</dd></div>
+              <div><dt data-rw="ku guhamagara kungahe">on how many calls</dt><dd data-rw="Nta na kumwe">None</dd></div>
+              <div><dt data-rw="iyo byanze bite">if it's wrong</dt><dd data-rw="Umufasha ntiyakeka. Agerageza kabiri, hanyuma akuzana.">The agent doesn't guess. It tries twice, then fetches you.</dd></div>
+            </dl>
+            <p id="l2body" data-rw="Guhamagara bitwara ijwi rike cyane — ubwiza bwa kimwe cya kabiri ugereranyije n'ubutumwa bw'ijwi. Nta sisitemu y'ijwi ku isi itangaza uko ikora ku Kinyarwanda kuri telefone. Nta n'imwe. Bityo ntitubyivugira kugeza tubipimye ku guhamagara kwawe.">A phone call carries about half the sound a voice note does. No speech system anywhere publishes how it performs on Kinyarwanda over a telephone line. Not one. So we don't claim it until we've measured it on your own calls.</p>
+          </div>
+        </div>
+
+        <div class="why2 warn" style="max-width:none">
+          <svg><use href="#i-circle-alert"/></svg>
+          <p data-rw-html="<b>Ikibazo kitarasubizwa.</b> Uko Ikinyarwanda cyumvikana kuri telefone ni cyo kintu cya mbere gikomeye kitaramenyekana muri uyu mushinga wose. Nta we wapimye. Igice cya mbere cy'uyu mushinga kibaho kugira ngo kibipime — kandi kugeza icyo gihe, iyi paji izahora ivuga &laquo;ntirapimwa&raquo; aho kwerekana umubare twahimbye."><b>An open question we haven't closed.</b> How well Kinyarwanda is understood on a telephone line is the single biggest unknown in this whole project. Nobody has measured it. Phase 0 exists to produce that number — and until it does, this page says "not yet measured" rather than showing you a figure we invented.</p>
+        </div>
+
+        <button class="btn btn-secondary" data-back="l1" style="margin-top:var(--s-6)"><span data-rw="Subira ku ndimi">Back to languages</span></button>
+      </section>
+
+      <!-- ═══════════ l3 · HOW IT SWITCHES ═══════════ -->
+      <section class="screen" id="l3">
+        <button class="backlink" data-back="l1"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira ku ndimi">Back to languages</span></button>
+        <h1 data-rw="Uko rihitamo ururimi">How it decides which language to speak</h1>
+        <p class="sub" data-rw="Umukiriya ni we ubyemeza mu masegonda atatu ya mbere. Ibi hepfo bigena icyo rikora nyuma yaho.">The caller decides, in the first three seconds. What follows is about what happens after that.</p>
+
+        <h3 style="margin-bottom:var(--s-5)" data-rw="Ibihora bikurikizwa">Always obeyed</h3>
+        <div class="always">
+          <div class="arow2">
+            <span class="ai"><svg><use href="#i-message-circle-more"/></svg></span>
+            <span class="aw"><b data-rw="Iyo umukiriya abisabye">When the caller asks</b>
+            <span data-rw="&laquo;In English please&raquo;, &laquo;Mu Cyongereza&raquo; — igihe icyo ari cyo cyose mu kiganiro, ntiharebwa ibindi.">"English please", "Mu Cyongereza" — at any point in the call, and nothing overrides it.</span></span>
+            <span class="alock"><svg><use href="#i-lock"/></svg><span data-rw="ntibihinduka">not a setting</span></span>
+          </div>
+          <div class="arow2">
+            <span class="ai"><svg><use href="#i-phone-call"/></svg></span>
+            <span class="aw"><b data-rw="Iyo akanze urufunguzo">When they press a key</b>
+            <span data-rw="Iyo twabimusabye nyuma yo kutumva. Ntabwo tubisaba mu ijambo ry'ubwakire.">Only after we've misunderstood. We never open the call with "press 1 for English".</span></span>
+            <span class="alock"><svg><use href="#i-lock"/></svg><span data-rw="ntibihinduka">not a setting</span></span>
+          </div>
+        </div>
+        <p class="hint" style="margin-bottom:var(--s-8)" data-rw="Ibyo bibiri ntibishobora guhindurwa, kandi ntibishobora guhagarikwa. Ikibazo cyonyine cyo guhitamo ni icyo umufasha akora iyo umukiriya atabisabye.">Neither of those can be changed or turned off. The only real choice is what the agent does when the caller hasn't asked.</p>
+
+        <h3 style="margin-bottom:var(--s-5)" data-rw="Iyo atabisabye">When they haven't asked</h3>
+        <div class="modes" id="modes">
+          <label class="mode3">
+            <input type="radio" name="lmode" value="follow" checked>
+            <span class="mi"><svg><use href="#i-split"/></svg></span>
+            <span class="mw">
+              <b data-rw-html="Kurikira umukiriya<span class='mrec'>bisanzwe</span>">Follow the customer<span class="mrec">default</span></b>
+              <span class="md" data-rw="Iyo umukiriya ahinduye ururimi mu kiganiro, umufasha na we arahindura.">If the caller changes language partway through, the agent changes with them.</span>
+              <span class="mcon" data-rw="Icyo bikugiraho: rimwe na rimwe rihindura kandi umukiriya atabishatse. Ni yo mpamvu tubara ibyo — kandi ukabibona ku ipaji &laquo;Ese irabumva?&raquo;.">What it costs you: now and then it switches when the caller didn't want it to. That's why we count those, and why you can see the number.</span>
+            </span>
+          </label>
+          <label class="mode3">
+            <input type="radio" name="lmode" value="askstay">
+            <span class="mi"><svg><use href="#i-lock"/></svg></span>
+            <span class="mw">
+              <b data-rw="Bimubaze mbere, hanyuma bigume">Ask at the start, then stay</b>
+              <span class="md" data-rw="Rimenya ururimi mu ntangiriro, hanyuma rugumaho kugeza kiganiro kirangiye.">It settles the language in the opening turns, then holds it for the rest of the call.</span>
+              <span class="mcon" data-rw="Icyo bikugiraho: ibiciro, amatariki n'amasaha ntibihindurwa hagati mu kiganiro. Ariko niba umukiriya yifuza guhindura koko, agomba kubisaba — kandi n'ubwo aribyo, bihora bikurikizwa.">What it costs you: prices, dates and times said mid-call stay in one language. If a caller genuinely wants to change, they have to ask — and asking always works.</span>
+            </span>
+          </label>
+          <label class="mode3">
+            <input type="radio" name="lmode" value="fixed">
+            <span class="mi"><svg><use href="#i-circle-dot"/></svg></span>
+            <span class="mw">
+              <b data-rw="Guma ku Kinyarwanda">Always Kinyarwanda</b>
+              <span class="md" data-rw="Ntirihindura na rimwe, keretse umukiriya abisabye.">It never changes on its own — only if the caller asks.</span>
+              <span class="mcon" data-rw="Icyo bikugiraho: umukiriya uvuga Icyongereza gusa agomba kubanza kubisaba.">What it costs you: an English-only caller has to ask before they're understood.</span>
+            </span>
+          </label>
+        </div>
+
+        <h3 style="margin-bottom:var(--s-5)" data-rw="Iyo ridashobora kumva">When it can't understand</h3>
+        <div class="beats">
+          <div class="beat"><span class="bn">1</span><span class="bw"><b data-rw="Rirabaza rimwe">It asks once</b>
+            <q data-rw="Mbabarira, ntabwo numvise neza. Wabisubiramo?">Mbabarira, ntabwo numvise neza. Wabisubiramo?</q></span></div>
+          <div class="beat"><span class="bn">2</span><span class="bw"><b data-rw="Rigerageza urundi rurimi wafunguye">It tries your other language, once</b>
+            <span class="bd" data-rw="Rimwe gusa. Guhindura ururimi ku muntu ufite imvugo ikomeye bigira ibintu bibi kurushaho.">Once only. Changing language on someone with a strong accent makes it worse, not better.</span></span></div>
+          <div class="beat"><span class="bn">3</span><span class="bw"><b data-rw="Ritanga urufunguzo">It offers the keypad</b>
+            <div class="keys"><span class="key">1</span><span class="keylab" data-rw="Ikinyarwanda">Kinyarwanda</span><span class="key">2</span><span class="keylab" data-rw="Icyongereza">English</span></div></span></div>
+          <div class="beat last"><span class="bn">4</span><span class="bw"><b data-rw="Rigukuzanira">It fetches you</b>
+            <span class="bd" data-rw="Nta kugerageza kwa gatatu mu rurimi rumwe. Abahamagara bahagarika kuri ako kanya.">Never a third try in the same language. That's where callers hang up.</span></span>
+            <span class="block"><svg><use href="#i-lock"/></svg><span data-rw="ntibihinduka">fixed</span></span></div>
+        </div>
+        <p class="hint" style="margin-bottom:var(--s-8)" data-rw="Uru rutonde ntiruhinduka. Ni rwo rugena ko nta muhamagara ubura kubera ururimi.">This ladder isn't configurable. It's what stops a call being lost to a language problem.</p>
+
+        <div class="savebar" hidden><span class="sv"><b data-rw="Impinduka zikorwa ku muhamagara ukurikira.">Changes apply to the next call.</b></span>
+          <button class="btn btn-primary btn-sm"><span data-rw="Bika">Save</span></button></div>
+        <button class="btn btn-secondary" data-back="l1"><span data-rw="Subira ku ndimi">Back to languages</span></button>
+      </section>
+
+      <!-- ═══════════ l4 · WHAT IT SAYS IN EACH LANGUAGE ═══════════ -->
+      <section class="screen" id="l4">
+        <button class="backlink" data-back="l1"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira ku ndimi">Back to languages</span></button>
+        <h1 data-rw="Icyo rivuga mu Cyongereza">What it says in English</h1>
+        <p class="sub" data-rw="Ibi byahinduwe n'imashini biturutse ku Kinyarwanda. Umashini ntizi uko ubucuruzi bwawe buvuga — bityo buri nteruro itegereje ko uyemeza.">These were machine-translated from your Kinyarwanda. A machine doesn't know how your business talks — so each line waits for you to say it sounds right.</p>
+
+        <div class="measline"><svg><use href="#i-languages"/></svg><span data-rw="Zikomoka ku Kinyarwanda — ni rwo rurimi rw'ibanze">Translated from Kinyarwanda — your primary language</span></div>
+
+        <div class="phrase needs" id="ph1">
+          <div class="ph"><span class="punrev"></span><b data-rw="Ijambo ry'ubwakire">The greeting</b>
+            <span class="plen" id="ph1len">≈ 4.2s spoken</span></div>
+          <div class="pb">
+            <p class="plead" id="ph1t">Hello, this is Salon Ubwiza. I'm an assistant, not a person. How can I help?</p>
+            <p class="psrc" data-rw="Muraho, ni Salon Ubwiza. Ndi umufasha w'ikoranabuhanga. Nabafasha nte?">Muraho, ni Salon Ubwiza. Ndi umufasha w'ikoranabuhanga. Nabafasha nte?</p>
+            <div class="pfoot">
+              <button class="btn btn-secondary btn-sm" data-hear="ph1"><svg><use href="#i-play"/></svg><span data-rw="Yumve">Hear it</span></button>
+              <button class="btn btn-primary btn-sm" data-ok="ph1"><span data-rw="Ni byo, ni ko tuvuga">Yes, that's how we'd say it</span></button>
+              <button class="btn btn-ghost btn-sm" data-edit="ph1"><span data-rw="Mpindura">Change it</span></button>
+              <span class="mtag" id="ph1tag"><svg><use href="#i-bot"/></svg><span data-rw="byahinduwe n'imashini">machine-translated</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phrase needs" id="ph2">
+          <div class="ph"><span class="punrev"></span><b data-rw="Iyo idashobora gufasha">When it can't help</b>
+            <span class="plen" id="ph2len">≈ 2.8s spoken</span></div>
+          <div class="pb">
+            <p class="plead" id="ph2t">That's not something I can confirm. Let me get Aline for you.</p>
+            <p class="psrc" data-rw="Icyo sinshobora kukibemeza. Reka mbahamagarire Aline.">Icyo sinshobora kukibemeza. Reka mbahamagarire Aline.</p>
+            <div class="pfoot">
+              <button class="btn btn-secondary btn-sm" data-hear="ph2"><svg><use href="#i-play"/></svg><span data-rw="Yumve">Hear it</span></button>
+              <button class="btn btn-primary btn-sm" data-ok="ph2"><span data-rw="Ni byo">Yes, that's right</span></button>
+              <button class="btn btn-ghost btn-sm" data-edit="ph2"><span data-rw="Mpindura">Change it</span></button>
+              <span class="mtag" id="ph2tag"><svg><use href="#i-bot"/></svg><span data-rw="byahinduwe n'imashini">machine-translated</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phrase needs" id="ph3">
+          <div class="ph"><span class="punrev"></span><b data-rw="Iyo idasobanukiwe">When it didn't catch that</b>
+            <span class="plen" id="ph3len">≈ 2.1s spoken</span></div>
+          <div class="pb">
+            <p class="plead" id="ph3t">Sorry, I didn't catch that. Could you say it again?</p>
+            <p class="psrc" data-rw="Mbabarira, ntabwo numvise neza. Wabisubiramo?">Mbabarira, ntabwo numvise neza. Wabisubiramo?</p>
+            <div class="pfoot">
+              <button class="btn btn-secondary btn-sm" data-hear="ph3"><svg><use href="#i-play"/></svg><span data-rw="Yumve">Hear it</span></button>
+              <button class="btn btn-primary btn-sm" data-ok="ph3"><span data-rw="Ni byo">Yes, that's right</span></button>
+              <button class="btn btn-ghost btn-sm" data-edit="ph3"><span data-rw="Mpindura">Change it</span></button>
+              <span class="mtag" id="ph3tag"><svg><use href="#i-bot"/></svg><span data-rw="byahinduwe n'imashini">machine-translated</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="banner banner-warn" id="tooLong" hidden>
+          <svg class="bi"><use href="#i-clock"/></svg>
+          <div><b data-rw="Iryo jambo ry'ubwakire ni rirerire">That greeting is long to say</b>
+          <p data-rw="Rifata amasegonda 7.4. Abahamagara batangira kuvuga mbere yuko rirangira, maze umufasha akabura intangiriro. Munsi y'amasegonda atanu ni byo byiza. Ikinyarwanda gifata igihe kirekire ku ijana 15 kugeza 25 kuruta Icyongereza, bityo pima urundi na rwo.">It takes 7.4 seconds. Callers start talking before it finishes, and the agent loses their opening. Under five seconds is the mark. Kinyarwanda runs 15–25% longer than English, so check the other one too.</p></div>
+        </div>
+
+        <div class="banner banner-info">
+          <svg class="bi"><use href="#i-git-branch"/></svg>
+          <div><b data-rw="Uru ni urundi ruhande rw'inyandiko imwe">This is one configuration, seen in another language</b>
+          <p data-rw-html="Ntabwo ari umufasha wa kabiri. Amategeko, ibiciro n'imipaka ni bimwe mu ndimi zose — ibi ni amagambo gusa. Guhindura icyo rivuga mu Kinyarwanda bikorerwa <a href='#'>mu myitwarire y'umufasha</a>.">This is not a second agent. The rules, the prices and the limits are the same in every language — only the wording differs here. To change what it says in Kinyarwanda, edit <a href="#">the agent's behaviour</a>.</p></div>
+        </div>
+
+        <div class="savebar" id="saveBar4" hidden>
+          <span class="sv"><b data-rw="Impinduka zikorwa ku muhamagara ukurikira.">Changes apply to the next call.</b> <span data-rw="Guhamagara kuri ubu ntikugira icyo guhinduka.">A call happening now is not affected.</span></span>
+          <button class="btn btn-primary btn-sm"><span data-rw="Bika">Save</span></button>
+        </div>
+      </section>
+
+      <!-- ═══════════ l5 · IS IT UNDERSTANDING THEM? ═══════════ -->
+      <section class="screen" id="l5">
+        <button class="backlink" data-back="l1"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira ku ndimi">Back to languages</span></button>
+        <h1 data-rw="Ese irabumva?">Is it understanding them?</h1>
+        <p class="sub" data-rw="Ntushobora kumva guhamagara kwose, kandi ntushobora gupima Ikinyarwanda utumva. Ni yo mpamvu iyi paji ibaho.">You can't listen to every call, and you can't judge Kinyarwanda recognition by ear. That's what this page is for.</p>
+
+        <p class="measline"><svg><use href="#i-activity"/></svg><span data-rw="Bipimwa kuva ku wa 3 Werurwe · guhamagara 41">Measuring since 3 March · 41 calls</span></p>
+
+        <div class="headnum">
+          <div class="hl"><svg><use href="#i-split"/></svg><span data-rw="Guhindura ururimi umukiriya atabisabye">Switches the caller didn't ask for</span></div>
+          <div class="hv" id="spurV">0</div>
+          <p class="ht" id="spurT" data-rw="Muri guhamagara 41 kuva ku wa 3 Werurwe. Iyi ni yo mibare y'ingenzi kuri iyi paji: iyo umufasha ahinduye ururimi umukiriya atabishatse, umukiriya abyumva — kandi ni bwo bwoko bubi bw'ikosa.">Out of 41 calls since 3 March. This is the number that matters most on this page: when the agent changes language and the caller didn't want it, the caller hears it — and that's the worst place for a mistake to show up.</p>
+          <span class="htgt" data-rw="Intego: munsi ya 1% ya guhamagara">Target: under 1% of calls</span>
+        </div>
+
+        <div class="enough" id="thinData" hidden>
+          <svg><use href="#i-circle-help"/></svg>
+          <div><b data-rw="Guhamagara ntiguhagije ngo tuvuge ikintu.">Not enough calls yet to say anything.</b>
+          <span data-rw=" Dufite guhamagara 6 mu Kinyarwanda na 1 mu Cyongereza. Munsi ya 30 nta mubare wakwizerwa — bityo ntituwerekana aho kukwereka uwo twahimbye.">We have 6 calls in Kinyarwanda and 1 in English. Under thirty, any rate we showed you would be noise — so we show you this instead of a number we made up.</span></div>
+        </div>
+
+        <div id="measured">
+          <h3 style="margin-bottom:var(--s-5)" data-rw="Uko rumva buri rurimi, ku telefone">How well it hears each language, on calls</h3>
+          <div class="lbars">
+            <div class="lbar"><span class="bl">Ikinyarwanda</span>
+              <span class="bt"><i style="--w:88%"></i></span><span class="bv">88%</span></div>
+            <div class="lbar"><span class="bl">English</span>
+              <span class="bt"><i style="--w:94%"></i></span><span class="bv">94%</span></div>
+            <div class="lbar"><span class="bl">Français</span>
+              <span class="bt thin"><i style="--w:0%"></i></span><span class="bv none" data-rw="guhamagara 3">3 calls</span></div>
+          </div>
+          <p class="hint" style="margin-bottom:var(--s-7)" data-rw="Igifaransa gifite guhamagara gatatu gusa. Ntabwo tubara ijanisha ku bintu bitatu — byaba ari ugukina n'imibare.">French has had three calls. We don't compute a percentage from three — that would be playing with numbers.</p>
+
+          <div class="evid">
+            <button class="erow" data-goto="l6">
+              <span class="ew"><b data-rw="Interuro zivanze zasubijwe nta guhindura">Mixed sentences answered without switching</b>
+              <span data-rw="Muri guhamagara 41, 24 yarimo indimi ebyiri mu nteruro imwe">24 of 41 calls mixed two languages inside one sentence</span></span>
+              <span class="en">24</span><span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+            </button>
+            <button class="erow" data-goto="l6">
+              <span class="ew"><b data-rw="Guhindura umukiriya yasabye">Switches the caller asked for</b>
+              <span data-rw="Bikurikizwa buri gihe, kandi ntibishobora guhagarikwa">Always obeyed, and never switchable off</span></span>
+              <span class="en">5</span><span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+            </button>
+            <button class="erow warn" data-goto="l7">
+              <span class="ew"><b data-rw="Guhamagara kwafungiwe ku rurimi rumwe">Calls locked to one language</b>
+              <span data-rw="Nyuma yo kugerageza guhindura gatatu, umufasha arahagarara">After three proposed switches the agent stops trying</span></span>
+              <span class="en">2</span><span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+            </button>
+            <button class="erow" data-goto="l6">
+              <span class="ew"><b data-rw="Guhindura ururimi nyuma yo kutumva">Switched right after we missed something</b>
+              <span data-rw="Ntituramenya niba ari uguhitamo cyangwa ari ukwikosora. Turabibara ukwabyo kugeza tubizi.">We don't yet know whether that's a preference or a repair. We count it separately until we do.</span></span>
+              <span class="en">3</span><span class="ea"><svg><use href="#i-chevron-right"/></svg></span>
+            </button>
+          </div>
+
+          <div class="banner banner-info">
+            <svg class="bi"><use href="#i-calendar"/></svg>
+            <div><b data-rw="Amasaha n'imibare bipimwa ukwabyo">Times and numbers are counted separately</b>
+            <p data-rw-html="&laquo;Saturday saa tatu&raquo; ni uko abantu bavuga hano: umunsi mu Cyongereza, isaha mu Kinyarwanda. Iyo umufasha abyumva nabi, gahunda yandikwa nabi — kandi ijanisha rusange ryabihisha. <b>Byakozwe neza 38 kuri 41.</b>">"Saturday saa tatu" — the day in English, the hour in Kinyarwanda — is how people actually speak here. When the agent gets that wrong, a booking goes in wrong, and an overall percentage would hide it. <b>Right on 38 of 41.</b></p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ l6 · A CALL WORTH LOOKING AT ═══════════ -->
+      <section class="screen" id="l6">
+        <button class="backlink" data-back="l5"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira inyuma">Back</span></button>
+        <h1 id="l6h" data-rw="Interuro imwe, indimi ebyiri">One sentence, two languages</h1>
+        <p class="sub" id="l6sub" data-rw="Uku ni ko abantu bavuga i Kigali. Ntabwo ari ikosa, kandi ntabwo ari impamvu yo guhindura ikiganiro cyose.">This is how people speak in Kigali. It isn't a mistake, and it isn't a reason to change the whole conversation.</p>
+
+        <p class="measline"><svg><use href="#i-phone"/></svg><span data-rw="Kuwa gatandatu 11:04 · +250 78• ••• 214 · amasegonda 47">Saturday 11:04 · +250 78• ••• 214 · 47 seconds</span></p>
+
+        <div class="tscript" id="l6script">
+          <div class="turn ai"><span class="tav">S</span><span class="tb">
+            <span class="tmeta"><b data-rw="Umufasha">Agent</b><span class="lchip">RW</span><time>0:02</time></span>
+            <p class="tt" data-rw="Muraho, ni Salon Ubwiza. Ndi umufasha w'ikoranabuhanga. Nabafasha nte?">Muraho, ni Salon Ubwiza. Ndi umufasha w'ikoranabuhanga. Nabafasha nte?</p>
+          </span></div>
+
+          <div class="turn human" id="l6t2"><span class="tav">JB</span><span class="tb">
+            <span class="tmeta"><b data-rw="Umuhamagara">Caller</b><span class="lchip mix" data-rw="RW + EN">RW + EN</span>
+              <span class="conf hi"><i><b></b><b></b><b></b></i><span data-rw="Byumvikanye">Clear</span></span><time>0:09</time></span>
+            <p class="tt" data-rw-html="Ndashaka kubona <span class='mx'>appointment</span> kuwa gatandatu.">Ndashaka kubona <span class="mx">appointment</span> kuwa gatandatu.</p>
+          </span></div>
+
+          <div class="turn ai"><span class="tav">S</span><span class="tb">
+            <span class="tmeta"><b data-rw="Umufasha">Agent</b><span class="lchip">RW</span><time>0:11</time></span>
+            <p class="tt" data-rw="Yego. Kuwa gatandatu, saa tatu za mu gitondo — 9:00. Nabandika izina ryawe?">Yego. Kuwa gatandatu, saa tatu za mu gitondo — 9:00. Nabandika izina ryawe?</p>
+          </span></div>
+        </div>
+
+        <div class="banner banner-ok" id="l6ok">
+          <svg class="bi"><use href="#i-check-check"/></svg>
+          <div><b data-rw="Nta guhindura ururimi byabaye hano">No language switch happened here</b>
+          <p data-rw-html="Umuhamagara yakoresheje ijambo rimwe ry'Icyongereza mu nteruro y'Ikinyarwanda. Umufasha yumvise byose maze asubiza mu rurimi rwiganje. <b>Guhindura ikiganiro cyose kubera ijambo rimwe</b> ni cyo kintu cya mbere gikorwa nabi mu bicuruzwa nk'ibi — kandi ni ko umukiriya amenya ko yavugana n'imashini.">The caller used one English word inside a Kinyarwanda sentence. The agent understood all of it and answered in the dominant language. <b>Switching the whole conversation because of one word</b> is the most common failure in products like this — and it's how a caller learns they're talking to a machine.</p></div>
+        </div>
+
+        <div id="l6switch" hidden>
+          <div class="swmark"><span><svg><use href="#i-languages"/></svg><span data-rw="Ikinyarwanda → Icyongereza · igice cya 4">Kinyarwanda → English · turn 4</span><span class="trig asked" data-rw="yabisabye">asked</span></span></div>
+          <div class="turn human"><span class="tav">JB</span><span class="tb">
+            <span class="tmeta"><b data-rw="Umuhamagara">Caller</b><span class="lchip">EN</span><time>0:22</time></span>
+            <p class="tt">Sorry, can we do this in English?</p>
+          </span></div>
+          <div class="turn ai"><span class="tav">S</span><span class="tb">
+            <span class="tmeta"><b data-rw="Umufasha">Agent</b><span class="lchip">EN</span><time>0:24</time></span>
+            <p class="tt">Of course. Saturday at nine in the morning. May I take your name?</p>
+          </span></div>
+        </div>
+
+        <div id="l6spur" hidden>
+          <div class="swmark spur"><span><svg><use href="#i-triangle-alert"/></svg><span data-rw="Ikinyarwanda → Icyongereza · igice cya 4">Kinyarwanda → English · turn 4</span><span class="trig detected" data-rw="ryabimenye ubwaryo">detected</span></span></div>
+          <div class="banner banner-risk" style="margin-top:var(--s-5)">
+            <svg class="bi"><use href="#i-circle-alert"/></svg>
+            <div><b data-rw="Umukiriya ntiyigeze ahindura ururimi">The caller never changed language</b>
+            <p data-rw="Umufasha ni we wahinduye, kandi ntacyo byari bishingiyeho. Uku ni ko bigenda: iyo guhamagara kwose gutangiye kugira ibi, guhinduka bimwe mu makumyabiri, umukiriya abyumva. Niba bibaye kenshi, hindura uburyo bwo guhindura ujye kuri &laquo;Bimubaze mbere, hanyuma bigume&raquo;.">The agent changed it, and nothing the caller said justified that. This is the failure mode: around one call in twenty in the industry, and the caller hears every one. If it happens often, move the switching mode to "Ask at the start, then stay".</p></div>
+          </div>
+          <button class="btn btn-primary btn-sm" data-goto="l3" style="margin-top:var(--s-6)"><span data-rw="Hindura uburyo bwo guhindura">Change the switching mode</span></button>
+        </div>
+      </section>
+
+      <!-- ═══════════ l7 · LOCKED ═══════════ -->
+      <section class="screen" id="l7">
+        <button class="backlink" data-back="l5"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira inyuma">Back</span></button>
+        <h1 data-rw="Umufasha yahagaritse guhindura ururimi">The agent stopped changing language</h1>
+        <p class="sub" data-rw="Kuri guhamagara kumwe, ryagerageje guhindura ururimi gatatu. Nyuma y'ubwa gatatu rirahagarara — ururimi rumwe rutunganye kuruta ururimi ruhindagurika.">On one call it proposed changing language three times. After the third it stops — one language that might be wrong beats a conversation that keeps moving.</p>
+
+        <p class="measline"><svg><use href="#i-phone"/></svg><span data-rw="Kuwa kane 16:22 · +250 78• ••• 771 · amasegonda 96">Thursday 16:22 · +250 78• ••• 771 · 96 seconds</span></p>
+
+        <div class="tscript">
+          <div class="swmark"><span><svg><use href="#i-languages"/></svg><span data-rw="Guhindura kwa 1 · igice cya 3">Switch 1 · turn 3</span><span class="trig detected" data-rw="ryabimenye">detected</span></span></div>
+          <div class="swmark"><span><svg><use href="#i-languages"/></svg><span data-rw="Guhindura kwa 2 · igice cya 5">Switch 2 · turn 5</span><span class="trig detected" data-rw="ryabimenye">detected</span></span></div>
+          <div class="swmark locked"><span><svg><use href="#i-lock"/></svg><span data-rw="Rwafungiwe ku Kinyarwanda · igice cya 7">Locked to Kinyarwanda · turn 7</span></span></div>
+          <div class="turn ai"><span class="tav">S</span><span class="tb">
+            <span class="tmeta"><b data-rw="Umufasha">Agent</b><span class="lchip">RW</span><time>1:04</time></span>
+            <p class="tt" data-rw="Reka mbahamagarire Aline — arabafasha neza kurusha.">Reka mbahamagarire Aline — arabafasha neza kurusha.</p>
+          </span></div>
+        </div>
+
+        <div class="banner banner-warn">
+          <svg class="bi"><use href="#i-circle-alert"/></svg>
+          <div><b data-rw="Byabaye kabiri muri uku kwezi">This happened twice this month</b>
+          <p data-rw="Guhamagara kubiri muri 41. Iyo bibaye kenshi, bivuze ko kumenya ururimi bidakora neza ku bakiriya bawe — atari ko umufasha wawe wangiritse. Igisubizo ni kimwe: shyira uburyo ku &laquo;Bimubaze mbere, hanyuma bigume&raquo;.">Two calls out of 41. When this happens often it means detection isn't working well on your customers — not that your agent is broken. There's one fix: move the switching mode to "Ask at the start, then stay".</p>
+          <button class="btn btn-primary btn-sm" data-goto="l3" style="margin-top:var(--s-5)"><span data-rw="Hindura uburyo">Change the mode</span></button></div>
+        </div>
+        <p class="microfoot" data-rw="Umuhamagara ntiyigeze amenya ko hari icyahagaze. Yumvise ururimi rumwe, hanyuma akuzanirwa.">The caller never learned anything had stopped. They heard one language, then a person.</p>
+      </section>
+
+      <!-- ═══════════ l8 · A LANGUAGE YOU HAVEN'T TURNED ON ═══════════ -->
+      <section class="screen" id="l8">
+        <button class="backlink" data-back="l1"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira ku ndimi">Back to languages</span></button>
+        <h1 data-rw="Abakiriya batanu bavuze Igiswahili">Five callers spoke Swahili</h1>
+        <p class="sub" data-rw="Ntabwo ari benshi. Ariko ni abantu batanu bahamagaye ubucuruzi bwawe, maze ntibashobore gufashwa mu rurimi rwabo.">Not many. But five people called your business and couldn't be helped in their own language.</p>
+
+        <p class="measline"><svg><use href="#i-calendar"/></svg><span data-rw="Muri uku kwezi · guhamagara 5 muri 41">This month · 5 calls out of 41</span></p>
+
+        <div class="evid">
+          <div class="erow" style="cursor:default">
+            <span class="ew"><b>"Habari, mnafungua saa ngapi?"</b><span data-rw="Kuwa mbere 09:12 · umufasha yasabye imbabazi mu Kinyarwanda maze akuzana">Monday 09:12 · the agent apologised in Kinyarwanda and fetched you</span></span></div>
+          <div class="erow" style="cursor:default">
+            <span class="ew"><b>"Bei ya kusuka ni ngapi?"</b><span data-rw="Kuwa gatatu 14:40 · umuhamagara yahagaritse">Wednesday 14:40 · the caller hung up</span></span></div>
+          <div class="erow" style="cursor:default">
+            <span class="ew"><b>"Naweza kuja leo?"</b><span data-rw="Kuwa gatandatu 10:03 · umufasha yakuzaniye">Saturday 10:03 · the agent fetched you</span></span></div>
+        </div>
+
+        <div class="banner banner-info">
+          <svg class="bi"><use href="#i-info"/></svg>
+          <div><b data-rw="Icyo gufungura Igiswahili bisobanura">What turning on Swahili would mean</b>
+          <p data-rw-html="Ku butumwa: rirakora neza. Ku telefone: <b>riracyategurwa</b> — riruta Ikinyarwanda ariko ntirigera ku Gifaransa. Uzabona inyandiko yayo nk'iy'izindi, kandi izahinduka nk'uko tugenda tubipima.">In messages: it works well. On calls: <b>still improving</b> — better resourced than Kinyarwanda, not as strong as French. You'd get the same honest label as every other language, and it moves as we measure.</p></div>
+        </div>
+
+        <div style="display:flex;gap:var(--s-4);flex-wrap:wrap;margin-top:var(--s-7)">
+          <button class="btn btn-primary" id="swOn2"><span data-rw="Fungura Igiswahili">Turn on Swahili</span></button>
+          <button class="btn btn-ghost" data-goto="l1"><span data-rw="Ntabwo ubu">Not now</span></button>
+        </div>
+        <p class="microfoot" data-rw="Nutabikora, ntituzongera kukubaza uku kwezi. Tuzakubwira gusa niba umubare wikubye kabiri.">If you don't, we won't ask again this month. We'll only mention it if the number doubles.</p>
+      </section>
+
+      <!-- ═══════════ l9 · MESSAGES AND VOICE NOTES ═══════════ -->
+      <section class="screen" id="l9">
+        <button class="backlink" data-back="l1"><svg><use href="#i-arrow-left"/></svg><span data-rw="Subira ku ndimi">Back to languages</span></button>
+        <h1 data-rw="Ubutumwa n'amajwi">Messages and voice notes</h1>
+        <p class="sub" data-rw="Mu butumwa byoroshye kuruta ku telefone, kandi hari igihe cyo kwitonda. Ni yo mpamvu inyandiko z'ubuziranenge zitandukanye.">Messages are easier than calls, and there's time to be careful. That's why the quality labels differ.</p>
+
+        <div class="always">
+          <div class="arow2">
+            <span class="ai"><svg><use href="#i-mic"/></svg></span>
+            <span class="aw"><b data-rw="Ubutumwa bw'ijwi ni bwo bwiza kurusha ibindi byose twakira">A voice note is the best sound we ever get</b>
+            <span data-rw="Bufite ijwi ryinshi inshuro ebyiri kurusha guhamagara. Umukiriya uvuga Ikinyarwanda yumvikana neza mu butumwa bw'ijwi kuruta kuri telefone — kandi ibyo ntibyari byitezwe.">It carries about twice the sound a phone call does. A Kinyarwanda customer is understood better in a voice note than on the phone — which is the opposite of what people expect.</span></span>
+          </div>
+          <div class="arow2">
+            <span class="ai"><svg><use href="#i-message-circle-more"/></svg></span>
+            <span class="aw"><b data-rw="Risubiza mu rurimi rw'ubutumwa bwa nyuma">It replies in the language of their last message</b>
+            <span data-rw="Nta kumenya ururimi mu buryo bugoye. Iyo umukiriya ahinduye, na ryo rirahindura.">No detection guesswork. If they change, it changes.</span></span>
+          </div>
+          <div class="arow2">
+            <span class="ai"><svg><use href="#i-volume-2"/></svg></span>
+            <span class="aw"><b data-rw="Ku butumwa bw'ijwi, risubiza mu nyandiko no mu ijwi">To a voice note, it replies with both text and a voice note</b>
+            <span data-rw="Mu rurimi rumwe. Abantu benshi bakoresha ubutumwa bw'ijwi kubera impamvu — kandi ntitubasubiza mu buryo batabishaka.">In the same language. People use voice notes for a reason, and we don't answer them in a way they didn't choose.</span></span>
+            <span class="alock"><svg><use href="#i-lock"/></svg><span data-rw="ntibihinduka">fixed</span></span>
+          </div>
+        </div>
+
+        <h3 style="margin-bottom:var(--s-5)" data-rw="Uko rumva buri rurimi, mu butumwa">How well it hears each language, in messages</h3>
+        <div class="lbars">
+          <div class="lbar"><span class="bl">Ikinyarwanda</span><span class="bt"><i style="--w:96%"></i></span><span class="bv">96%</span></div>
+          <div class="lbar"><span class="bl">English</span><span class="bt"><i style="--w:98%"></i></span><span class="bv">98%</span></div>
+        </div>
+        <p class="hint" data-rw="Gereranya n'ibya 88% na 94% ku telefone. Itandukaniro ni ijwi, atari ururimi.">Compare with 88% and 94% on calls. The difference is the sound, not the language.</p>
+      </section>
+
+    </div><!-- /authbody -->
+    <div class="authfoot"></div>
+  </div><!-- /authmain -->
+
+  <aside class="authaside">
+
+    <div class="asidepane on" id="as-l1">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-languages"/></svg><span data-rw="Icyemezo cy'ingenzi">The decision this flow turns on</span></div>
+        <p class="gq" data-rw-html="Ururimi rwemezwa n'<mark>umukiriya</mark> mu masegonda atatu ya mbere. Kumenya ururimi bifasha icyo cyemezo — ntikigisimbura.">The language is decided by the <mark>caller</mark>, in the first three seconds. Detection assists that decision — it never replaces it.</p>
+        <p class="gt" data-rw="Kumenya ururimi ni ubuhanga budashobora kwizerwa. Iyo binaniranye, uwabibona ni umukiriya — kandi ni ho bibi cyane.">Detection is unreliable technology. When it fails, the person who finds out is the customer — which is the worst possible place for a failure to appear.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Inyandiko imwe kuri buri rurimi yari kuba ikinyoma">One badge per language would be a lie</h3>
+        <p data-rw="Guhamagara gutwara ijwi rike cyane kuruta ubutumwa bw'ijwi — nka kimwe cya kabiri. Ururimi rumwe rushobora kumvikana neza mu butumwa kandi rukaba rugoye kuri telefone. Ni yo mpamvu buri rurimi rufite ibimenyetso bibiri: telefone n'ubutumwa, buri kimwe kigaragaza ukuri kwacyo.">A phone call carries about half the sound a voice note does. The same language can be understood well in messages and be hard work on the phone. So every language here carries two marks — the phone and the message — each telling its own truth.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="&laquo;Ntirapimwa&raquo; ni inyandiko, si ubusa">"Not yet measured" is a label, not a gap</h3>
+        <p data-rw="Atlas itanga inyandiko eshatu: rirakora neza, riracyategurwa, ntirihari ku majwi. Hakenewe iya kane, kuko mbere yuko dupima nta n'imwe muri izo ari ukuri. Kwerekana &laquo;rirakora neza&raquo; ku Kinyarwanda tutarapima ni ugusezerana ku mukiriya utari uwacu.">The atlas gives three labels: good, improving, not yet available for voice. A fourth is needed, because before we measure, none of those three is true. Showing "good" for Kinyarwanda before anyone has measured it is making a promise to a customer who isn't ours.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-l3">
+      <div class="asidecard">
+        <h3 data-rw="Ibihora bikurikizwa ntabwo ari amahitamo">The two that are never a setting</h3>
+        <p data-rw="Iyo umukiriya asabye ururimi, bikurikizwa. Iyo akanze urufunguzo, bikurikizwa. Nta buto yo guhagarika ibyo, kuko umukiriya ubisabye kabiri agahabwa ikindi ni umukiriya wamenye ko atavugana n'umuntu. Ni yo mpamvu imirongo ibiri ya mbere ifunze — nk'uko buto yo guhagarika uruhushya ifunze ku ipaji ya nyir'ukonti mu ijwi.">If the caller asks for a language, it is obeyed. If they press a key, it is obeyed. There is no control to switch that off, because a caller who asks twice and is answered otherwise is a caller who has learned they're not talking to a person. So the first two rows are locked — the same grammar as the locked withdrawal control on the voice owner's record.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Nta kigenzura cyo kumenya ururimi">There is no detection dial</h3>
+        <p data-rw="Twashoboraga gushyiraho urugero rwo kumenya ururimi. Ntabwo twabikoze, kuko tutazi umubare w'abakiriya bavanga indimi mu Rwanda — bityo nta rugero twavuga ko ari rwo rukwiye. Ikigenzura cyonyine ni uburyo butatu, kandi buri bumwe buvuga icyo bugutwara mu magambo asanzwe aho gushyiraho umubare utagira icyo uvuze.">We could have shipped a detection-sensitivity slider. We didn't, because nobody knows how often Rwandan business callers mix languages — so there is no threshold we could honestly recommend. The only control is the three modes, and each one states what it costs you in plain words rather than as a number that means nothing.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-l4">
+      <div class="asidecard">
+        <h3 data-rw="Umufasha umwe, indimi nyinshi">One agent, many tongues</h3>
+        <p data-rw="Ibicuruzwa byinshi bituma ukora umufasha kuri buri rurimi. Nyuma y'amezi atatu batandukana: umwe azi igiciro gishya, undi ntakizi. Iyi paji ni ugusoma kumwe kw'inyandiko imwe — amagambo ni yo ahinduka, atari amategeko. Nta buto yo &laquo;gukora umufasha w'Igifaransa&raquo; iri hano, kandi ntizigera ibaho.">Most products let you create an agent per language. Three months later they have drifted: one knows the new price, the other doesn't. This page is one reading of one configuration — the wording changes, the rules never do. There is no "create a French agent" button here, and there never will be.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Igihinduwe n'imashini ni umushinga kugeza umuntu abivuze">A machine translation is a draft until a person says otherwise</h3>
+        <p data-rw="Umashini ntizi ko ubucuruzi bwawe buvuga &laquo;murakaza neza&raquo; aho kuvuga &laquo;mwaramutse&raquo;. Ni yo mpamvu buri nteruro yerekanwa ifite akadomo k'umuhondo kugeza uyemeje — kandi ni yo mpamvu igihe cyo kuyivuga kigaragara mu masegonda, atari mu nyuguti. Ijambo ry'ubwakire rirerire ni ryo kintu cya mbere gitera abahamagara kwivugira hejuru yaryo.">A machine doesn't know your business says "murakaza neza" rather than "mwaramutse". So every line carries an amber dot until you confirm it — and the length is shown in spoken seconds, not characters. A long greeting is the single most common reason callers start talking over the agent.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-l5">
+      <div class="asidecard">
+        <h3 data-rw="Umubare umwe ukwiye kureberwa">The one number worth watching</h3>
+        <p data-rw="Guhindura ururimi umukiriya atabisabye. Ibindi byose kuri iyi paji ni inkuru; iki ni cyo kigaragaza niba icyemezo cyawe ari cyo. Umufasha uhindura ururimi nta mpamvu ni ikosa umukiriya yumva ako kanya — kandi mu nganda, bibaho kuri guhamagara kumwe muri makumyabiri. Intego iri ku rupapuro kuko intego itagaragara si intego.">Switches the caller didn't ask for. Everything else on this page is context; this is the number that tells you whether your setting is right. An agent that changes language for no reason is a mistake the customer hears immediately — and across the industry it happens on roughly one call in twenty. The target is printed on screen, because a target you can't see isn't one.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Munsi ya mirongo itatu, ntitwerekana umubare">Under thirty calls, we show you a sentence instead of a number</h3>
+        <p data-rw="Ijanisha rivuye kuri guhamagara gatandatu ni urusaku rwambaye ikanzu y'ukuri. Umufasha w'ubucuruzi arebye 83% ku rubuga akemera ko ari ukuri — kandi twaba tumubeshye. Bityo munsi ya mirongo itatu tuvanaho umubare tugashyiraho interuro ivuga ko tutabizi. Ni yo mpamvu iyi paji ivuga igihe twatangiriye gupima na buri muhamagara wapimwe.">A percentage from six calls is noise wearing the costume of a fact. A shop owner who sees 83% on a screen believes it, and we'd have lied to her. So under thirty we remove the number and put a sentence in its place saying we don't know. That's also why this page states when measuring started and on how many calls.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-l6">
+      <div class="asidecard">
+        <h3 data-rw="Kuvanga indimi si ikintu kibaye">Mixing languages is not an event</h3>
+        <p data-rw="&laquo;Ndashaka kubona appointment kuwa gatandatu&raquo; ni interuro imwe, si ibiri. Igaragara nk'igice kimwe, ifite ibimenyetso bibiri by'indimi n'umurongo w'utudomo munsi y'ijambo ry'Icyongereza — kandi nta kimenyetso cyo guhindura ururimi kiri hejuru yayo. Iyo dushushanya imvugo isanzwe nk'ikintu kibaye, tuba tubwira umuntu ko uko avuga ari ikosa.">"Ndashaka kubona appointment kuwa gatandatu" is one sentence, not two. It renders as one turn, with two language chips and a dotted underline under the English word — and no switch marker above it. Drawing normal speech as an event tells somebody the way they talk is a mistake.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ikimenyetso cyo guhindura kivuga icyabiteye">A switch marker carries what caused it</h3>
+        <p data-rw="Yabisabye, yakanze urufunguzo, cyangwa ryabimenye ubwaryo. Icya nyuma ni cyo cyonyine gishobora kuba ikosa, kandi ni cyo kibarwa. Kandi iyo guhindura kuje nyuma yo kunanirwa kumva, ntitubyita &laquo;guhitamo&raquo; — tubibara ukwabyo kandi tukavuga ko tutaramenya icyo ari cyo. Ikibazo cy'atlas 12.e ntikirasubizwa, bityo ntitugishakira igisubizo ku rupapuro.">Asked, pressed a key, or detected on its own. Only the last can be a mistake, and only the last is counted as one. And when a switch arrives right after a failure to understand, we don't call it a preference — we count it separately and say we don't yet know what it is. Atlas question 12.e is open, so the screen doesn't answer it.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-l8">
+      <div class="asidecard">
+        <h3 data-rw="Icyifuzo kivuye ku bimenyetso, atari ku kugurisha">A suggestion made of evidence, not of selling</h3>
+        <p data-rw="Ntabwo tuvuga &laquo;fungura Igiswahili&raquo;. Tuvuga ko abantu batanu bahamagaye bakavuga Igiswahili, tukerekana icyo bavuze n'icyabaye. Icyemezo kiri kuri wowe, kandi nutagifata ntituzongera kukibaza uku kwezi. Icyifuzo kivuye mu bikorwa byawe bwite ni inama; gisubiwemo ni ukugurisha.">We don't say "turn on Swahili". We say five people called and spoke Swahili, and we show what they said and what happened. The decision is yours, and if you don't take it we won't ask again this month. A suggestion built from your own traffic is advice; the same suggestion repeated is a sales pitch.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ntitwigera duhindukira dutanga ikindi mu ibanga">We never quietly substitute</h3>
+        <p data-rw="Iyo umukiriya avuze ururimi utarafungura, umufasha arasaba imbabazi mu rurimi rwawe rw'ibanze maze akakuzana. Ntabwo agerageza. Ntabwo yigana. Kandi iyo ururimi rufite ubutumwa ariko rutagira ijwi, ibyo bivugwa ku rupapuro, ntibimenyekane ku muhamagara.">If a caller speaks a language you haven't enabled, the agent apologises in your primary language and fetches you. It doesn't attempt it. It doesn't approximate it. And where a language works in messages but has no voice, that is said on this page rather than discovered by a customer.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-l9">
+      <div class="asidecard">
+        <h3 data-rw="Ubutumwa bw'ijwi ni bwo bwiza kuruta guhamagara">The voice note beats the phone call</h3>
+        <p data-rw="Ibi bitangaza abantu. Telefone itwara ijwi riri hagati ya 300 na 3400 Hz; ubutumwa bw'ijwi bwa WhatsApp butwara byinshi kurushaho. Bityo umukiriya umwe, avuga ijambo rimwe, yumvikana neza mu butumwa kuruta kuri telefone. Ni yo mpamvu inyandiko z'ubuziranenge zitandukanye — kandi ni yo mpamvu tutazivanga.">This surprises people. A phone line carries roughly 300 to 3,400 Hz; a WhatsApp voice note carries considerably more. So the same customer, saying the same thing, is understood better in a message than on the phone. That's why the quality labels differ by channel — and why we never merge them into one.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Gusubiza mu buryo bwahisemo">Answering in the form they chose</h3>
+        <p data-rw="Umuntu wohereje ubutumwa bw'ijwi yabikoze kubera impamvu — birashoboka ko kwandika Ikinyarwanda ari akazi, cyangwa ko yari atwaye moto. Kumusubiza mu nyandiko gusa ni ukumusubiza mu buryo atahisemo. Bityo asubizwa mu byombi, mu rurimi rumwe, kandi ibyo ntibihinduka.">Someone who sent a voice note did it for a reason — typing Kinyarwanda is work, or they were on a moto. Answering only in text answers them in a form they didn't choose. So they get both, in the same language, and that isn't configurable.</p>
+      </div>
+    </div>
+
+  </aside>
+</div><!-- /auth -->
+</div><!-- /m-proto -->
+
+<div class="mode" id="m-spec">
+<div class="specwrap">
+  <p style="font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 var(--s-5)">Flow 1.9 · atlas F-12</p>
+  <h1 style="font-family:var(--f-display);font-size:clamp(2rem,1.5rem + 2vw,2.9rem);font-variation-settings:'opsz' 48;font-weight:600;letter-spacing:-.032em;line-height:1.06;margin:0 0 var(--s-6)">Language and switching</h1>
+  <p style="max-width:70ch;color:var(--ink-2);font-size:var(--t-body-l);line-height:1.68;margin:0">The flow where the product's whole differentiation lives, and the one where the owner configures something she will never hear. Nine screens, and an argument about what we are allowed to claim.</p>
+
+  <div class="sechd"><span class="n">01</span><h2>Choice first, detection second</h2></div>
+  <p>Automatic language detection is unreliable for closely related and heavily mixed languages, and the failure is customer-visible. One vendor documents roughly <b>4% of calls unexpectedly switching language around the eighth turn</b>; another recommends avoiding auto-detection altogether in favour of routing to language-specific agents — which is the cure that causes the disease the atlas forbids at L3.</p>
+  <p>The position, and every screen follows from it: <b>the caller decides, in the first three seconds, by one of three means, and detection assists that decision rather than replacing it.</b> An explicit request is absolute. A keypad press is absolute. Detection is advisory and only above threshold. Those first two render as locked rows on <code>l3</code>, in the same visual grammar as the locked withdrawal control in <code>voice.html</code> — a control that is present and does not press teaches whose decision it is better than a sentence does.</p>
+  <div class="why2"><svg><use href="#i-circle-x"/></svg><p><b>There is no detection dial, deliberately.</b> Atlas question 12.b — how heavily Rwandan business calls actually code-switch — is unanswered, so there is no threshold we could honestly recommend. Shipping a slider would be asking the owner to tune a number neither of us understands. The only control is the three modes, and each states its cost in plain words.</p></div>
+
+  <div class="sechd"><span class="n">02</span><h2>What we are allowed to say about a language</h2></div>
+  <p>The atlas asks for honest per-language quality labels and gives three: <em>Good · Improving · Not yet available for voice</em>. Two changes were necessary.</p>
+  <p><b>First, every language needs two labels, not one.</b> A phone line carries roughly 300–3,400 Hz; a voice note carries considerably more. The same language can be good in messages and hard work on a call — and atlas §8 says thresholds are tuned per channel, not globally. A single badge per language would be a lie, so the board shows a phone mark and a message mark, each lit or struck through.</p>
+  <p><b>Second, a fourth rung is required: <em>Not yet measured</em>.</b> Before Phase 0, none of the three atlas labels is true for Kinyarwanda on a telephone line. This is not an edge case — it is the shipping state.</p>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Language</th><th>On calls</th><th>In messages</th><th>What the line underneath says</th></tr></thead>
+    <tbody>
+      <tr><td>Ikinyarwanda</td><td><b>Not yet measured</b></td><td>Good</td><td>"We have never measured Kinyarwanda on a telephone line, because nobody has — that figure isn't published anywhere, for any speech system."</td></tr>
+      <tr><td>English</td><td>Good, with a caveat</td><td>Good</td><td>"Rwandan-accented English is a known weak spot in every speech system, and nobody publishes a figure for it — so we measure yours."</td></tr>
+      <tr><td>Français</td><td>Good</td><td>Good</td><td>Telephone-line quality still measured on the tenant's own calls, like every language here.</td></tr>
+      <tr><td>Kiswahili</td><td>Improving</td><td>Good</td><td>"Better resourced than Kinyarwanda, not as strong as French."</td></tr>
+    </tbody>
+  </table></div>
+  <p>Forbidden on that screen: any percentage for Kinyarwanda call understanding before Phase 0; the words "excellent" or "native"; and a green tick on a language whose voice does not exist.</p>
+
+  <div class="sechd"><span class="n">03</span><h2>One agent, translated views</h2></div>
+  <p>Atlas constraint L3: <em>separate prompts per language drift apart — one configuration, translated views, never separate agents per language.</em> Three months after you create a French agent, one of them knows the new price and the other doesn't.</p>
+  <p>So <code>l4</code> is a <b>view</b>, not a second configuration. Each line shows the target language first — because the target is the thing being judged — with the Kinyarwanda source quiet beneath it. This deliberately inverts the transcript component, where the original always leads and the translation sits under it; there the record is what was actually said, here the draft is what needs approving. Every string carries an amber dot until a person confirms it, and the length is stamped in <b>spoken seconds</b>, not characters, because a long greeting is the most common cause of callers talking over the agent. There is no affordance anywhere to create a language-specific agent.</p>
+
+  <div class="sechd"><span class="n">04</span><h2>Code-switching is not an event</h2></div>
+  <p><em>"Ndashaka kubona appointment kuwa gatandatu"</em> is one sentence in two languages, and in Kigali it is the normal case rather than the exception. The atlas is explicit: this is <b>not</b> a language switch and must not be treated as one.</p>
+  <p>The rendering carries the whole argument. A mixed utterance is <b>one turn</b>, with two language chips and a dotted underline beneath the foreign span — and <b>no switch marker above it</b>. A switch marker is reserved for a sustained change, and it carries the trigger that caused it: <span class="tag">asked</span> <span class="tag">keypad</span> <span class="tag">detected</span>. Only the third can be a mistake, and only the third is counted as one.</p>
+  <div class="why2 warn"><svg><use href="#i-circle-alert"/></svg><p><b>What this design cannot promise.</b> SC 12.2 asks for &gt;95% of code-switched utterances not triggering a full switch. Handling code-switching is stage K5 of the Kinyarwanda programme, scheduled for <b>Phase 3</b> — it is roadmap, not shipped. The screens render the correct behaviour and the evidence row for it ships in an unmeasured state. The design can show what right looks like; it cannot make the model do it.</p></div>
+
+  <div class="sechd"><span class="n">05</span><h2>The number that matters, and the number we refuse to show</h2></div>
+  <p>Atlas §12 names it: <code>language.switch</code> with trigger = detection and no preceding caller switch. That is the spurious-switch rate, and it is the single most important quality figure in this flow. It gets the headline on <code>l5</code>, in words rather than jargon — <em>"switches the caller didn't ask for"</em> — with its target, under 1% of calls, printed beside it.</p>
+  <p>The refusal is the other half. <b>Below thirty calls the meter is removed and replaced with a sentence</b>, not greyed out and not shown at low confidence. A percentage computed from six calls is noise wearing the costume of a fact, and a shop owner who reads 83% on a screen will believe it. The page also states when measuring began and on how many calls — because a number with no denominator is not evidence.</p>
+  <p>Two more are counted separately rather than folded into an average. <b>Times and numbers</b>: <em>"Saturday saa tatu"</em> — English weekday, Kinyarwanda clock — is how people book here, and when it resolves wrongly a booking goes in wrong; an aggregate understanding rate hides exactly that. And <b>switches that arrive right after a failure</b>, which atlas 12.e leaves open: we do not classify them as preference or repair, we count them in their own row and say we don't know.</p>
+
+  <div class="sechd"><span class="n">06</span><h2>The gate we have not passed</h2></div>
+  <div class="why2 warn"><svg><use href="#i-triangle-alert"/></svg><p><b>Atlas 12.a blocks everything in this flow, and it is unanswered.</b> The real Kinyarwanda understanding rate on 8 kHz telephone audio is unknown. The project documentation is blunt about it: no reliable published WER figure exists for any candidate model on telephone audio, and <em>"that absence is itself the finding."</em> The only quantified expectation is a hedged range — narrowband degradation informally cited at 1.5–3× relative — and the only hard Kinyarwanda number in the corpus is a cautionary one from a deliberately undersized fine-tune. Phase 0 exists to produce one honest number.</p></div>
+  <p>The design carries that three ways rather than working around it. Kinyarwanda's call state <b>defaults to "Not yet measured"</b>, and that is the screen's shipping state. The evidence page ships with its empty state designed first, worded as ignorance rather than as zero. And <code>l2</code> says it in one sentence a shop owner can read: <em>nobody has published this number for any speech system, including ours.</em> That is G13 — say "I don't know" rather than guess — applied to the product's own capability rather than to a caller's question.</p>
+
+  <div class="sechd"><span class="n">07</span><h2>Every screen, every state</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Screen</th><th>States</th></tr></thead>
+    <tbody>
+      <tr><td>l1 The board</td><td>four configured · one chat-only · one unmeasured · primary marked · turning off the primary refused inline · unsaved · saving · queued offline · suggestion present</td></tr>
+      <tr><td>l2 What the label means</td><td>good · improving · chat-only · unmeasured — one sheet per state, reached from the badge</td></tr>
+      <tr><td>l3 How it switches</td><td>follow · ask-then-stay · fixed · the two locked rows · the ladder, read-only · keypad shown</td></tr>
+      <tr><td>l4 What it says</td><td>untranslated · machine-translated unreviewed · confirmed · edited · too long to say</td></tr>
+      <tr><td>l5 Is it understanding them</td><td>no calls yet · too thin to say · measured · a language with too few calls · falling</td></tr>
+      <tr><td>l6 A call worth looking at</td><td>mixed sentence, no switch · a switch the caller asked for · a switch nobody asked for</td></tr>
+      <tr><td>l7 Locked</td><td>locked on this call · recurring for this tenant · resolved by changing mode</td></tr>
+      <tr><td>l8 A language not turned on</td><td>suggested with evidence · acted · dismissed for the month</td></tr>
+      <tr><td>l9 Messages and voice notes</td><td>measured · the three fixed behaviours</td></tr>
+    </tbody>
+  </table></div>
+  <p>The eight cross-cutting states from atlas Flow 24 §6 sit on top. <b>Empty</b> is the honest resting state of <code>l5</code> and is designed first, not last. <b>Partial</b> is its common state — metrics for two languages, too few calls for a third — and it is the state this whole flow lives in. <b>Loading</b> is the label-preserving spinner. <b>Offline</b> queues a setting change and says so in the save bar rather than losing it. <b>Permission denied</b> is a manager who may configure the agent but not the languages, reached from Flow 18. <b>Not found</b> and <b>rate limited</b> do not arise on a settings surface with no addressable records and no user-triggered fetches. <b>Server error</b> is a failed save, which must never leave the owner believing a change landed.</p>
+
+  <div class="sechd"><span class="n">08</span><h2>Success criteria</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>#</th><th>Criterion</th><th>Where, and whether design alone can satisfy it</th></tr></thead>
+    <tbody>
+      <tr><td>12.1</td><td>Explicit language requests always honoured — 100%</td><td><b>Runtime.</b> Design makes the guarantee visible and unconfigurable: <code>l3</code>'s locked rows, and the <span class="tag">asked</span> trigger on <code>l6</code></td></tr>
+      <tr><td>12.2</td><td>Code-switched utterances don't trigger a switch — &gt;95%</td><td><b>Model, Phase 3.</b> <code>l6</code> renders the correct behaviour; <code>l5</code>'s row for it ships unmeasured</td></tr>
+      <tr><td>12.3</td><td>Spurious mid-conversation switches — &lt;1%</td><td><b>Runtime metric.</b> It is <code>l5</code>'s headline, with its target on screen</td></tr>
+      <tr><td>12.4</td><td>Flap protection engages — 100%</td><td><b>Runtime.</b> <code>l7</code> renders the lock and its one remedy</td></tr>
+      <tr><td>12.5</td><td>No third consecutive failed attempt — 100%</td><td><b>Runtime.</b> <code>l3</code>'s ladder is read-only and says why</td></tr>
+      <tr><td>12.6</td><td>Voice-note replies as both text and audio — 100%</td><td>Partly. <code>l9</code> states it as fixed behaviour, not a setting</td></tr>
+      <tr><td>12.7</td><td>Per-language quality visible to the owner — UI audit</td><td><b>Fully. This criterion is the deliverable</b> — <code>l1</code> and <code>l5</code>, one tap apart</td></tr>
+      <tr><td>12.8</td><td>Unavailable languages never silently substituted</td><td><b>Fully.</b> The chat-only state on <code>l1</code>, and the apology shown to the owner on <code>l8</code></td></tr>
+      <tr><td>12.9</td><td>Understanding rate measured on real traffic from day one</td><td>Partly. <code>l5</code> carries "measuring since · N calls" even at zero</td></tr>
+    </tbody>
+  </table></div>
+  <p>Five of nine are pure runtime criteria. For those the prototype's job is not to claim them but to render their evidence surfaces and their locked controls honestly.</p>
+
+  <div class="sechd"><span class="n">09</span><h2>What we still don't know</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>#</th><th>Question</th><th>What it means for what is drawn</th></tr></thead>
+    <tbody>
+      <tr><td>12.a</td><td>The real Kinyarwanda understanding rate on 8 kHz telephone audio</td><td><b>Blocks everything here.</b> Why the fourth label exists and why <code>l5</code> ships empty</td></tr>
+      <tr><td>12.b</td><td>How heavily Rwandan business calls actually code-switch</td><td>Why there is no threshold control anywhere in this file</td></tr>
+      <tr><td>12.c</td><td>Is a keypad menu acceptable, or does it feel like the IVR people hate?</td><td>Why the keypad appears only after a misunderstanding, never in the greeting</td></tr>
+      <tr><td>12.d</td><td>Should the greeting be bilingual for mixed customer bases?</td><td>Why there is no bilingual-greeting composer — one primary greeting only</td></tr>
+      <tr><td>12.e</td><td>A caller who switches because we failed — preference, or repair?</td><td>Why that has its own counted row on <code>l5</code>, labelled as unanswered</td></tr>
+    </tbody>
+  </table></div>
+  <div class="why2 warn"><svg><use href="#i-languages"/></svg><p><b>And one that is not in the atlas.</b> The Kinyarwanda on these screens is carefully written but has not been read by a native speaker. On this surface that matters more than anywhere else in the programme, because this is the flow whose entire claim is that the product speaks Kinyarwanda properly. Atlas SC 6.12 requires a native-speaker walkthrough; nothing here should ship without one.</p></div>
+
+  <div class="sechd"><span class="n">10</span><h2>Where this flow stops</h2></div>
+  <p>The agent's rules, tone and greeting text belong to Flow 09 and are shipped in <code>agent.html</code> — this surface shows a translated view and deep-links to the source. The pronunciation dictionary is Flow 10, shipped in <code>knowledge.html</code>; language links to it and does not reimplement it. Voice selection, availability and cloning are Flow 11, shipped in <code>voice.html</code>; this flow consumes voice availability to draw the chat-only state and nothing more. The full conversation inbox is Flow 14 and is not yet designed — so <code>l6</code> and <code>l7</code> show three-to-five turn excerpts, reached from evidence rows, and carry no filters, no search and no reply affordance. Escalation is Flow 15: the ladder on <code>l3</code> ends by handing over and stops. Analytics is Flow 16, and the fleet-wide view of flap-locking is Flow 22, in the admin console. None of those are drawn here.</p>
+</div>
+</div>
+
+<script>
+(function(){
+  var d=document, S={lang:'en',scen:'normal',screen:'l1'}, dirty=false;
+
+  var ASIDE={l1:'as-l1',l2:'as-l1',l3:'as-l3',l4:'as-l4',l5:'as-l5',
+             l6:'as-l6',l7:'as-l6',l8:'as-l8',l9:'as-l9'};
+
+  function txt(el,en,rw){ if(!el) return; var t=el.querySelector('span')||el;
+    t.removeAttribute('data-en'); t.setAttribute('data-rw',rw);
+    t.textContent = S.lang==='rw'?rw:en; }
+
+  function show(id,back){
+    [].forEach.call(d.querySelectorAll('.screen'),function(s){
+      s.classList.toggle('on',s.id===id); s.classList.toggle('back',s.id===id&&!!back); });
+    [].forEach.call(d.querySelectorAll('.asidepane'),function(p){
+      p.classList.toggle('on',p.id===(ASIDE[id]||'as-l1')); });
+    S.screen=id; scrollTo({top:0,behavior:'auto'});
+    var f=d.querySelector('#'+id+' button:not(.backlink):not([disabled])');
+    if(f) setTimeout(function(){ try{f.focus({preventScroll:true})}catch(e){} },80);
+  }
+  d.addEventListener('click',function(e){
+    var g=e.target.closest('[data-goto]'); if(g){ show(g.dataset.goto); return; }
+    var b=e.target.closest('[data-back]'); if(b){ show(b.dataset.back,true); }
+  });
+
+  /* ── l1 · the board ──────────────────────────────────────────── */
+  function markDirty(){ dirty=true; d.getElementById('saveBar').hidden=false; }
+  d.addEventListener('change',function(e){
+    var t=e.target.closest('[data-lt]'); if(!t) return;
+    var L=t.dataset.lt, wrap=d.querySelector('.lwrap[data-l="'+L+'"]');
+    /* the greeting's language cannot simply be switched off — and a
+       disabled control with no explanation is not an answer */
+    if(L==='rw' && !t.checked){
+      t.checked=true;
+      var r=wrap.querySelector('.refuse');
+      if(!r){ r=d.createElement('p'); r.className='refuse';
+        r.innerHTML='<svg><use href="#i-circle-alert"/></svg><span></span>';
+        wrap.appendChild(r); }
+      txt(r,'This is the language your greeting is said in. Choose a different primary first, then you can turn this one off.',
+            "Uru ni rwo rurimi ijambo ry'ubwakire rivugwamo. Banza uhitemo urundi rw'ibanze, ubone kuruhagarika.");
+      setTimeout(function(){ if(r) r.remove(); },5200);
+      return;
+    }
+    wrap.classList.toggle('on',t.checked);
+    wrap.classList.toggle('off',!t.checked);
+    markDirty();
+  });
+  d.getElementById('saveBtn').addEventListener('click',function(){
+    var b=this; b.classList.add('btn-load');
+    setTimeout(function(){ b.classList.remove('btn-load');
+      d.getElementById('saveBar').hidden=true; dirty=false; },700);
+  });
+  function turnOnSwahili(){
+    var t=d.querySelector('[data-lt="sw"]');
+    if(t && !t.checked){ t.checked=true; t.dispatchEvent(new Event('change',{bubbles:true})); }
+    d.getElementById('swSuggest').hidden=true;
+    show('l1');
+  }
+  d.getElementById('swOn').addEventListener('click',turnOnSwahili);
+  d.getElementById('swOn2').addEventListener('click',turnOnSwahili);
+
+  /* ── l2 · what a quality label actually means ────────────────── */
+  var QD={
+    rw:{cls:'unmeasured',lab:['Not yet measured','Ntirapimwa'],
+      title:['Kinyarwanda on the phone','Ikinyarwanda ku telefone'],
+      h:['Kinyarwanda, on the phone','Ikinyarwanda, ku telefone'],
+      sub:["Here's what that label means, and what we don't yet know.","Dore icyo iyi nyandiko isobanura, n'icyo tutaramenya."],
+      rows:[["We don't yet know how well it works on a telephone line.","Ntabwo turamenya neza uko rikora ku murongo wa telefone."],
+            ['Not yet','Ntibirapimwa'],['None','Nta na kumwe'],
+            ["The agent doesn't guess. It tries twice, then fetches you.","Umufasha ntiyakeka. Agerageza kabiri, hanyuma akuzana."]],
+      body:['A phone call carries about half the sound a voice note does. No speech system anywhere publishes how it performs on Kinyarwanda over a telephone line. Not one. So we don’t claim it until we’ve measured it on your own calls.',
+            "Guhamagara bitwara ijwi rike cyane — nka kimwe cya kabiri cy'ubutumwa bw'ijwi. Nta sisitemu y'ijwi ku isi itangaza uko ikora ku Kinyarwanda kuri telefone. Nta n'imwe. Bityo ntitubyivugira kugeza tubipimye ku guhamagara kwawe."]},
+    en:{cls:'good',lab:['Good','Rirakora neza'],
+      title:['English on the phone','Icyongereza ku telefone'],
+      h:['English, on the phone','Icyongereza, ku telefone'],
+      sub:['Strong overall — with one caveat that matters here.',"Gikora neza muri rusange — ariko hari ikintu kimwe cy'ingenzi."],
+      rows:[['Understood reliably in most conditions.','Cyumvikana neza mu bihe byinshi.'],
+            ['Continuously, on your own calls','Buri gihe, ku guhamagara kwawe'],['41 calls','Guhamagara 41'],
+            ['It tries twice, then fetches you.','Agerageza kabiri, hanyuma akuzana.']],
+      body:['Rwandan-accented English is a known weak spot across every major speech system, and no reliable benchmark for it is published anywhere. A global figure would not tell you about your customers. So the number on this page is measured on your calls, not borrowed from a vendor.',
+            "Icyongereza kivugwa mu Rwanda ni ahantu hazwi ho gukomera kuri buri sisitemu y'ijwi, kandi nta gipimo cyizewe cyatangajwe. Umubare rusange ntiwakubwira ku bakiriya bawe. Bityo umubare uri kuri iyi paji upimwe ku guhamagara kwawe, ntabwo waguzwe."]},
+    fr:{cls:'good',lab:['Good','Rirakora neza'],
+      title:['French on the phone','Igifaransa ku telefone'],
+      h:['French, on the phone','Igifaransa, ku telefone'],
+      sub:['Well supported, and still measured on your own traffic.','Gifite inkunga nziza, ariko gipimwa ku guhamagara kwawe.'],
+      rows:[['Well supported by the underlying speech models.',"Gifite inkunga nziza mu bikoresho by'ijwi."],
+            ['Continuously','Buri gihe'],['3 calls — too few to rate','Guhamagara 3 — ni bike'],
+            ['It tries twice, then fetches you.','Agerageza kabiri, hanyuma akuzana.']],
+      body:['Three calls is not a measurement. The label reflects how the underlying models perform generally; the number stays blank until your own traffic can support one.',
+            "Guhamagara gatatu si igipimo. Iyi nyandiko igaragaza uko ibikoresho bikora muri rusange; umubare uguma ubusa kugeza guhamagara kwawe kuhagije."]},
+    sw:{cls:'improving',lab:['Improving','Rirategurwa'],
+      title:['Swahili on the phone','Igiswahili ku telefone'],
+      h:['Swahili, on the phone','Igiswahili, ku telefone'],
+      sub:['Better resourced than Kinyarwanda, not as strong as French.','Rifite ibikoresho birenze iby\'Ikinyarwanda, ariko ntiringana n\'Igifaransa.'],
+      rows:[['Usable, and being tuned for telephone lines.','Rirakoreshwa, kandi riri gutegurirwa imirongo ya telefone.'],
+            ['Not on your traffic yet','Ntibirapimwa ku bwawe'],['None','Nta na kumwe'],
+            ['It tries twice, then fetches you.','Agerageza kabiri, hanyuma akuzana.']],
+      body:['Swahili has more public speech data than Kinyarwanda, which is why the label is higher. It is still being adapted for narrowband telephone audio, and it has not been measured on your customers.',
+            "Igiswahili gifite amakuru y'ijwi menshi kuruta Ikinyarwanda, ni yo mpamvu inyandiko yacyo iri hejuru. Kiracyategurirwa ijwi rya telefone, kandi ntikirapimwa ku bakiriya bawe."]}
+  };
+  d.addEventListener('click',function(e){
+    var b=e.target.closest('[data-q]'); if(!b) return;
+    var q=QD[b.dataset.q]; if(!q) return;
+    var i = S.lang==='rw'?1:0;
+    var bd=d.getElementById('l2badge');
+    bd.className='qbadge '+q.cls; txt(bd,q.lab[0],q.lab[1]);
+    txt(d.getElementById('l2h'),q.h[0],q.h[1]);
+    txt(d.getElementById('l2sub'),q.sub[0],q.sub[1]);
+    txt(d.getElementById('l2title'),q.title[0],q.title[1]);
+    var dds=d.querySelectorAll('#l2dl dd');
+    q.rows.forEach(function(r,n){ if(dds[n]) txt(dds[n],r[0],r[1]); });
+    txt(d.getElementById('l2body'),q.body[0],q.body[1]);
+    show('l2');
+  });
+
+  /* ── l4 · phrase review ──────────────────────────────────────── */
+  function unrevCount(){
+    var n=d.querySelectorAll('#l4 .phrase.needs').length;
+    var note=d.getElementById('unrevNote');
+    if(n===0) txt(note,'Every line reviewed','Interuro zose zasuzumwe');
+    else txt(note, n+' line'+(n>1?'s':'')+' not reviewed yet', 'Interuro '+n+' ntizirasuzumwa');
+    var sb=d.getElementById('saveBar4'); if(sb) sb.hidden = (n===d.querySelectorAll('#l4 .phrase').length);
+  }
+  d.addEventListener('click',function(e){
+    var ok=e.target.closest('[data-ok]');
+    if(ok){
+      var box=d.getElementById(ok.dataset.ok);
+      box.classList.remove('needs');
+      var dot=box.querySelector('.punrev'); if(dot) dot.remove();
+      var tag=d.getElementById(ok.dataset.ok+'tag');
+      tag.classList.add('done');
+      tag.querySelector('use').setAttribute('href','#i-check');
+      txt(tag,'you confirmed this','wabyemeje');
+      ok.remove(); unrevCount();
+      return;
+    }
+    var ed=e.target.closest('[data-edit]');
+    if(ed){
+      var b2=d.getElementById(ed.dataset.edit), p=b2.querySelector('.plead');
+      if(p.getAttribute('contenteditable')==='true') return;
+      p.setAttribute('contenteditable','true'); p.style.outline='2px solid var(--signal-lo)';
+      p.style.outlineOffset='3px'; p.style.borderRadius='3px'; p.focus();
+      txt(ed,'Done','Byarangiye');
+      p.addEventListener('blur',function(){
+        p.removeAttribute('contenteditable'); p.style.outline='';
+        b2.classList.remove('needs');
+        var dt=b2.querySelector('.punrev'); if(dt) dt.remove();
+        var tg=d.getElementById(ed.dataset.edit+'tag');
+        tg.classList.add('done'); tg.querySelector('use').setAttribute('href','#i-pencil');
+        txt(tg,'you wrote this','wabyanditse');
+        unrevCount();
+      },{once:true});
+      return;
+    }
+    var hr=e.target.closest('[data-hear]');
+    if(hr){
+      var s2=hr.querySelector('span');
+      txt(hr,'Playing…','Birumvikana…');
+      setTimeout(function(){ txt(hr,'Hear it','Yumve'); },1500);
+    }
+  });
+
+  /* ── scenarios ───────────────────────────────────────────────── */
+  var START={normal:'l1',nokin:'l2',chatonly:'l1',offprimary:'l1',switching:'l3',ladder:'l3',
+    phrases:'l4',toolong:'l4',thin:'l5',measured:'l5',mixed:'l6',switched:'l6',spurious:'l6',
+    locked:'l7',swahili:'l8',notes:'l9'};
+
+  function applyScenario(v){
+    S.scen=v;
+    /* board */
+    var kin=d.querySelector('.lwrap[data-l="rw"]');
+    var scope=kin.querySelectorAll('.chscope i');
+    var kb=kin.querySelector('.qbadge');
+    if(v==='chatonly'){
+      scope[0].className='no'; scope[1].className='yes';
+      kb.className='qbadge chatonly'; txt(kb,'Chat only','Ubutumwa gusa');
+      kin.querySelector('.chscope').setAttribute('aria-label','On calls: no. In messages: yes.');
+      txt(kin.querySelector('.qwhy span'),
+        'No Kinyarwanda voice reaches the standard we would ship yet. Calls are answered in your next language, with an apology the caller hears — we will not substitute a French-accented approximation. Messages are unaffected.',
+        "Nta jwi ry'Ikinyarwanda rigeze ku rwego twashyiraho. Guhamagara gusubizwa mu rurimi rwawe rukurikira, umukiriya akumva imbabazi — ntabwo tuzatanga ijwi ry'Igifaransa rigerageza Ikinyarwanda. Ubutumwa ntibuhinduka.");
+    } else {
+      scope[0].className='yes'; scope[1].className='yes';
+      kb.className='qbadge unmeasured'; txt(kb,'Not yet measured','Ntirapimwa');
+      kin.querySelector('.chscope').setAttribute('aria-label','On calls: yes. In messages: yes.');
+      var w=kin.querySelector('.qwhy span'); w.removeAttribute('data-en');
+      w.setAttribute('data-rw',"Ntitwigeze dupima Ikinyarwanda ku murongo wa telefone, kuko nta n'umwe wabikoze — iyo mibare ntayo isohotse ahantu na hamwe. <b>Tuzakwereka iyawe bwite</b> nitumara kubona guhamagara makumyabiri.");
+      w.innerHTML = S.lang==='rw' ? w.getAttribute('data-rw')
+        : 'We have never measured Kinyarwanda on a telephone line, because nobody has — that figure isn’t published anywhere, for any speech system. <b>We’ll show you the number from your own calls</b> as soon as we have twenty of them.';
+    }
+    d.getElementById('swSuggest').hidden = (v!=='swahili' && v!=='normal');
+    d.getElementById('saveBar').hidden=true; dirty=false;
+
+    /* switching */
+    var fm=d.querySelector('input[name=lmode][value="'+(v==='ladder'?'askstay':'follow')+'"]');
+    if(fm) fm.checked=true;
+
+    /* phrases */
+    d.getElementById('tooLong').hidden = (v!=='toolong');
+    var l1=d.getElementById('ph1len');
+    if(v==='toolong'){ l1.textContent='≈ 7.4s spoken'; l1.classList.add('over');
+      d.getElementById('ph1t').textContent='Hello and you are very welcome to Salon Ubwiza in Remera. I am an automated assistant, not a person. How may I be of help to you today?';
+    } else { l1.textContent='≈ 4.2s spoken'; l1.classList.remove('over');
+      d.getElementById('ph1t').textContent="Hello, this is Salon Ubwiza. I'm an assistant, not a person. How can I help?"; }
+
+    /* evidence */
+    var thin = (v==='thin');
+    d.getElementById('thinData').hidden=!thin;
+    d.getElementById('measured').hidden=thin;
+    var sv=d.getElementById('spurV'), st=d.getElementById('spurT');
+    if(thin){ sv.className='hv none'; txt(sv,'Not enough calls yet','Guhamagara ntiguhagije');
+      txt(st,'Seven calls since Tuesday. We need about thirty before any rate here would mean anything — so there is no number on this page yet, rather than a number you should not trust.',
+             "Guhamagara kwinshi kuva ku wa kabiri. Dukeneye nka mirongo itatu kugira ngo umubare ugire icyo uvuga — bityo nta mubare uri kuri iyi paji, aho kuwushyiraho utakwizerwa.");
+      txt(d.querySelector('#l5 .measline span'),'Measuring since Tuesday · 7 calls','Bipimwa kuva ku wa kabiri · guhamagara 7');
+    } else { sv.className='hv'; sv.textContent='0';
+      txt(st,'Out of 41 calls since 3 March. This is the number that matters most on this page: when the agent changes language and the caller didn’t want it, the caller hears it — and that’s the worst place for a mistake to show up.',
+             "Muri guhamagara 41 kuva ku wa 3 Werurwe. Iyi ni yo mibare y'ingenzi kuri iyi paji: iyo umufasha ahinduye ururimi umukiriya atabishatse, umukiriya abyumva — kandi ni bwo bwoko bubi bw'ikosa.");
+      txt(d.querySelector('#l5 .measline span'),'Measuring since 3 March · 41 calls','Bipimwa kuva ku wa 3 Werurwe · guhamagara 41');
+    }
+    if(v==='spurious'){ sv.className='hv'; sv.textContent='2';
+      txt(st,'Two calls out of 41 where the agent changed language and nothing the caller said justified it. Above one in a hundred, move the switching mode to "Ask at the start, then stay".',
+             'Guhamagara kubiri muri 41 aho umufasha yahinduye ururimi nta mpamvu. Iyo birenze rimwe kuri ijana, hindura uburyo ujye kuri &laquo;Bimubaze mbere, hanyuma bigume&raquo;.'); }
+
+    /* the call excerpt */
+    var sw=d.getElementById('l6switch'), sp=d.getElementById('l6spur'), okb=d.getElementById('l6ok');
+    sw.hidden = (v!=='switched'); sp.hidden = (v!=='spurious'); okb.hidden = (v==='spurious');
+    if(v==='switched'){ txt(d.getElementById('l6h'),'A caller asked for English','Umukiriya yasabye Icyongereza');
+      txt(d.getElementById('l6sub'),'An explicit request is always obeyed, at any point in the call. There is no setting that can prevent it.',
+        "Iyo umukiriya abisabye, bihora bikurikizwa, igihe icyo ari cyo cyose. Nta buryo bwo kubibuza."); }
+    else if(v==='spurious'){ txt(d.getElementById('l6h'),'It switched on its own','Ryahinduye ubwaryo');
+      txt(d.getElementById('l6sub'),'Nothing the caller said asked for this. This is the failure the switching mode exists to control.',
+        "Nta cyo umukiriya yavuze cyabisabye. Iri ni ryo kosa uburyo bwo guhindura bwagenewe kugabanya."); }
+    else { txt(d.getElementById('l6h'),'One sentence, two languages','Interuro imwe, indimi ebyiri');
+      txt(d.getElementById('l6sub'),"This is how people speak in Kigali. It isn’t a mistake, and it isn’t a reason to change the whole conversation.",
+        "Uku ni ko abantu bavuga i Kigali. Ntabwo ari ikosa, kandi ntabwo ari impamvu yo guhindura ikiganiro cyose."); }
+
+    unrevCount();
+    show(START[v]||'l1');
+    if(v==='nokin'){ var kbn=d.querySelector('.qbadge[data-q="rw"]'); if(kbn) kbn.click(); }
+  }
+  d.getElementById('scen').addEventListener('change',function(){ applyScenario(this.value); });
+
+  /* ── i18n ────────────────────────────────────────────────────── */
+  function setLang(l){
+    [].forEach.call(d.querySelectorAll('[data-rw]'),function(el){
+      if(!el.hasAttribute('data-en')) el.setAttribute('data-en', el.textContent);
+      el.textContent=(l==='rw')?el.getAttribute('data-rw'):el.getAttribute('data-en'); });
+    [].forEach.call(d.querySelectorAll('[data-rw-html]'),function(el){
+      if(!el.hasAttribute('data-en-html')) el.setAttribute('data-en-html', el.innerHTML);
+      el.innerHTML=(l==='rw')?el.getAttribute('data-rw-html'):el.getAttribute('data-en-html'); });
+    [].forEach.call(d.querySelectorAll('[data-lang]'),function(b){
+      b.setAttribute('aria-pressed',String(b.dataset.lang===l)); });
+    d.documentElement.setAttribute('lang',l); S.lang=l;
+  }
+  d.addEventListener('click',function(e){
+    var b=e.target.closest('[data-lang]'); if(b) setLang(b.dataset.lang);
+    var m=e.target.closest('[data-mode]');
+    if(m){ [].forEach.call(d.querySelectorAll('[data-mode]'),function(x){
+        x.setAttribute('aria-pressed',String(x===m)); });
+      d.getElementById('m-proto').classList.toggle('on',m.dataset.mode==='proto');
+      d.getElementById('m-spec').classList.toggle('on',m.dataset.mode==='spec');
+      scrollTo({top:0}); }
+  });
+
+  setLang('en'); applyScenario('normal');
+})();
+</script>

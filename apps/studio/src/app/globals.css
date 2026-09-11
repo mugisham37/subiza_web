@@ -1,0 +1,8 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss";
+@import "@subiza/ui/tokens.css";
+@import "@subiza/ui/theme.css";
+@import "@subiza/ui/base.css";
+@import "@subiza/ui/components.css";
+@import "@subiza/ui/product.css";
+@source "../../../../packages/ui/src";

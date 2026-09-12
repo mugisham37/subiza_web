@@ -71,7 +71,10 @@ export type Grade =
 export const FULL = { kind: "full" } as const satisfies Grade;
 export const READONLY = { kind: "readonly" } as const satisfies Grade;
 export const NONE = { kind: "none" } as const satisfies Grade;
-export const scoped = (scope: string): Grade => ({ kind: "scoped", scope });
+export const scoped = <S extends string>(scope: S): { readonly kind: "scoped"; readonly scope: S } => ({
+  kind: "scoped",
+  scope,
+});
 
 export const tenantMatrix = {
   owner: {
@@ -103,7 +106,7 @@ export const tenantMatrix = {
     editKnowledgeBase: FULL,
     selectLibraryVoice: FULL,
     initiateVoiceCloning: NONE,
-    connectDisconnectChannel: scoped("connect only"),
+    connectDisconnectChannel: scoped("connect-only"),
     setupCallForwarding: FULL,
     changeLanguageSettings: FULL,
     runTestConversation: FULL,
@@ -112,11 +115,11 @@ export const tenantMatrix = {
     takeOverLiveConversation: FULL,
     configureEscalationRules: FULL,
     seeAnalytics: FULL,
-    exportConversationData: scoped("with reason logged"),
+    exportConversationData: scoped("with-reason"),
     topUpCredit: NONE,
-    seeBillingDetail: scoped("balance only"),
-    inviteRemoveTeam: scoped("below own level"),
-    respondToDsar: scoped("prepare only"),
+    seeBillingDetail: scoped("balance-only"),
+    inviteRemoveTeam: scoped("below-own"),
+    respondToDsar: scoped("prepare-only"),
     changeRetentionSettings: NONE,
     deleteAccount: NONE,
   },
@@ -130,8 +133,8 @@ export const tenantMatrix = {
     setupCallForwarding: NONE,
     changeLanguageSettings: NONE,
     runTestConversation: FULL,
-    takeAgentLiveOrPause: scoped("pause only"),
-    readAllConversations: scoped("assigned + escalated"),
+    takeAgentLiveOrPause: scoped("pause-only"),
+    readAllConversations: scoped("assigned-escalated"),
     takeOverLiveConversation: FULL,
     configureEscalationRules: NONE,
     seeAnalytics: scoped("own"),
@@ -172,7 +175,13 @@ export function tenantGrade(role: TenantRoleId, capability: TenantCapability): G
   return tenantMatrix[role][capability];
 }
 
+/** Write-capable access. A readonly grade must not satisfy this. */
 export function can(role: TenantRoleId, capability: TenantCapability): boolean {
+  const grade = tenantGrade(role, capability);
+  return grade.kind === "full" || grade.kind === "scoped";
+}
+
+export function canRead(role: TenantRoleId, capability: TenantCapability): boolean {
   return tenantGrade(role, capability).kind !== "none";
 }
 
@@ -193,13 +202,13 @@ export function canDisconnectChannel(role: TenantRoleId): boolean {
 
 export function canConnectChannel(role: TenantRoleId): boolean {
   const grade = tenantGrade(role, "connectDisconnectChannel");
-  return grade.kind === "full" || (grade.kind === "scoped" && grade.scope === "connect only");
+  return grade.kind === "full" || (grade.kind === "scoped" && grade.scope === "connect-only");
 }
 
 /** Any staff member who can pause; only Owner or Manager may resume. */
 export function canPauseAgent(role: TenantRoleId): boolean {
   const grade = tenantGrade(role, "takeAgentLiveOrPause");
-  return grade.kind === "full" || (grade.kind === "scoped" && grade.scope === "pause only");
+  return grade.kind === "full" || (grade.kind === "scoped" && grade.scope === "pause-only");
 }
 
 export function canResumeAgent(role: TenantRoleId): boolean {

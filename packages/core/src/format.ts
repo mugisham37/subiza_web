@@ -1,5 +1,22 @@
 const RW_PHONE = /^(\+?250|0)?(7[2-9]\d{7})$/;
 
+/** Allocated Rwanda MNO prefixes. Foreign and unallocated prefixes are refused before any OTP spend. */
+export const ALLOCATED_RW_MNO = ["72", "73", "75", "78", "79"] as const;
+
+export function isAllocatedRwandaMno(e164: string): boolean {
+  const match = /^\+250(7\d)\d{7}$/.exec(e164);
+  const prefix = match?.[1];
+  return prefix !== undefined && (ALLOCATED_RW_MNO as readonly string[]).includes(prefix);
+}
+
+export function parseRwandaPhone(raw: string): string | null {
+  const digits = raw.replace(/\s+/g, "");
+  const match = RW_PHONE.exec(digits);
+  const local = match?.[2];
+  if (!local) return null;
+  return `+250${local}`;
+}
+
 export function formatRwf(amount: number, locale = "rw"): string {
   return new Intl.NumberFormat(locale === "rw" ? "en-RW" : locale, {
     style: "currency",

@@ -14,6 +14,7 @@ export {
 } from "./lib/preferences";
 
 export { Icon, SpriteDefs, type IconName } from "./icons/Icon";
+export { CRITICAL_ICON_NAMES, CRITICAL_ICON_COUNT } from "./icons/critical";
 
 export { Button, ButtonLink, buttonVariants } from "./atoms/Button";
 export { Chip } from "./atoms/Chip";
@@ -27,6 +28,7 @@ export { Eyebrow, Label, Hint, VisuallyHidden } from "./atoms/Eyebrow";
 
 export { PhoneField } from "./molecules/PhoneField";
 export { OtpField } from "./molecules/OtpField";
+export { otpSlotsScript } from "./scripts/otp-slots";
 export { ChoiceCard } from "./molecules/ChoiceCard";
 export { Card, CardHeader, CardBody, CardFooter, CardLink } from "./molecules/Card";
 export { Stat, StatGrid } from "./molecules/Stat";
@@ -55,6 +57,7 @@ export { EscalationLadder } from "./product/EscalationLadder";
 export { CreditCard } from "./product/CreditCard";
 export { WhatsAppBubble } from "./product/WhatsAppBubble";
 export { PhoneFrame } from "./product/PhoneFrame";
+export { PricingTiers, PILOT_BANNER_TEXT, type PricingCopy } from "./product/PricingTiers";
 
 export { LoadingState } from "./states/LoadingState";
 export { EmptyState } from "./states/EmptyState";

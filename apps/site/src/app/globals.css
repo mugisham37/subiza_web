@@ -6,6 +6,8 @@
 @import "@subiza/ui/components.css";
 @import "@subiza/ui/product.css";
 @import "../views/DesignSystemView/docs.css";
+@import "../views/site.css";
+@import "../views/AuthView/auth.css";
 
 @source "../../../../packages/ui/src";
 

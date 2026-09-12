@@ -1,48 +1,43 @@
-"use client";
-
-import { OTPInput, type SlotProps } from "input-otp";
 import { cx } from "../lib/cx";
 
-function Slot({ char, isActive, hasFakeCaret }: SlotProps) {
-  return (
-    <span className={cx("slot", char && "filled", isActive && "cursor")}>
-      {char}
-      {hasFakeCaret ? null : null}
-    </span>
-  );
-}
+const SLOTS = [0, 1, 2, 3, 4, 5] as const;
 
 export function OtpField({
   id,
-  value,
-  onChange,
+  name = "code",
   invalid,
   disabled,
+  describedBy,
+  defaultValue,
 }: {
-  id?: string;
-  value?: string;
-  onChange?: (value: string) => void;
+  id: string;
+  name?: string;
   invalid?: boolean;
   disabled?: boolean;
+  describedBy?: string;
+  defaultValue?: string;
 }) {
   return (
-    <OTPInput
-      {...(id ? { id } : {})}
-      maxLength={6}
-      {...(value !== undefined ? { value } : {})}
-      {...(onChange ? { onChange } : {})}
-      {...(disabled !== undefined ? { disabled } : {})}
-      containerClassName={cx("otp", invalid && "is-invalid")}
-      inputMode="numeric"
-      autoComplete="one-time-code"
-      textAlign="left"
-      render={({ slots }) => (
-        <span className="slots" aria-hidden>
-          {slots.map((slot, index) => (
-            <Slot key={index} {...slot} />
-          ))}
-        </span>
-      )}
-    />
+    <div className={cx("otp", invalid && "is-invalid")} data-otp={invalid ? "invalid" : ""}>
+      <input
+        type="text"
+        id={id}
+        name={name}
+        inputMode="numeric"
+        autoComplete="one-time-code"
+        pattern="[0-9]{6}"
+        maxLength={6}
+        enterKeyHint="done"
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+        {...(describedBy ? { "aria-describedby": describedBy } : {})}
+        {...(defaultValue !== undefined ? { defaultValue } : {})}
+      />
+      <span className="slots" aria-hidden="true">
+        {SLOTS.map((slot) => (
+          <span key={slot} className="slot" />
+        ))}
+      </span>
+    </div>
   );
 }

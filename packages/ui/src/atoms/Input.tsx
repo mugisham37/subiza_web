@@ -21,12 +21,13 @@ export function Field({ id, label, optional, hint, error, children }: FieldProps
         {optional ? <span className="opt">{optional}</span> : null}
       </label>
       {children}
+      {hint ? (
+        <Hint {...(hintId ? { id: hintId } : {})}>{hint}</Hint>
+      ) : null}
       {error ? (
         <p className="err" id={errorId} role="alert">
           {error}
         </p>
-      ) : hint ? (
-        <Hint {...(hintId ? { id: hintId } : {})}>{hint}</Hint>
       ) : null}
     </div>
   );

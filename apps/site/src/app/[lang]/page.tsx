@@ -1,18 +1,44 @@
+import { SITE_ORIGIN } from "@subiza/core";
 import { ViewTransition } from "react";
-import { ButtonLink } from "@subiza/ui";
+import { HomeView } from "@/views/HomeView/HomeView";
+import { asSiteLocale } from "@/lib/locale";
 
 export default async function Page({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   return (
     <ViewTransition>
-      <main id="content" className="wrap">
-        <p className="eyebrow">Subiza</p>
-        <h1 className="h0">Foundation is up.</h1>
-        <p className="docint">
-          Phase 1 ships the design system, not a marketing page. That is Prompt 02.
-        </p>
-        <ButtonLink href={`/${lang}/design-system`}>Open the design system</ButtonLink>
-      </main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                name: "Subiza",
+                url: SITE_ORIGIN,
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "Kigali",
+                  addressCountry: "RW",
+                },
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: "+250788782492",
+                  email: "muraho@subiza.rw",
+                  contactType: "customer support",
+                },
+              },
+              {
+                "@type": "WebSite",
+                name: "Subiza",
+                url: SITE_ORIGIN,
+              },
+            ],
+          }),
+        }}
+      />
+      <HomeView lang={asSiteLocale(lang)} />
     </ViewTransition>
   );
 }

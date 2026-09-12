@@ -1,7 +1,10 @@
 import type { IconName } from "./names.generated";
+import { CRITICAL_ICON_NAMES } from "./critical";
 import { cx } from "../lib/cx";
 
 export type { IconName };
+
+const CRITICAL = new Set<string>(CRITICAL_ICON_NAMES);
 
 type IconProps = {
   name: IconName;
@@ -11,6 +14,7 @@ type IconProps = {
 };
 
 export function Icon({ name, size = 16, className, title }: IconProps) {
+  const href = CRITICAL.has(name) ? `#i-${name}` : `/icons/sprite.svg#i-${name}`;
   return (
     <svg
       width={size}
@@ -21,7 +25,7 @@ export function Icon({ name, size = 16, className, title }: IconProps) {
       focusable="false"
     >
       {title ? <title>{title}</title> : null}
-      <use href={`#i-${name}`} />
+      <use href={href} />
     </svg>
   );
 }

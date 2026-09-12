@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
-import { Bricolage_Grotesque, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import type { SiteLocale } from "@subiza/i18n";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { routing } from "@/i18n/routing";
+import { pageMetadata } from "@/lib/metadata";
 import { motionInitScript, themeInitScript } from "@subiza/ui/preferences";
+import { Bricolage_Grotesque, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "../globals.css";
 
 const display = Bricolage_Grotesque({
@@ -30,10 +31,10 @@ const mono = JetBrains_Mono({
   adjustFontFallback: true,
 });
 
-function spriteMarkup() {
+function criticalSprite() {
   try {
     return readFileSync(
-      join(process.cwd(), "../../packages/ui/src/icons/sprite.svg"),
+      join(process.cwd(), "../../packages/ui/src/icons/sprite-critical.svg"),
       "utf8",
     );
   } catch {
@@ -45,10 +46,17 @@ export function generateStaticParams() {
   return routing.locales.map((lang) => ({ lang }));
 }
 
-export const metadata: Metadata = {
-  title: "Subiza",
-  description: "The system that answers.",
-};
+export async function generateMetadata({ params }: LayoutProps<"/[lang]">) {
+  const { lang } = await params;
+  if (!hasLocale(routing.locales, lang)) notFound();
+  const t = await getTranslations({ locale: lang, namespace: "meta" });
+  return pageMetadata({
+    lang: lang as SiteLocale,
+    path: "/",
+    title: t("title"),
+    description: t("description"),
+  });
+}
 
 export default async function LangLayout({
   children,
@@ -58,6 +66,7 @@ export default async function LangLayout({
   if (!hasLocale(routing.locales, lang)) notFound();
   setRequestLocale(lang);
   const messages = await getMessages();
+  const t = await getTranslations("nav");
 
   return (
     <html
@@ -70,9 +79,9 @@ export default async function LangLayout({
         <script dangerouslySetInnerHTML={{ __html: motionInitScript }} />
       </head>
       <body>
-        <div dangerouslySetInnerHTML={{ __html: spriteMarkup() }} hidden />
+        <div dangerouslySetInnerHTML={{ __html: criticalSprite() }} hidden />
         <a className="skip-link" href="#content">
-          Skip to content
+          {t("skip")}
         </a>
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>

@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ICON_NAMES } from "./icon-names.ts";
+import { CRITICAL_ICON_NAMES } from "../src/icons/critical.ts";
 
 const require = createRequire(import.meta.url);
 const here = dirname(fileURLToPath(import.meta.url));
@@ -35,10 +36,19 @@ const symbols = ICON_NAMES.map((name) => {
   return normalise(raw, name);
 });
 
+const critical = CRITICAL_ICON_NAMES.map((name) => {
+  const raw = readFileSync(findLucideIcon(name), "utf8");
+  return normalise(raw, name);
+});
+
 mkdirSync(outDir, { recursive: true });
 writeFileSync(
   join(outDir, "sprite.svg"),
   `<svg xmlns="http://www.w3.org/2000/svg" style="display:none">${symbols.join("")}</svg>\n`,
+);
+writeFileSync(
+  join(outDir, "sprite-critical.svg"),
+  `<svg xmlns="http://www.w3.org/2000/svg" style="display:none">${critical.join("")}</svg>\n`,
 );
 
 const union = ICON_NAMES.map((name) => `  | "${name}"`).join("\n");

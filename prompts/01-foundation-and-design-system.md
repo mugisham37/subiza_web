@@ -464,7 +464,7 @@ write the justification against the 200KB budget first and get it approved.
 | `next` 16.3.5, `react` / `react-dom` 19.2.8 | Already installed. Do not upgrade in this phase. |
 | `next-intl` | Four locales. Chosen over Paraglide because our JS-disabled law makes this an RSC-first app, and `getTranslations` on the server ships **zero** catalogue to the client. Paraglide's tree-shaking only wins where client components exist — and ours barely do. |
 | `@radix-ui/react-slot` (~1.8KB) | `asChild` polymorphism on `Button`/`ButtonLink`. The only Radix package installed. |
-| `input-otp` (zero deps) | Exactly our OTP model: one invisible input behind painted slots, with `autocomplete="one-time-code"` SMS autofill. Directly matches §16.4 and the Rwandan SMS onboarding flow. |
+| ~~`input-otp`~~ **SUPERSEDED** | **Do not install.** Prompt 03 §3.2 reverses this: `input-otp` is a client component, so with JavaScript disabled the most important form in the product does not render — breaking this document's own law. Use a plain server-rendered `<input>` under six `aria-hidden` painted spans instead. Zero bytes, same SC 3.3.8 compliance. |
 | `class-variance-authority` | Variant declaration for components with real variant matrices (`Button`, `Tag`, `Banner`). |
 
 ## 6.2 Install — dev only
@@ -1394,8 +1394,8 @@ platform SMS autofill works. The slots are pure decoration with `aria-hidden`. T
 end on focus and click — *"a caret dropped mid-string is how a pasted code silently becomes 8 digits."*
 The focus ring is drawn on the container via `:focus-within`.
 
-`input-otp` (§6.1) implements exactly this model, which is why it is one of only two runtime UI
-dependencies.
+**Implement this with a plain server-rendered `<input>`, not a library.** (An earlier revision of §6.1
+named `input-otp`; Prompt 03 §3.2 reverses that — it is a client component and fails the JS-disabled law.)
 
 ## 16.5 Dialogs, popovers and disclosure
 

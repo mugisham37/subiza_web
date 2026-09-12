@@ -7,18 +7,24 @@ export function LiveCallCard({
   line,
   elapsed,
   compact,
+  liveLabel = "On a call now",
+  primaryLabel = "Take the call",
+  secondaryLabel = "Listen in",
 }: {
   who: string;
   line: string;
   elapsed: string;
   compact?: boolean;
+  liveLabel?: string;
+  primaryLabel?: string;
+  secondaryLabel?: string;
 }) {
   return (
     <article className="callcard">
       <div className="cc-top">
         <span className="cc-live">
           <i />
-          On a call now
+          {liveLabel}
         </span>
         <span className="cc-time">{elapsed}</span>
       </div>
@@ -32,9 +38,9 @@ export function LiveCallCard({
       <Waveform />
       <div className="cc-acts">
         <Button tone="primary" block={compact}>
-          Take the call
+          {primaryLabel}
         </Button>
-        {compact ? null : <Button tone="secondary">Listen in</Button>}
+        {compact ? null : <Button tone="secondary">{secondaryLabel}</Button>}
       </div>
       {compact ? null : <StatusDot tone="live">Live</StatusDot>}
     </article>

@@ -1,0 +1,2337 @@
+<title>Subiza — Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUBIZA DESIGN SYSTEM
+   Tokens are declared once, in full, on :root — the light theme.
+   Dark redefines only what changes, twice: once for the system
+   preference, once for the explicit toggle. No hex is ever inverted.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── Ground & surface ─────────────────────────────────────────── */
+  --ground:#FAF9F4;          /* warm paper. never pure white */
+  --surface:#FFFFFF;
+  --surface-2:#F2F1EA;       /* sunken: inputs, wells, code */
+  --surface-3:#EAE9E0;       /* hover on surface-2 */
+  --overlay:rgba(20,21,15,.42);
+
+  /* ── Ink ──────────────────────────────────────────────────────── */
+  --ink:#14150F;             /* 17.4:1 on ground */
+  --ink-2:#4A4C42;           /* 8.3:1  */
+  --ink-3:#6E7063;           /* 4.8:1 — the floor. nothing lighter carries text */
+  --ink-inv:#FAF9F4;
+
+  /* ── Hairlines. this system draws with lines, not shadows ─────── */
+  --rule:rgba(20,21,15,.09);
+  --rule-2:rgba(20,21,15,.16);
+  --rule-3:rgba(20,21,15,.28);
+
+  /* ── Signal: the lime. A FILL. NEVER A TEXT COLOUR. ───────────── */
+  --signal:#C6F24E;          /* 1.2:1 on ground — unusable as text, by design */
+  --signal-hi:#D3F86B;       /* hover */
+  --signal-lo:#B3E033;       /* pressed */
+  --signal-ink:#14150F;      /* 14.2:1 on signal — what sits ON the lime */
+  --signal-soft:#EEF9CE;     /* the wash: selected rows, soft callouts */
+  --signal-edge:#D6E9A0;
+  --signal-text:#3D5C10;     /* 7.3:1 — the ONLY green allowed to be text */
+
+  /* ── Panel: the deep surface. inverted regions, not dark mode ─── */
+  --panel:#1C2A12;
+  --panel-2:#26361A;
+  --panel-ink:#FFFFFF;       /* 15.1:1 */
+  --panel-ink-2:#B9C7A6;
+  --panel-rule:rgba(255,255,255,.14);
+
+  /* ── Status ───────────────────────────────────────────────────── */
+  --ok:#3D5C10; --ok-fill:#C6F24E; --ok-soft:#EEF9CE; --ok-edge:#D6E9A0;
+  --warn:#7A5300; --warn-fill:#F0B840; --warn-soft:#FCF0D6; --warn-edge:#EFD9A4;
+  --risk:#A6311D; --risk-fill:#C4442E; --risk-soft:#FBE7E2; --risk-edge:#F0C4B9;
+  --info:#2C4A6B; --info-fill:#5B87B8; --info-soft:#E4EDF6; --info-edge:#C0D5E8;
+  --live:#C4442E;            /* the on-air dot. red because a call is live */
+
+  /* ── Type ─────────────────────────────────────────────────────── */
+  --f-display:'Bricolage Grotesque','Bricolage Grotesque Fallback',Georgia,serif;
+  --f-body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --t-d1:clamp(2.6rem,1.6rem + 4.4vw,4.75rem);
+  --t-d2:clamp(2.1rem,1.45rem + 2.9vw,3.5rem);
+  --t-h1:clamp(1.7rem,1.3rem + 1.8vw,2.5rem);
+  --t-h2:clamp(1.35rem,1.15rem + .9vw,1.75rem);
+  --t-h3:1.125rem;
+  --t-h4:1rem;
+  --t-body-l:1.0625rem;
+  --t-body:.9375rem;
+  --t-body-s:.875rem;
+  --t-cap:.8125rem;
+  --t-label:.6875rem;
+
+  /* ── Space. 4px base, no arbitrary values anywhere ────────────── */
+  --s-1:2px;  --s-2:4px;  --s-3:6px;  --s-4:8px;  --s-5:12px;
+  --s-6:16px; --s-7:20px; --s-8:24px; --s-9:32px; --s-10:40px;
+  --s-11:56px;--s-12:72px;--s-13:96px;--s-14:128px;
+
+  /* ── Radius. three steps and a pill. deliberate, not uniform ──── */
+  --r-sm:4px;   /* inputs, chips, tags, small tiles */
+  --r-md:12px;  /* cards, sheets, buttons */
+  --r-lg:24px;  /* feature panels, media, the hero */
+  --r-pill:999px;
+
+  /* ── Elevation. four levels; three of them have no shadow ─────── */
+  --e-0:none;
+  --e-1:none;                                  /* hairline only */
+  --e-2:0 1px 2px rgba(20,21,15,.05);          /* raised, still grounded */
+  --e-3:0 6px 16px -4px rgba(20,21,15,.10),0 2px 4px rgba(20,21,15,.05);   /* menus */
+  --e-4:0 24px 48px -12px rgba(20,21,15,.20),0 8px 16px -8px rgba(20,21,15,.10); /* modal */
+
+  /* ── Motion. ceiling is 300ms. exits run ~20% faster than entries ─ */
+  --t-micro:120ms;  /* hover, focus, colour */
+  --t-ui:200ms;     /* the default: expand, slide, reveal */
+  --t-panel:280ms;  /* sheets, modals, drawers */
+  --t-exit:160ms;
+  --e-out:cubic-bezier(.22,1,.36,1);
+  --e-in:cubic-bezier(.55,0,1,.45);
+  --e-inout:cubic-bezier(.65,0,.35,1);
+  --e-spring:linear(0,.42 8.7%,.75 17.5%,.96 25.4%,1.06 32.1%,1.09 39.3%,1.06 47.5%,1.01 60.2%,.99 76.2%,1);
+
+  --nav-w:264px;
+  --measure:70ch;
+}
+
+:root:not([data-theme=light]){ @media (prefers-color-scheme:dark){
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}}
+:root[data-theme=dark]{
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}
+
+/* ═══ Base ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--f-body); font-size:var(--t-body); line-height:1.6;
+  font-feature-settings:"cv05" 1,"ss01" 1;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--f-display); font-weight:600; letter-spacing:-.022em; line-height:1.12; margin:0; text-wrap:balance}
+h1{font-size:var(--t-h1); font-variation-settings:"opsz" 40}
+h2{font-size:var(--t-h2); font-variation-settings:"opsz" 28}
+h3{font-size:var(--t-h3); font-variation-settings:"opsz" 18; letter-spacing:-.012em}
+h4{font-size:var(--t-h4); font-variation-settings:"opsz" 14; letter-spacing:-.006em}
+p{margin:0 0 var(--s-5)}
+a{color:inherit}
+svg{display:block}
+code{font-family:var(--f-mono); font-size:.85em; background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r-sm); padding:.1em .38em}
+::selection{background:var(--signal); color:var(--signal-ink)}
+
+/* Focus. Dual-tone so it survives any background it lands on.
+   WCAG 2.2 §2.4.13: perimeter ≥ 2px, ≥3:1 against adjacent colours. */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--ink); outline-offset:2px;
+  box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink);
+  border-radius:var(--r-sm);
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Button ─────────────────────────────────────────────────────── */
+.btn{
+  --bh:44px;
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-4);
+  height:var(--bh);padding:0 var(--s-7);border-radius:var(--r-pill);
+  font-family:var(--f-body);font-size:var(--t-body-s);font-weight:600;letter-spacing:-.008em;
+  border:1px solid transparent;background:none;color:var(--ink);
+  cursor:pointer;text-decoration:none;white-space:nowrap;position:relative;
+  transition:background var(--t-micro) var(--e-out),border-color var(--t-micro),
+             color var(--t-micro),transform var(--t-micro) var(--e-out),opacity var(--t-micro);
+}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:17px;height:17px;flex:none}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.42;pointer-events:none}
+
+.btn-primary{background:var(--signal);color:var(--signal-ink);border-color:var(--signal-lo)}
+.btn-primary:hover{background:var(--signal-hi)}
+.btn-primary:active{background:var(--signal-lo)}
+
+.btn-solid{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-solid:hover{background:var(--ink-2);border-color:var(--ink-2)}
+
+.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--rule-2)}
+.btn-secondary:hover{background:var(--surface-2);border-color:var(--rule-3)}
+
+.btn-ghost{color:var(--ink-2)}
+.btn-ghost:hover{background:var(--surface-2);color:var(--ink)}
+
+.btn-danger{background:var(--risk-fill);color:#fff;border-color:var(--risk-fill)}
+.btn-danger:hover{filter:brightness(1.08)}
+
+.btn-sm{--bh:34px;padding:0 var(--s-5);font-size:var(--t-cap);gap:var(--s-3)}
+.btn-sm svg{width:15px;height:15px}
+.btn-lg{--bh:54px;padding:0 var(--s-8);font-size:var(--t-body-l)}
+.btn-lg svg{width:19px;height:19px}
+.btn-icon{padding:0;width:var(--bh);border-radius:var(--r-pill)}
+.btn-block{display:flex;width:100%}
+
+/* loading: the label stays, so width never jumps */
+.btn-load{color:transparent!important;pointer-events:none}
+.btn-load::after{
+  content:"";position:absolute;inset:0;margin:auto;width:17px;height:17px;
+  border:2px solid currentColor;border-radius:50%;
+  border-top-color:transparent;color:var(--signal-ink);
+  animation:spin .7s linear infinite;
+}
+.btn-secondary.btn-load::after,.btn-ghost.btn-load::after{color:var(--ink)}
+.btn-solid.btn-load::after{color:var(--ground)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Chip / filter / tag ────────────────────────────────────────── */
+.chip{
+  display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);
+  border:1px solid var(--rule-2);border-radius:var(--r-pill);background:var(--surface);
+  font-size:var(--t-cap);font-weight:500;color:var(--ink-2);cursor:pointer;
+  transition:all var(--t-micro) var(--e-out);
+}
+.chip:hover{border-color:var(--rule-3);color:var(--ink)}
+.chip[aria-pressed=true],.chip.on{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink);font-weight:600}
+.chip svg{width:14px;height:14px}
+.chip .ct{display:inline-block;min-width:17px;height:17px;line-height:17px;text-align:center;border-radius:var(--r-pill);background:var(--surface-2);font-family:var(--f-mono);font-size:10px;padding:0 4px}
+.chip.on .ct{background:rgba(20,21,15,.14)}
+
+.tag{display:inline-flex;align-items:center;gap:var(--s-2);padding:2px var(--s-4);border-radius:var(--r-sm);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.06em;text-transform:uppercase;font-weight:500;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2)}
+.tag-ok{background:var(--ok-soft);border-color:var(--ok-edge);color:var(--ok)}
+.tag-warn{background:var(--warn-soft);border-color:var(--warn-edge);color:var(--warn)}
+.tag-risk{background:var(--risk-soft);border-color:var(--risk-edge);color:var(--risk)}
+.tag-info{background:var(--info-soft);border-color:var(--info-edge);color:var(--info)}
+
+/* status dot — shape as well as colour, so it is not colour-only */
+.dot{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);font-weight:500}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot-ok::before{background:var(--ok-fill);box-shadow:0 0 0 3px var(--ok-soft)}
+.dot-warn::before{background:var(--warn-fill);box-shadow:0 0 0 3px var(--warn-soft);border-radius:2px}
+.dot-risk::before{background:var(--risk-fill);box-shadow:0 0 0 3px var(--risk-soft);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0;width:9px;height:9px}
+.dot-live::before{background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in oklab,var(--live) 55%,transparent)}55%{box-shadow:0 0 0 6px transparent}}
+
+/* ── Field ──────────────────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:var(--s-3);margin-bottom:var(--s-6)}
+.field > label{font-size:var(--t-body-s);font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4)}
+.field > label .opt{font-weight:400;color:var(--ink-3);font-size:var(--t-cap)}
+.hint{font-size:var(--t-cap);color:var(--ink-3);margin:0}
+.inp{
+  height:48px;padding:0 var(--s-5);width:100%;
+  background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  font-family:var(--f-body);font-size:var(--t-body);color:var(--ink);
+  transition:border-color var(--t-micro),background var(--t-micro),box-shadow var(--t-micro);
+}
+textarea.inp{height:auto;padding:var(--s-5);min-height:110px;line-height:1.6;resize:vertical}
+.inp::placeholder{color:var(--ink-3)}
+.inp:hover{border-color:var(--rule-3)}
+.inp:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.inp:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed}
+.inp[aria-invalid=true]{border-color:var(--risk-fill);background:var(--risk-soft)}
+.inp[aria-invalid=true]:focus{box-shadow:0 0 0 3px var(--risk-soft)}
+.err{display:flex;align-items:flex-start;gap:var(--s-3);font-size:var(--t-cap);color:var(--risk);margin:0}
+.err svg{width:14px;height:14px;flex:none;margin-top:2px}
+.inpwrap{position:relative;display:flex;align-items:center}
+.inpwrap .lead{position:absolute;left:var(--s-5);color:var(--ink-3);pointer-events:none}
+.inpwrap .lead svg{width:17px;height:17px}
+.inpwrap .lead + .inp{padding-left:42px}
+.inpwrap .trail{position:absolute;right:var(--s-3)}
+
+/* phone field — country code is a real control, not decoration */
+.phonefield{display:flex;border:1px solid var(--rule-2);border-radius:var(--r-sm);background:var(--surface);overflow:hidden;transition:border-color var(--t-micro),box-shadow var(--t-micro)}
+.phonefield:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.phonefield .cc{display:flex;align-items:center;gap:var(--s-3);height:48px;padding:0 var(--s-5);border-right:1px solid var(--rule);background:var(--surface-2);font-family:var(--f-mono);font-size:var(--t-body-s);color:var(--ink);cursor:pointer;border:none;flex:none}
+.phonefield .inp{border:none;background:none;box-shadow:none!important;font-family:var(--f-mono);letter-spacing:.04em}
+
+/* OTP — ONE input, six slots.
+   The six slots are decoration; the control underneath is a single
+   <input>, because a six-input field breaks paste, breaks iOS autofill
+   and is named as a failure example in the WCAG 2.2 SC 3.3.8
+   Understanding document. See the Forms section for the full reasoning. */
+.otp{position:relative;display:flex;gap:var(--s-4)}
+.otp > input{
+  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  border:none;background:none;padding:0;margin:0;
+  font-family:var(--f-mono);font-size:1.35rem;letter-spacing:1em;text-indent:.5em;
+  color:transparent;caret-color:transparent;
+}
+.otp > input:focus{outline:none}
+.otp .slot{
+  flex:1;min-width:0;height:58px;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:1.35rem;font-weight:600;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  transition:background var(--t-micro),border-color var(--t-micro),transform var(--t-micro) var(--e-out);
+}
+.otp .slot.filled{background:var(--signal-soft);border-color:var(--signal-edge)}
+.otp > input:focus ~ .slots .slot.cursor,.otp .slots .slot.cursor{border-color:var(--ink);background:var(--surface);transform:translateY(-2px)}
+.otp .slot.cursor::after{content:"";width:2px;height:24px;background:var(--ink);border-radius:1px;animation:caret 1.1s steps(1) infinite}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.otp .slot.cursor::after{animation:none}}
+.otp .slots{display:flex;gap:var(--s-4);width:100%}
+.otp:focus-within{border-radius:var(--r-sm);outline:2px solid var(--ink);outline-offset:4px;box-shadow:0 0 0 6px var(--ground),0 0 0 8px var(--ink)}
+.otp[aria-invalid=true] .slot{border-color:var(--risk-fill);background:var(--risk-soft)}
+
+/* toggle */
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+
+/* choice card — a radio you can actually hit on a phone */
+.choice{display:block;position:relative;cursor:pointer}
+.choice input{position:absolute;opacity:0;width:0;height:0}
+.choice .cbody{
+  display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);transition:all var(--t-ui) var(--e-out);height:100%;
+}
+.choice:hover .cbody{border-color:var(--rule-3);background:var(--surface-2)}
+.choice input:checked + .cbody{border-color:var(--signal-lo);background:var(--signal-soft);box-shadow:inset 0 0 0 1px var(--signal-lo)}
+.choice input:focus-visible + .cbody{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.choice .cico{width:38px;height:38px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none;transition:background var(--t-ui)}
+.choice input:checked + .cbody .cico{background:var(--signal);color:var(--signal-ink)}
+.choice .cico svg{width:19px;height:19px}
+.choice h4{margin-bottom:2px}
+.choice .cd{font-size:var(--t-cap);color:var(--ink-2);margin:0;line-height:1.5}
+.choice .cmark{position:absolute;top:var(--s-6);right:var(--s-6);width:20px;height:20px;border:1px solid var(--rule-3);border-radius:50%;display:grid;place-items:center;transition:all var(--t-micro)}
+.choice input:checked ~ .cbody .cmark,.choice input:checked + .cbody .cmark{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.choice .cmark svg{width:12px;height:12px;opacity:0;transition:opacity var(--t-micro)}
+.choice input:checked + .cbody .cmark svg{opacity:1}
+
+/* ── Card ───────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.card-i{padding:0;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);padding:var(--s-6) var(--s-7);border-bottom:1px solid var(--rule)}
+.card-bd{padding:var(--s-7)}
+.card-ft{padding:var(--s-5) var(--s-7);border-top:1px solid var(--rule);background:var(--surface-2);display:flex;gap:var(--s-4);align-items:center;justify-content:space-between}
+.card-link{display:block;text-decoration:none;transition:border-color var(--t-ui) var(--e-out),transform var(--t-ui) var(--e-out)}
+.card-link:hover{border-color:var(--rule-3);transform:translateY(-2px)}
+
+/* stat */
+.stat{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-6) var(--s-7);position:relative;overflow:hidden}
+.stat .sl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+.stat .sv{font-family:var(--f-display);font-size:2.35rem;font-variation-settings:"opsz" 36;font-weight:600;letter-spacing:-.035em;line-height:1;display:flex;align-items:baseline;gap:var(--s-3)}
+.stat .sv small{font-size:.95rem;font-weight:500;color:var(--ink-3);letter-spacing:0;font-family:var(--f-body)}
+.stat .sd{display:flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-4)}
+.stat .sd svg{width:13px;height:13px}
+.stat .up{color:var(--signal-text);font-weight:600}
+.stat .down{color:var(--risk);font-weight:600}
+.stat-key{background:var(--signal-soft);border-color:var(--signal-edge)}
+
+/* banner */
+.banner{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);align-items:flex-start}
+.banner svg.bi{width:19px;height:19px;flex:none;margin-top:1px}
+.banner h4{margin-bottom:2px}
+.banner p{font-size:var(--t-body-s);color:var(--ink-2);margin:0}
+.banner .ba{margin-left:auto;flex:none}
+.banner-ok{background:var(--ok-soft);border-color:var(--ok-edge)} .banner-ok svg.bi{color:var(--ok)}
+.banner-warn{background:var(--warn-soft);border-color:var(--warn-edge)} .banner-warn svg.bi{color:var(--warn)}
+.banner-risk{background:var(--risk-soft);border-color:var(--risk-edge)} .banner-risk svg.bi{color:var(--risk)}
+.banner-info{background:var(--info-soft);border-color:var(--info-edge)} .banner-info svg.bi{color:var(--info)}
+
+/* toast */
+.toast{display:flex;align-items:center;gap:var(--s-5);background:var(--panel);color:var(--panel-ink);border:1px solid var(--panel-rule);border-radius:var(--r-md);padding:var(--s-5) var(--s-6);box-shadow:var(--e-3);max-width:400px}
+.toast svg{width:18px;height:18px;flex:none;color:var(--signal)}
+.toast .tt{font-size:var(--t-body-s);font-weight:500}
+.toast button{margin-left:auto;background:none;border:none;color:var(--panel-ink-2);cursor:pointer;padding:var(--s-2);display:grid;place-items:center;border-radius:var(--r-sm)}
+.toast button:hover{color:var(--panel-ink);background:rgba(255,255,255,.1)}
+
+/* empty state */
+.empty{text-align:center;padding:var(--s-11) var(--s-7);max-width:420px;margin:0 auto}
+.empty .eart{margin:0 auto var(--s-7);width:112px;height:84px}
+.empty h3{margin-bottom:var(--s-4)}
+.empty p{font-size:var(--t-body-s);color:var(--ink-2);margin-bottom:var(--s-7)}
+
+/* skeleton */
+.sk{background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface-3) 37%,var(--surface-2) 63%);
+  background-size:400% 100%;animation:shim 1.4s ease-in-out infinite;border-radius:var(--r-sm)}
+@keyframes shim{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none;background:var(--surface-2)}}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRODUCT COMPONENTS
+   The parts that only exist because Subiza answers phones.
+   Nothing here is a repurposed generic; nothing here is stock art.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Live call card ─────────────────────────────────────────────── */
+.callcard{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-7);position:relative;overflow:hidden;isolation:isolate}
+.callcard::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(120% 90% at 88% -12%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.cc-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-live{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);font-weight:600}
+.cc-live i{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+.cc-time{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2);font-variant-numeric:tabular-nums}
+.cc-who{display:flex;align-items:center;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-av{width:44px;height:44px;border-radius:50%;background:var(--panel-2);border:1px solid var(--panel-rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:1rem;flex:none}
+.cc-who b{display:block;font-size:var(--t-body-l);font-weight:600;letter-spacing:-.01em}
+.cc-who span{display:block;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2)}
+.cc-acts{display:flex;gap:var(--s-4);margin-top:var(--s-6)}
+.cc-acts .btn-secondary{background:var(--panel-2);border-color:var(--panel-rule);color:var(--panel-ink)}
+.cc-acts .btn-secondary:hover{background:#314323;border-color:rgba(255,255,255,.24)}
+
+/* the waveform. bars are driven by CSS custom props, not a canvas —
+   it survives 2G, costs nothing, and honours reduced motion. */
+.wave{display:flex;align-items:center;justify-content:space-between;gap:3px;height:44px;padding:0 var(--s-2)}
+.wave i{flex:0 1 4px;min-width:2px;max-width:4px;border-radius:var(--r-pill);background:var(--signal);
+  height:var(--h,20%);transform-origin:center;
+  animation:wv 1.15s var(--e-inout) infinite alternate;animation-delay:var(--d,0s)}
+@keyframes wv{from{transform:scaleY(.28)}to{transform:scaleY(1)}}
+.wave.muted i{background:var(--panel-ink-2);animation:none;transform:scaleY(.3)}
+@media (prefers-reduced-motion:reduce){.wave i{animation:none}}
+
+/* ── Transcript stream ──────────────────────────────────────────── */
+.tscript{display:flex;flex-direction:column;gap:var(--s-5)}
+.turn{display:flex;gap:var(--s-5);max-width:100%}
+.turn .tav{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.02em}
+.turn.ai .tav{background:var(--signal);color:var(--signal-ink)}
+.turn.human .tav{background:var(--surface-3);color:var(--ink-2)}
+.turn .tb{flex:1;min-width:0}
+.turn .tmeta{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-3);flex-wrap:wrap}
+.turn .tmeta b{font-size:var(--t-cap);font-weight:600}
+.turn .tmeta time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.turn .tt{font-size:var(--t-body-s);line-height:1.62;color:var(--ink);background:var(--surface-2);border:1px solid var(--rule);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);margin:0}
+.turn.ai .tt{background:var(--signal-soft);border-color:var(--signal-edge)}
+.turn .tt em{font-style:normal;color:var(--ink-3)}
+/* the original-language line, always shown under a translation */
+.turn .torig{font-size:var(--t-cap);color:var(--ink-3);margin:var(--s-3) 0 0;padding-left:var(--s-5);border-left:2px solid var(--rule-2)}
+/* confidence: never a bare percentage, always a judgement */
+.conf{display:inline-flex;align-items:center;gap:var(--s-2);font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.conf i{display:flex;gap:1.5px}
+.conf i b{width:3px;height:9px;border-radius:1px;background:var(--rule-3)}
+.conf.hi i b:nth-child(-n+3){background:var(--signal-lo)}
+.conf.mid i b:nth-child(-n+2){background:var(--warn-fill)}
+.conf.lo i b:nth-child(1){background:var(--risk-fill)}
+/* the escalation marker in the stream */
+.tmark{display:flex;align-items:center;gap:var(--s-4);margin:var(--s-2) 0}
+.tmark::before,.tmark::after{content:"";height:1px;background:var(--risk-edge);flex:1}
+.tmark span{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--risk);font-weight:600;white-space:nowrap}
+.tmark svg{width:13px;height:13px}
+
+/* ── Channel tile ───────────────────────────────────────────────── */
+.chan{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);transition:all var(--t-ui) var(--e-out)}
+.chan:hover{border-color:var(--rule-3)}
+.chan .cico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:none;color:#fff}
+.chan .cico svg{width:21px;height:21px}
+.chan-wa .cico{background:#25D366;color:#0B2C17}
+.chan-ig .cico{background:linear-gradient(135deg,#F58529,#DD2A7B 52%,#8134AF)}
+.chan-tg .cico{background:#2AABEE}
+.chan-ph .cico{background:var(--ink);color:var(--ground)}
+.chan .cmeta{flex:1;min-width:0}
+.chan .cmeta b{display:block;font-size:var(--t-body-s);font-weight:600}
+.chan .cmeta span{display:block;font-size:var(--t-cap);color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chan.is-off{background:var(--surface-2);border-style:dashed}
+.chan.is-off .cico{filter:grayscale(1);opacity:.5}
+.chan.is-err{border-color:var(--risk-edge);background:var(--risk-soft)}
+
+/* ── Credit meter ───────────────────────────────────────────────── */
+.credit{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);padding:var(--s-7)}
+.credit-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-5)}
+.credit-v{font-family:var(--f-display);font-size:1.9rem;font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.03em;line-height:1}
+.credit-v small{font-family:var(--f-mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.06em;margin-left:6px}
+.meter{height:10px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;border-radius:var(--r-pill);background:var(--signal);
+  width:var(--pct,50%);transition:width 600ms var(--e-out)}
+.meter.warn i{background:var(--warn-fill)} .meter.risk i{background:var(--risk-fill)}
+/* the threshold ticks are visible, so "low" is a place, not a surprise */
+.meter::after{content:"";position:absolute;top:0;bottom:0;left:20%;width:1px;background:var(--rule-3)}
+.credit-ft{display:flex;justify-content:space-between;gap:var(--s-5);margin-top:var(--s-4);font-size:var(--t-cap);color:var(--ink-2)}
+.credit-ft b{font-weight:600;color:var(--ink)}
+
+/* ── Forwarding code card ───────────────────────────────────────── */
+/* the single most important object in activation: a dial string. */
+.fcode{border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.fcode-h{padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:var(--s-4);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.fcode-h svg{width:14px;height:14px}
+.fcode-b{padding:var(--s-7) var(--s-6);text-align:center;background:var(--surface-2)}
+.fcode-s{font-family:var(--f-mono);font-size:clamp(1.25rem,1rem + 1.2vw,1.75rem);font-weight:600;letter-spacing:.01em;color:var(--ink);line-height:1.3;overflow-wrap:break-word}
+.fcode-s span{display:inline-block;white-space:nowrap}
+.fcode-s b{color:var(--signal-text);font-weight:600;background:var(--signal-soft);border-radius:3px;padding:0 3px;box-decoration-break:clone}
+.fcode-n{font-size:var(--t-cap);color:var(--ink-2);margin:var(--s-5) 0 0}
+.fcode-a{display:flex;gap:var(--s-4);padding:var(--s-5) var(--s-6);border-top:1px solid var(--rule)}
+.fcode-a .btn{flex:1}
+.fcode-plat{display:flex;gap:var(--s-4);align-items:flex-start;margin:0;padding:0 var(--s-6) var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.fcode-plat svg{width:14px;height:14px;flex:none;margin-top:2px}
+.fcode-plat b{color:var(--ink-2);font-weight:600}
+
+/* ── Escalation ladder ──────────────────────────────────────────── */
+.ladder{display:flex;flex-direction:column;gap:0;counter-reset:rung}
+.rung{display:flex;gap:var(--s-6);padding:var(--s-5) 0;position:relative}
+.rung::before{counter-increment:rung;content:counter(rung);
+  width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:11px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-2);z-index:1}
+.rung::after{content:"";position:absolute;left:12.5px;top:34px;bottom:-8px;width:1px;background:var(--rule-2)}
+.rung:last-child::after{display:none}
+.rung.done::before{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.rung.now::before{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.rung.now{background:linear-gradient(90deg,var(--signal-soft),transparent 70%);border-radius:var(--r-sm);padding-left:var(--s-4);margin-left:calc(var(--s-4) * -1)}
+.rung .rb b{display:block;font-size:var(--t-body-s);font-weight:600}
+.rung .rb span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.rung .rt{margin-left:auto;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink-3);white-space:nowrap;padding-left:var(--s-5)}
+
+/* ── Weekly report — rendered as the WhatsApp message it actually is ─ */
+.wamsg{max-width:340px;background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden}
+.wamsg-h{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);background:#075E54;color:#fff}
+.wamsg-h .m{width:28px;height:28px;border-radius:50%;background:var(--signal);display:grid;place-items:center;color:var(--signal-ink);flex:none}
+.wamsg-h .m svg{width:15px;height:15px}
+.wamsg-h b{font-size:var(--t-body-s);font-weight:600}
+.wamsg-h span{display:block;font-size:10px;opacity:.8}
+.wamsg-b{padding:var(--s-6);background:var(--surface-2);background-image:radial-gradient(var(--rule) .5px,transparent .5px);background-size:12px 12px}
+.wabub{background:var(--surface);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);font-size:var(--t-body-s);line-height:1.6;box-shadow:var(--e-2);position:relative}
+.wabub .big{font-family:var(--f-display);font-size:1.6rem;font-variation-settings:"opsz" 26;font-weight:600;letter-spacing:-.03em;display:block;line-height:1.1;margin:var(--s-3) 0}
+.wabub a{color:var(--signal-text);font-weight:600}
+.wabub time{display:block;text-align:right;font-family:var(--f-mono);font-size:10px;color:var(--ink-3);margin-top:var(--s-3)}
+
+/* ── Coverage ring — "what your agent can actually answer" ──────── */
+.ring{display:flex;align-items:center;gap:var(--s-6)}
+.ring svg{width:76px;height:76px;flex:none;transform:rotate(-90deg)}
+.ring .rtrack{fill:none;stroke:var(--surface-3);stroke-width:9}
+.ring .rval{fill:none;stroke:var(--signal-lo);stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:var(--dash,201);stroke-dashoffset:var(--off,60);
+  transition:stroke-dashoffset 800ms var(--e-out)}
+.ring .rnum{font-family:var(--f-display);font-size:1.5rem;font-variation-settings:"opsz" 24;font-weight:600;letter-spacing:-.03em;line-height:1}
+.ring .rlab{font-size:var(--t-cap);color:var(--ink-2);margin-top:2px}
+
+/* ── Data viz. hand-drawn SVG. no chart library, no 90KB payload. ── */
+.spark{display:block;width:100%;height:40px;overflow:visible}
+.spark path.ln{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.spark path.ar{fill:var(--signal-soft);stroke:none}
+.spark circle{fill:var(--signal);stroke:var(--surface);stroke-width:2}
+.bars{display:flex;align-items:flex-end;gap:var(--s-3);height:120px}
+.bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:var(--s-3);height:100%}
+.bars .b i{width:100%;max-width:28px;background:var(--surface-3);border-radius:3px 3px 0 0;height:var(--h,20%);
+  transition:height 600ms var(--e-out),background var(--t-micro)}
+.bars .b.on i{background:var(--signal)}
+.bars .b:hover i{background:var(--signal-lo)}
+.bars .b span{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* ── Nav: desktop rail ──────────────────────────────────────────── */
+.applayout{display:grid;grid-template-columns:224px 1fr;min-height:340px;background:var(--ground);border-radius:var(--r-md);overflow:hidden;border:1px solid var(--rule)}
+.appnav{background:var(--surface);border-right:1px solid var(--rule);padding:var(--s-5)}
+.appnav a{display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:var(--t-body-s);font-weight:500;transition:all var(--t-micro)}
+.appnav a svg{width:16px;height:16px;opacity:.75}
+.appnav a:hover{background:var(--surface-2);color:var(--ink)}
+.appnav a.on{background:var(--signal);color:var(--signal-ink);font-weight:600}
+.appnav a.on svg{opacity:1}
+.appnav a .nb{margin-left:auto;font-family:var(--f-mono);font-size:10px;background:var(--risk-fill);color:#fff;border-radius:var(--r-pill);padding:1px 6px}
+.appbody{padding:var(--s-7)}
+
+/* ── Nav: the phone. NOT the rail, reflowed — a different component. ─ */
+.phone{width:290px;border:1px solid var(--rule-2);border-radius:26px;overflow:hidden;background:var(--ground);box-shadow:var(--e-3);flex:none}
+.phone-top{height:26px;background:var(--surface);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;padding:0 var(--s-5);font-family:var(--f-mono);font-size:9px;color:var(--ink-3)}
+.phone-bd{padding:var(--s-6);min-height:200px}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-3) var(--s-2) var(--s-5)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:var(--s-3) 0;text-decoration:none;color:var(--ink-3);font-size:9.5px;font-weight:600;position:relative;min-height:48px;justify-content:center;border-radius:8px;transition:color var(--t-micro)}
+.tabbar a svg{width:19px;height:19px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2.5px;border-radius:var(--r-pill);background:var(--signal-lo)}
+.tabbar a .nb{position:absolute;top:2px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;background:var(--risk-fill);border:1.5px solid var(--surface)}
+
+/* ── Sheet / modal ──────────────────────────────────────────────── */
+.sheet{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:var(--s-7);box-shadow:var(--e-4);position:relative}
+.sheet::before{content:"";position:absolute;top:var(--s-4);left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:var(--r-pill);background:var(--rule-3)}
+.sheet h3{margin:var(--s-5) 0 var(--s-4)}
+.modal{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg);padding:var(--s-8);box-shadow:var(--e-4);max-width:460px}
+
+/* ── Table → list, on small screens ─────────────────────────────── */
+.rowlist{border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.rowitem{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background var(--t-micro)}
+.rowitem:last-child{border-bottom:none}
+.rowitem:hover{background:var(--surface-2)}
+.rowitem .rav{width:36px;height:36px;border-radius:50%;background:var(--surface-2);border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.8rem;flex:none}
+.rowitem .rmain{flex:1;min-width:0}
+.rowitem .rmain b{display:block;font-size:var(--t-body-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rmain span{display:block;font-size:var(--t-cap);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rside{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:var(--s-2)}
+.rowitem .rside time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* shell */
+html{overflow-x:clip}
+body{overflow-x:clip}
+
+/* ── Studio toolbar (not part of the product) ───────────────────── */
+.bar{position:sticky;top:0;z-index:80;display:flex;align-items:center;flex-wrap:wrap;
+  gap:var(--s-4) var(--s-5);min-height:56px;padding:var(--s-4) var(--s-7);
+  background:var(--panel);color:var(--panel-ink);border-bottom:1px solid var(--panel-rule)}
+.bar > *{min-width:0}
+.bar .lg{display:flex;align-items:center;gap:var(--s-4);flex:none}
+.bar .lg .mk{width:26px;height:26px;border-radius:7px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.bar .lg .mk svg{width:15px;height:15px}
+.bar .lg b{font-family:var(--f-display);font-size:.95rem;font-weight:700;letter-spacing:-.022em}
+.bar .lg span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-ink-2);display:block;margin-top:-2px}
+.bar .sp{margin-left:auto}
+.seg{display:flex;gap:2px;background:rgba(255,255,255,.09);border-radius:var(--r-pill);padding:3px}
+.seg button{border:none;background:none;color:var(--panel-ink-2);font:inherit;font-size:var(--t-cap);font-weight:600;
+  padding:6px var(--s-6);border-radius:var(--r-pill);cursor:pointer;min-height:32px;transition:all var(--t-micro)}
+.seg button[aria-pressed=true]{background:var(--signal);color:var(--signal-ink)}
+.bar .mini{display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);border-radius:var(--r-pill);
+  border:1px solid var(--panel-rule);background:none;color:var(--panel-ink-2);font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all var(--t-micro)}
+.bar .mini:hover{color:var(--panel-ink);border-color:rgba(255,255,255,.3)}
+.bar .mini svg{width:13px;height:13px}
+.bar select{height:32px;max-width:min(230px,42vw);border-radius:var(--r-pill);border:1px solid var(--panel-rule);background:rgba(255,255,255,.06);
+  color:var(--panel-ink);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;padding:0 var(--s-4);cursor:pointer}
+.bar select option{color:var(--ink);background:var(--surface)}
+
+/* ── Modes ──────────────────────────────────────────────────────── */
+.mode{display:none} .mode.on{display:block}
+
+/* ── The product frame ──────────────────────────────────────────── */
+.auth{min-height:calc(100vh - 56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr)}
+.authmain{display:flex;flex-direction:column;padding:var(--s-9) var(--s-10) var(--s-11);background:var(--ground)}
+.authaside{background:var(--surface-2);border-left:1px solid var(--rule);padding:var(--s-9) var(--s-10);display:flex;flex-direction:column;justify-content:center;gap:var(--s-7)}
+.authhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-6);margin-bottom:var(--s-10)}
+.blogo{display:flex;align-items:center;gap:var(--s-4)}
+.blogo .mk{width:30px;height:30px;border-radius:8px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.blogo .mk svg{width:17px;height:17px}
+.blogo b{font-family:var(--f-display);font-size:1.05rem;font-weight:700;letter-spacing:-.026em}
+.authbody{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:440px;width:100%;margin:0 auto}
+.authfoot{margin-top:var(--s-10);max-width:440px;width:100%;margin-left:auto;margin-right:auto}
+
+/* progress: five marks, no numbers — the flow is short enough that a
+   counter is noise, but a shape that fills is reassurance */
+.prog{display:flex;gap:var(--s-3);margin-bottom:var(--s-9)}
+.prog i{flex:1;height:3px;border-radius:var(--r-pill);background:var(--surface-3);transition:background 400ms var(--e-out)}
+.prog i.done{background:var(--signal-lo)} .prog i.now{background:var(--signal)}
+
+.screen{display:none;animation:sin var(--t-panel) var(--e-out)}
+.screen.on{display:block}
+@keyframes sin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.screen.back{animation:sinb var(--t-panel) var(--e-out)}
+@keyframes sinb{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen,.screen.back{animation:none}}
+
+.screen h1{font-family:var(--f-display);font-size:clamp(1.55rem,1.3rem + 1.1vw,2rem);font-variation-settings:"opsz" 32;
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:0 0 var(--s-5);text-wrap:balance}
+.screen .sub{color:var(--ink-2);font-size:var(--t-body);margin:0 0 var(--s-8);line-height:1.6}
+.screen .sub a{color:var(--signal-text);font-weight:600}
+.microfoot{font-size:var(--t-cap);color:var(--ink-3);text-align:center;margin:var(--s-6) 0 0}
+.microfoot a{color:var(--signal-text);font-weight:600}
+.backlink{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);font-weight:600;color:var(--ink-2);
+  background:none;border:none;cursor:pointer;padding:var(--s-3) 0;margin-bottom:var(--s-6)}
+.backlink:hover{color:var(--ink)} .backlink svg{width:14px;height:14px}
+
+/* ── Entry banners ──────────────────────────────────────────────── */
+.entryb{display:flex;gap:var(--s-5);align-items:flex-start;padding:var(--s-5) var(--s-6);border-radius:var(--r-md);
+  background:var(--signal-soft);border:1px solid var(--signal-edge);margin-bottom:var(--s-8);font-size:var(--t-body-s)}
+.entryb svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--signal-text)}
+.entryb b{font-weight:600}
+.entryb p{margin:0;color:var(--ink)}
+
+/* ── Delivery fallbacks ─────────────────────────────────────────── */
+.fallbacks{margin-top:var(--s-7);border-top:1px solid var(--rule);padding-top:var(--s-6)}
+.fbrow{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-5);border:1px solid var(--rule-2);
+  border-radius:var(--r-sm);background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);
+  margin-bottom:var(--s-4);transition:all var(--t-micro) var(--e-out)}
+.fbrow:hover:not(:disabled){border-color:var(--rule-3);background:var(--surface-2)}
+.fbrow:disabled{opacity:.45;cursor:not-allowed}
+.fbrow .fi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none;background:var(--surface-2)}
+.fbrow .fi svg{width:16px;height:16px}
+.fbrow.wa .fi{background:#25D366;color:#0B2C17}
+.fbrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fbrow span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fbrow .fw{flex:1;min-width:0}
+.fbrow .ft{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);white-space:nowrap;text-transform:uppercase;letter-spacing:.08em}
+
+/* ── Greeting preview (aside) ───────────────────────────────────── */
+.gprev{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-8);position:relative;overflow:hidden}
+.gprev::before{content:"";position:absolute;inset:0;background:radial-gradient(110% 80% at 85% -10%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.gprev > *{position:relative}
+.gprev .gl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);margin-bottom:var(--s-6);display:flex;align-items:center;gap:var(--s-4)}
+.gprev .gl svg{width:14px;height:14px}
+.gprev .gq{font-family:var(--f-display);font-size:1.35rem;font-variation-settings:"opsz" 22;font-weight:500;letter-spacing:-.018em;line-height:1.35;margin:0}
+.gprev .gq mark{background:none;color:var(--signal);font-weight:600}
+.gprev .gt{font-size:var(--t-cap);color:var(--panel-ink-2);margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--panel-rule)}
+
+.asidecard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.asidecard h3{margin-bottom:var(--s-5);font-size:var(--t-h4)}
+.asidecard ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.asidecard li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink-2);line-height:1.55;align-items:flex-start}
+.asidecard li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--signal-text)}
+.asidecard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.asidepane{display:none} .asidepane.on{display:grid;gap:var(--s-6);animation:sin var(--t-panel) var(--e-out)}
+@media (prefers-reduced-motion:reduce){.asidepane.on{animation:none}}
+
+/* ── Consent ────────────────────────────────────────────────────── */
+.summ{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);padding:var(--s-7);margin-bottom:var(--s-7)}
+.summ ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.summ li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink);line-height:1.55;align-items:flex-start}
+.summ li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--ink-3)}
+.summ .sfoot{margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--rule);font-size:var(--t-cap);color:var(--ink-3)}
+.summ .sfoot a{color:var(--signal-text);font-weight:600}
+.consent{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);cursor:pointer;margin-bottom:var(--s-5);transition:all var(--t-ui) var(--e-out)}
+.consent:hover{border-color:var(--rule-3)}
+.consent input{position:absolute;opacity:0;width:0;height:0}
+.consent .cbx{width:22px;height:22px;border:1.5px solid var(--rule-3);border-radius:5px;flex:none;display:grid;place-items:center;
+  margin-top:1px;transition:all var(--t-micro) var(--e-out);background:var(--surface)}
+.consent .cbx svg{width:13px;height:13px;opacity:0;color:var(--signal-ink);transform:scale(.6);transition:all var(--t-micro) var(--e-out)}
+.consent input:checked ~ .cw .cbx,.consent input:checked + .cbx{background:var(--signal);border-color:var(--signal-lo)}
+.consent input:checked + .cbx svg{opacity:1;transform:none}
+.consent input:focus-visible + .cbx{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.consent input:checked ~ *{}
+.consent.checked{border-color:var(--signal-lo);background:var(--signal-soft)}
+.consent .cw b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.consent .cw span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.consent .req{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-left:var(--s-3)}
+.receipt{font-family:var(--f-mono);font-size:10.5px;line-height:1.7;color:var(--ink-3);background:var(--surface-2);
+  border:1px solid var(--rule);border-radius:var(--r-sm);padding:var(--s-5);margin:var(--s-6) 0 0;overflow-x:auto}
+.receipt b{color:var(--ink-2);font-weight:500}
+.notyet{display:flex;gap:var(--s-4);margin-top:var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.notyet svg{width:14px;height:14px;flex:none;margin-top:2px}
+
+/* ── Recovery hub ───────────────────────────────────────────────── */
+.recopt{display:flex;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);margin-bottom:var(--s-5);
+  transition:all var(--t-ui) var(--e-out)}
+.recopt:hover{border-color:var(--signal-lo);background:var(--signal-soft);transform:translateY(-1px)}
+.recopt .ri{width:36px;height:36px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.recopt .ri svg{width:18px;height:18px}
+.recopt b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.recopt span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.recopt .ra{margin-left:auto;align-self:center;color:var(--ink-3)}
+.recopt .ra svg{width:16px;height:16px}
+
+/* ── Workspace chooser ──────────────────────────────────────────── */
+.wsopt{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);
+  border-radius:var(--r-md);background:var(--surface);cursor:pointer;font:inherit;color:var(--ink);text-align:left;
+  margin-bottom:var(--s-4);transition:all var(--t-ui) var(--e-out)}
+.wsopt:hover{border-color:var(--signal-lo);background:var(--signal-soft)}
+.wsopt .wa{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--rule);
+  display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.9rem;flex:none}
+.wsopt b{display:block;font-size:var(--t-body-s);font-weight:600}
+.wsopt span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+
+/* ── Done ───────────────────────────────────────────────────────── */
+.donemark{width:76px;height:76px;border-radius:50%;background:var(--signal);color:var(--signal-ink);
+  display:grid;place-items:center;margin-bottom:var(--s-8);position:relative}
+.donemark svg{width:34px;height:34px;stroke-dasharray:32;stroke-dashoffset:32;animation:draw 520ms var(--e-out) 160ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.donemark::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--signal-lo);animation:ripple 1.6s var(--e-out) 2}
+@keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.donemark svg{animation:none;stroke-dashoffset:0}.donemark::after{animation:none;opacity:0}}
+
+/* ── SPEC MODE ──────────────────────────────────────────────────── */
+.specwrap{max-width:1120px;margin:0 auto;padding:var(--s-11) var(--s-10) var(--s-13)}
+.specwrap .sechd{margin:var(--s-13) 0 var(--s-7)}
+.specwrap .sechd:first-of-type{margin-top:var(--s-9)}
+.specwrap .sechd .n{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-5)}
+.specwrap .sechd .n::before{content:"";display:inline-block;width:18px;height:1px;background:var(--rule-3);vertical-align:middle;margin-right:var(--s-4)}
+.specwrap h2{font-family:var(--f-display);font-size:clamp(1.4rem,1.15rem + 1vw,1.85rem);font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.028em;margin:0}
+.specwrap > p,.sechd + p{max-width:70ch;color:var(--ink-2);margin:var(--s-5) 0 0}
+.stbl{width:100%;border-collapse:collapse;font-size:var(--t-body-s)}
+.stbl th{text-align:left;font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;padding:0 var(--s-5) var(--s-4);border-bottom:1px solid var(--rule-2);white-space:nowrap}
+.stbl td{padding:var(--s-5);border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.stbl td:first-child{color:var(--ink);font-weight:500}
+.stblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:var(--s-6) 0}
+.stblwrap .stbl{min-width:600px}
+.why2{display:flex;gap:var(--s-5);max-width:74ch;background:var(--signal-soft);border:1px solid var(--signal-edge);
+  border-radius:var(--r-md);padding:var(--s-5) var(--s-6);margin:var(--s-6) 0;font-size:var(--t-body-s);color:var(--ink)}
+.why2 svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--signal-text)}
+.why2 p{margin:0} .why2 b{font-weight:600}
+.why2.warn{background:var(--warn-soft);border-color:var(--warn-edge)} .why2.warn svg{color:var(--warn)}
+.sgrid{display:grid;gap:var(--s-6);grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));margin:var(--s-6) 0}
+.sgrid > *{min-width:0}
+.scard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.scard h4{margin-bottom:var(--s-4)}
+.scard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.scard .tagline{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+
+/* flow map */
+.fmap{display:grid;gap:0;margin:var(--s-7) 0;max-width:520px}
+.fnode{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);padding:var(--s-5) var(--s-6)}
+.fnode b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fnode span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fnode.key{background:var(--signal-soft);border-color:var(--signal-lo);border-width:2px}
+.fnode.term{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.fnode.term span{color:rgba(250,249,244,.72)}
+.fconn{width:1px;height:20px;margin:0 auto;background:var(--rule-3);position:relative}
+.fconn::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--rule-3)}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:980px){
+  .auth{grid-template-columns:minmax(0,1fr)}
+  .authaside{border-left:none;border-top:1px solid var(--rule);padding:var(--s-9) var(--s-8)}
+  .authmain{padding:var(--s-8) var(--s-8) var(--s-9)}
+  .specwrap{padding:var(--s-9) var(--s-8) var(--s-12)}
+}
+@media (max-width:640px){
+  .bar{padding:var(--s-4) var(--s-5)}
+  .bar .lg > span > span{display:none}
+  .bar .sp{margin-left:auto}
+  .bar .scen{order:5;width:100%}
+  .bar select{width:100%}
+  .auth{min-height:0}
+  .authmain{padding:var(--s-7) var(--s-6) var(--s-8)}
+  .authaside{padding:var(--s-8) var(--s-6)}
+  .specwrap{padding:var(--s-8) var(--s-6) var(--s-11)}
+  .authhead{margin-bottom:var(--s-8)}
+  .fallbacks .fbrow .ft{display:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INHERITED VERBATIM
+
+   The app shell and the week panel are home.html's — this is the
+   fourth surface on that shell. The conversation row is
+   conversations.html's, because the number has to open into the
+   very list that file already draws. The band is escalation.html's.
+   ═══════════════════════════════════════════════════════════════════ */
+/* ── The app shell, from home.html. Fourth surface. The @media
+   override is restated at the foot — class rules travel, media
+   blocks do not. ───────────────────────────────────────────────── */
+.appframe{border:1px solid var(--rule-2);border-radius:var(--r-lg);background:var(--ground);
+  overflow:hidden;display:flex;flex-direction:column;height:720px;max-width:420px;margin:0 auto;
+  box-shadow:var(--sh-2);transition:max-width var(--t-page) var(--e-out)}
+.appframe.wide{max-width:100%;height:660px;flex-direction:row}
+.appframe.wide .appnav{display:flex}
+.appframe.wide .tabbar{display:none}
+.appcol{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.apphead{padding:var(--s-6) var(--s-6) var(--s-5);border-bottom:1px solid var(--rule);
+  background:var(--surface);flex:none}
+.apphead .pausebtn{width:34px;height:34px}
+.ahtop{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5)}
+.greet{flex:1;min-width:0}
+.greet b{display:block;font-family:var(--f-display);font-size:1.05rem;font-variation-settings:"opsz" 18;
+  font-weight:600;letter-spacing:-.018em;line-height:1.2}
+.greet span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:1px}
+.statebar{display:flex;align-items:center;gap:var(--s-4);overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch}
+.statebar::-webkit-scrollbar{display:none}
+.schip{display:inline-flex;align-items:center;gap:var(--s-3);height:26px;padding:0 var(--s-5);
+  border-radius:var(--r-pill);border:1px solid var(--rule-2);background:var(--surface-2);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.03em;color:var(--ink-2);
+  white-space:nowrap;flex:none;font-weight:600;cursor:pointer;font-family:inherit;
+  transition:all var(--t-micro) var(--e-out)}
+.schip:hover{border-color:var(--rule-3);color:var(--ink)}
+.schip svg{width:13px;height:13px}
+.schip i{width:7px;height:7px;border-radius:50%;background:var(--rule-3);flex:none}
+.schip.live i{background:var(--ok-fill)}
+.schip.ok{border-color:var(--signal-edge);background:var(--signal-soft);color:var(--signal-text)}
+.schip.warn{border-color:var(--warn-edge);background:var(--warn-soft);color:var(--warn)}
+.schip.risk{border-color:var(--risk-edge);background:var(--risk-soft);color:var(--risk)}
+.schip .sv{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.feed{flex:1;overflow-y:auto;padding:var(--s-6);background:var(--ground)}
+.feed::-webkit-scrollbar{width:6px}
+.feed::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:3px}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-3) var(--s-2) var(--s-5)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:var(--s-3) 0;text-decoration:none;color:var(--ink-3);font-size:9.5px;font-weight:600;position:relative;min-height:48px;justify-content:center;border-radius:8px;transition:color var(--t-micro)}
+.tabbar a svg{width:19px;height:19px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2.5px;border-radius:var(--r-pill);background:var(--signal-lo)}
+.tabbar a .nb{position:absolute;top:2px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;background:var(--risk-fill);border:1.5px solid var(--surface)}
+.tabbar{flex:none;padding-bottom:max(var(--s-5),env(safe-area-inset-bottom))}
+.tabbar a{cursor:pointer;min-height:52px;justify-content:center}
+.appnav{background:var(--surface);border-right:1px solid var(--rule);padding:var(--s-5)}
+.appnav a{display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:var(--t-body-s);font-weight:500;transition:all var(--t-micro)}
+.appnav a svg{width:16px;height:16px;opacity:.75}
+.appnav a:hover{background:var(--surface-2);color:var(--ink)}
+.appnav a.on{background:var(--signal);color:var(--signal-ink);font-weight:600}
+.appnav a.on svg{opacity:1}
+.appnav a .nb{margin-left:auto;font-family:var(--f-mono);font-size:10px;background:var(--risk-fill);color:#fff;border-radius:var(--r-pill);padding:1px 6px}
+.appnav{display:none;flex-direction:column;gap:2px;width:208px;flex:none;padding:var(--s-6) var(--s-5);
+  overflow-y:auto}
+.appnav .nvh{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);padding:0 var(--s-5) var(--s-4)}
+.appnav a{cursor:pointer}
+.appnav .nvsp{flex:1}
+.skel{display:grid;gap:var(--s-4)}
+.skrow{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);padding:var(--s-6)}
+.skl{height:10px;border-radius:var(--r-pill);background:var(--surface-3);margin-bottom:var(--s-4);
+  animation:shim 1.4s var(--e-inout) infinite}
+.skl:last-child{margin-bottom:0}
+.pausebtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--rule-2);background:var(--surface);
+  display:grid;place-items:center;cursor:pointer;color:var(--ink-2);flex:none;
+  transition:all var(--t-micro) var(--e-out)}
+.pausebtn:hover{border-color:var(--risk-edge);background:var(--risk-soft);color:var(--risk)}
+.pausebtn svg{width:15px;height:15px}
+.week{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.wtop{padding:var(--s-7) var(--s-6) var(--s-6)}
+.wnum{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:var(--s-3)}
+.wnum b{font-family:var(--f-display);font-size:2.6rem;font-variation-settings:"opsz" 40;font-weight:600;
+  letter-spacing:-.03em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.wnum span{font-size:var(--t-body-s);color:var(--ink-2);line-height:1.35}
+.wsub{font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.wclaim{display:flex;gap:var(--s-4);align-items:flex-start;padding:var(--s-6);width:100%;
+  border:none;border-top:1px solid var(--rule);background:var(--signal-soft);
+  font:inherit;color:var(--ink);text-align:left;cursor:pointer;
+  transition:background var(--t-micro) var(--e-out)}
+.wclaim:hover{background:color-mix(in oklab,var(--signal) 16%,transparent)}
+.wclaim .wca{width:16px;height:16px;color:var(--ink-3);flex:none;margin-top:1px;margin-left:auto}
+.wclaim svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--signal-text)}
+.wclaim b{display:block;font-size:var(--t-body-s);font-weight:600}
+.wclaim span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5;margin-top:2px}
+.tooearly{padding:var(--s-7) var(--s-6)}
+.tooearly b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:var(--s-4)}
+.tooearly p{margin:0;font-size:var(--t-cap);color:var(--ink-2);line-height:1.6}
+.tedots{display:flex;gap:var(--s-3);margin-top:var(--s-6)}
+.tedots i{height:5px;flex:1;border-radius:var(--r-pill);background:var(--surface-3)}
+.tedots i.f{background:var(--signal)}
+.zone{margin-bottom:var(--s-8)}
+.zone:last-child{margin-bottom:0}
+.zone.z1 .zi{background:var(--warn-fill);color:#14150F}
+.zone.z2 .zi{background:var(--signal);color:var(--signal-ink)}
+.zone.z3 .zi{background:var(--surface-3);color:var(--ink-2)}
+.zh{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5)}
+.zh .zi{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;flex:none}
+.zh .zi svg{width:11px;height:11px}
+.zh b{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:600;color:var(--ink-2)}
+.zh .zn{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.08em;color:var(--ink-3)}
+
+/* ── The conversation row, from conversations.html: the number has
+   to open into the very list that file already draws. ─────────── */
+.crow{display:flex;gap:var(--s-5);padding:var(--s-6);width:100%;border:none;
+  border-bottom:1px solid var(--rule);background:var(--surface);text-align:left;
+  font:inherit;color:var(--ink);cursor:pointer;position:relative;transition:background var(--t-micro)}
+.crow:hover{background:var(--surface-2)}
+.crow.on{background:var(--signal-soft)}
+.crow.on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--signal-lo)}
+.cav{width:34px;height:34px;border-radius:50%;background:var(--surface-3);flex:none;
+  display:grid;place-items:center;font-size:11.5px;font-weight:600;color:var(--ink-2)}
+.cav.unknown{background:var(--surface-2);border:1px dashed var(--rule-3);color:var(--ink-3)}
+.cbody{flex:1;min-width:0}
+.ctop{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:2px}
+.cname{font-size:var(--t-body-s);font-weight:600;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;min-width:0}
+.cch{width:13px;height:13px;color:var(--ink-3);flex:none;align-self:center}
+.ctime{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--ink-3);flex:none}
+.csum{font-size:var(--t-cap);color:var(--ink-2);line-height:1.45;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:var(--s-4)}
+.csum mark{background:var(--signal);color:var(--signal-ink);border-radius:2px;padding:0 2px}
+.oc{display:inline-flex;align-items:center;gap:var(--s-3);height:20px;padding:0 var(--s-4);
+  border-radius:var(--r-pill);font-family:var(--f-mono);font-size:9.5px;letter-spacing:.07em;
+  text-transform:uppercase;font-weight:600;border:1px solid var(--rule-2);
+  background:var(--surface-2);color:var(--ink-3)}
+.oc svg{width:10px;height:10px}
+.oc.booked{background:var(--signal-soft);border-color:var(--signal-edge);color:var(--signal-text)}
+.oc.needs{background:var(--warn-soft);border-color:var(--warn-edge);color:var(--warn)}
+.oc.esc{background:var(--risk-soft);border-color:var(--risk-edge);color:var(--risk)}
+.oc.live{background:var(--panel);border-color:var(--panel);color:var(--panel-ink)}
+.oc.live i{width:6px;height:6px;border-radius:50%;background:var(--live);
+  animation:pulse 1.6s var(--e-inout) infinite}
+.cday{padding:var(--s-5) var(--s-6) var(--s-4);font-family:var(--f-mono);font-size:var(--t-label);
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);background:var(--ground);
+  position:sticky;top:0;z-index:1}
+.clist{flex:1;overflow-y:auto;background:var(--ground)}
+.clist::-webkit-scrollbar{width:6px}
+.clist::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:3px}
+
+/* ── The band, from escalation.html ─────────────────────────────── */
+.band{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-6);margin-bottom:var(--s-6)}
+.band .bh2{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:var(--s-5)}
+.band .bv{font-family:var(--f-display);font-size:1.9rem;font-variation-settings:"opsz" 32;
+  font-weight:600;letter-spacing:-.026em;line-height:1;font-variant-numeric:tabular-nums}
+.band .bt{font-size:var(--t-cap);color:var(--ink-2);line-height:1.4}
+.band p{margin:0;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.btrack{height:8px;border-radius:var(--r-pill);background:var(--surface-3);position:relative;
+  margin-bottom:var(--s-4)}
+.btrack .bok{position:absolute;top:0;bottom:0;background:var(--signal-soft);
+  border-left:1px solid var(--signal-lo);border-right:1px solid var(--signal-lo)}
+.btrack .bmark{position:absolute;top:-3px;width:3px;height:14px;border-radius:2px;background:var(--ink)}
+.bends{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:9.5px;
+  color:var(--ink-3);margin-bottom:var(--s-5)}
+.stages{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin-bottom:var(--s-6);
+  border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.stage{display:flex;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);
+  align-items:flex-start}
+.stage:last-child{border-bottom:none}
+.stage .sn{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-3);
+  font-family:var(--f-mono);font-size:10px;font-weight:600}
+.stage .sw{flex:1;min-width:0}
+.stage b{display:block;font-size:var(--t-body-s);font-weight:600}
+.stage span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55;margin-top:2px}
+.stage .swhen{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);flex:none;padding-top:4px}
+.stage.done .sn{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.stage.now{background:var(--warn-soft)}
+.stage.now .sn{background:var(--warn-fill);border-color:var(--warn-edge);color:#14150F}
+.stage.next{opacity:.6}
+
+/* ── Lifted from the files that own them: the switch, the WhatsApp
+   message mock, and the back link. ────────────────────────────── */
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+.dback{display:inline-flex;align-items:center;gap:var(--s-3);border:none;background:none;
+  font:inherit;font-size:var(--t-cap);color:var(--ink-2);cursor:pointer;padding:0;margin-bottom:var(--s-5)}
+.dback svg{width:14px;height:14px}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESULTS — where the subscription renews
+
+   Atlas §1: "An owner who cannot see what Subiza did for them will
+   cancel it the first month money is tight, regardless of how well it
+   worked." The failure mode is silent churn — the product works, she
+   never notices, and she cancels while calling it "not really doing
+   much."
+
+   And the sentence that governs every number on this screen, atlas §2:
+   "The exclusions matter more than the inclusions. A number the owner
+   can poke a hole in is worse than a smaller number they trust. If they
+   ever catch us inflating it, every other number in the product becomes
+   suspect."
+
+   So: no chart library (G14), no invented figure anywhere, and the
+   headline is a control that opens the conversations behind it.
+   ═══════════════════════════════════════════════════════════════════ */
+.authmain{max-width:none}
+.authbody{max-width:none;padding:0}
+
+/* ── The one number. It is a button, because SC 16.5 requires every
+   counted conversation to be listed and openable — auditability is
+   not a feature here, it is the number's only defence. ──────────── */
+.bignum{width:100%;text-align:left;border:1px solid var(--signal-edge);border-radius:var(--r-lg);
+  background:var(--signal-soft);padding:var(--s-8) var(--s-7);font:inherit;color:var(--ink);
+  cursor:pointer;margin-bottom:var(--s-5);transition:background var(--t-micro) var(--e-out)}
+.bignum:hover{background:color-mix(in oklab,var(--signal) 18%,transparent)}
+.bignum .bv2{display:flex;align-items:baseline;gap:var(--s-5)}
+.bignum .bnum{font-family:var(--f-display);font-size:clamp(3rem,2.2rem + 3vw,4.2rem);
+  font-variation-settings:"opsz" 48;font-weight:600;letter-spacing:-.04em;line-height:.9;
+  font-variant-numeric:tabular-nums}
+.bignum .blab{font-size:var(--t-body);line-height:1.3;font-weight:500}
+.bignum .bsub{display:flex;align-items:center;gap:var(--s-4);margin-top:var(--s-6);
+  font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.bignum .bsub svg{width:15px;height:15px;flex:none;color:var(--signal-text)}
+.bignum .bopen{display:inline-flex;align-items:center;gap:var(--s-3);margin-top:var(--s-6);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--signal-text);font-weight:600}
+.bignum .bopen svg{width:13px;height:13px}
+
+/* ── The four supporting numbers. Plain rows, not tiles — G16 wants
+   numbers and words, not a grid of boxes. ───────────────────────── */
+.nlist{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.nrow{display:flex;align-items:baseline;gap:var(--s-5);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--rule)}
+.nrow:last-child{border-bottom:none}
+.nrow .nv{font-family:var(--f-mono);font-size:1.15rem;font-weight:600;font-variant-numeric:tabular-nums;
+  width:44px;flex:none;text-align:right;color:var(--ink)}
+.nrow .nl{flex:1;min-width:0;font-size:var(--t-body-s);line-height:1.4}
+.nrow .nn{font-size:var(--t-cap);color:var(--ink-3)}
+.nrow.quietrow .nv,.nrow.quietrow .nl{color:var(--ink-2)}
+
+/* ── When and how busy. Hand-drawn, because G14 forbids a chart
+   library and a week of hours is seven bars and a label. ────────── */
+.whenbox{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-6);margin-bottom:var(--s-6)}
+.wdays{display:flex;align-items:flex-end;gap:var(--s-3);height:78px;margin-bottom:var(--s-4)}
+.wday{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.wday i{display:block;border-radius:3px 3px 0 0;background:var(--signal-lo);min-height:3px}
+.wday.peak i{background:var(--signal)}
+.wday.low i{background:var(--rule-3)}
+.wlabs{display:flex;gap:var(--s-3)}
+.wlabs span{flex:1;text-align:center;font-family:var(--f-mono);font-size:9.5px;color:var(--ink-3)}
+.wnote{display:flex;gap:var(--s-5);flex-wrap:wrap;margin-top:var(--s-5);
+  padding-top:var(--s-5);border-top:1px solid var(--rule);font-size:var(--t-cap)}
+.wnote span{color:var(--ink-2)}
+.wnote b{color:var(--ink);font-weight:600}
+
+/* ── What is counted, and what is not. The exclusions come SECOND on
+   the page but they are the reason the number is worth anything. ── */
+.counted{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.counted .ch3{padding:var(--s-5) var(--s-6);background:var(--surface-2);
+  border-bottom:1px solid var(--rule);font-family:var(--f-mono);font-size:var(--t-label);
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.crow2{display:flex;gap:var(--s-5);padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);
+  align-items:flex-start;font-size:var(--t-cap);line-height:1.5}
+.crow2:last-child{border-bottom:none}
+.crow2 > svg{width:15px;height:15px;flex:none;margin-top:1px}
+.crow2.in > svg{color:var(--ok-fill)}
+.crow2.out > svg{color:var(--ink-3)}
+.crow2 .cw2{flex:1;min-width:0}
+.crow2 b{display:block;font-weight:600;color:var(--ink)}
+.crow2 span{display:block;color:var(--ink-2);margin-top:1px}
+.crow2 .cn2{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink-3);flex:none}
+.crow2.out{background:var(--surface-2)}
+.crow2.out b{color:var(--ink-2)}
+
+/* ── What customers asked. Atlas §4.2: "the most valuable screen in
+   the product for the business itself" — no Rwandan SME has ever had
+   a ranked list of what their customers ask. ────────────────────── */
+.intents{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.irow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--rule);position:relative}
+.irow:last-child{border-bottom:none}
+.irow .iname{flex:1;min-width:0;font-size:var(--t-body-s);overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.irow .ibar{width:96px;height:6px;border-radius:var(--r-pill);background:var(--surface-3);
+  flex:none;overflow:hidden}
+.irow .ibar i{display:block;height:100%;background:var(--signal-lo);border-radius:var(--r-pill)}
+.irow .ict{font-family:var(--f-mono);font-size:var(--t-body-s);font-weight:600;
+  font-variant-numeric:tabular-nums;width:26px;text-align:right;flex:none}
+/* The rows that matter most are the ones it could not answer, and they
+   convert straight into a two-minute task from real demand. */
+.irow.gap{background:var(--warn-soft)}
+.irow.gap .ibar i{background:var(--warn-fill)}
+.irow.gap .iname{color:var(--ink)}
+.igapl{display:flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:9px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--warn);flex:none}
+.igapl svg{width:11px;height:11px}
+.ifix{padding:var(--s-5) var(--s-6);border-top:1px dashed var(--warn-edge);background:var(--warn-soft)}
+.ifix p{margin:0 0 var(--s-5);font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.ifix .ib{display:flex;gap:var(--s-4);flex-wrap:wrap}
+
+/* ── How well it worked. Plain statements, never metric names. ──── */
+.plain{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s-4);margin-bottom:var(--s-6)}
+.prow2{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);
+  border-radius:var(--r-md);background:var(--surface);align-items:flex-start}
+.prow2 .pi2{width:28px;height:28px;border-radius:8px;background:var(--surface-2);
+  border:1px solid var(--rule-2);display:grid;place-items:center;flex:none;color:var(--ink-2)}
+.prow2 .pi2 svg{width:14px;height:14px}
+.prow2 .pw3{flex:1;min-width:0}
+.prow2 b{display:block;font-size:var(--t-body-s);font-weight:600;line-height:1.4}
+.prow2 span{display:block;font-size:var(--t-cap);color:var(--ink-3);margin-top:3px;line-height:1.45}
+/* Bad news is shown, and it arrives with the fix attached. */
+.prow2.bad{border-color:var(--warn-edge);background:var(--warn-soft)}
+.prow2.bad .pi2{background:var(--warn-fill);border-color:var(--warn-edge);color:#14150F}
+.prow2.bad .btn{margin-top:var(--s-5)}
+
+/* ── At most three suggestions, each from her own data ──────────── */
+.suggs{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s-4);margin-bottom:var(--s-6)}
+.sug{border:1px solid var(--signal-edge);border-radius:var(--r-md);background:var(--signal-soft);
+  padding:var(--s-6)}
+.sug .sev{display:flex;gap:var(--s-4);align-items:flex-start;margin-bottom:var(--s-5);
+  font-size:var(--t-body-s);line-height:1.5}
+.sug .sev svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--signal-text)}
+.sug .sev b{font-weight:600}
+.sug .sa2{display:flex;gap:var(--s-4);flex-wrap:wrap}
+.sug.gone{display:none}
+
+/* ── Her own money figure. We never invent an average job value; if
+   she gives us one the arithmetic becomes hers, sourced and labelled.
+   If she has not, this does not appear at all. ──────────────────── */
+.mine{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-6);margin-bottom:var(--s-6)}
+.mine .ml{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3)}
+.mine .ml svg{width:13px;height:13px}
+.mine .mv{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:var(--s-4)}
+.mine .mv b{font-family:var(--f-display);font-size:1.8rem;font-variation-settings:"opsz" 30;
+  font-weight:600;letter-spacing:-.026em;line-height:1;font-variant-numeric:tabular-nums}
+.mine .mv span{font-size:var(--t-cap);color:var(--ink-2);line-height:1.35}
+.mine .msrc{display:flex;gap:var(--s-4);align-items:flex-start;padding-top:var(--s-5);
+  border-top:1px solid var(--rule);font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.mine .msrc svg{width:14px;height:14px;flex:none;margin-top:1px;color:var(--ink-3)}
+.askmine{border:1px dashed var(--rule-3);border-radius:var(--r-md);padding:var(--s-6);
+  margin-bottom:var(--s-6)}
+.askmine b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:var(--s-4)}
+.askmine p{margin:0 0 var(--s-5);font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.askmine .ar{display:flex;gap:var(--s-4);align-items:center;flex-wrap:wrap}
+.askmine .inpwrap{margin:0;flex:1;min-width:140px}
+
+/* ── The weekly report. Under 60 words, on WhatsApp, and the message
+   is itself an instance of the thing she is paying for. ─────────── */
+.repwrap{margin-bottom:var(--s-6)}
+.repcount{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;color:var(--ink-3);
+  margin-top:var(--s-4);padding:0 var(--s-4)}
+.repcount .over{color:var(--warn)}
+.reptmpl{display:flex;gap:var(--s-4);align-items:flex-start;padding:var(--s-5) var(--s-6);
+  border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface-2);
+  font-size:var(--t-cap);color:var(--ink-2);line-height:1.5;margin-top:var(--s-5)}
+.reptmpl svg{width:14px;height:14px;flex:none;margin-top:1px;color:var(--ink-3)}
+.reptmpl b{color:var(--ink);font-weight:600}
+
+/* ── Zero traffic is not a quiet week. It is usually broken
+   forwarding, and saying "quiet week!" over a dead line is how a
+   report becomes noise she mutes. ───────────────────────────────── */
+.fwdcheck{border:1px solid var(--warn-edge);border-radius:var(--r-md);background:var(--warn-soft);
+  padding:var(--s-7) var(--s-6);margin-bottom:var(--s-6)}
+.fwdcheck .fl{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--warn)}
+.fwdcheck .fl svg{width:14px;height:14px}
+.fwdcheck b{display:block;font-family:var(--f-display);font-size:1.1rem;
+  font-variation-settings:"opsz" 18;font-weight:600;letter-spacing:-.016em;line-height:1.3;
+  margin-bottom:var(--s-4)}
+.fwdcheck p{margin:0 0 var(--s-6);font-size:var(--t-cap);color:var(--ink-2);line-height:1.6}
+
+/* ── Still gathering. Never a broken empty chart. ───────────────── */
+.gathering{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-8) var(--s-6);text-align:center;margin-bottom:var(--s-6)}
+.gathering b{display:block;font-size:var(--t-body);font-weight:600;margin-bottom:var(--s-4)}
+.gathering p{margin:0 auto var(--s-6);font-size:var(--t-cap);color:var(--ink-2);line-height:1.6;max-width:40ch}
+
+/* ── The off switch. One tap, present, and not a dark pattern. ──── */
+.offsw{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.offrow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--rule)}
+.offrow:last-child{border-bottom:none}
+.offrow .ow{flex:1;min-width:0}
+.offrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.offrow span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:1px;line-height:1.45}
+
+/* ── The period picker ──────────────────────────────────────────── */
+.periods{display:flex;gap:var(--s-3);margin-bottom:var(--s-6);overflow-x:auto;
+  scrollbar-width:none;padding-bottom:2px}
+.periods::-webkit-scrollbar{display:none}
+.per{flex:none;height:30px;padding:0 var(--s-5);border-radius:var(--r-pill);
+  border:1px solid var(--rule-2);background:var(--surface);font:inherit;font-size:var(--t-cap);
+  font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap;
+  transition:all var(--t-micro) var(--e-out)}
+.per:hover{border-color:var(--rule-3);color:var(--ink)}
+.per.on{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:640px){
+  /* Restated, not inherited. See conversations.html §07. */
+  .appframe{max-width:100%;height:auto;min-height:600px;border-radius:var(--r-md);box-shadow:none}
+  .appframe.wide{flex-direction:column;height:auto}
+  .appframe.wide .appnav{display:none}
+  .appframe.wide .tabbar{display:flex}
+  /* The headline stacks: at 360 a 4rem numeral and a two-line label
+     cannot share a baseline without the label wrapping to one word
+     per line, and the label is the half that carries the meaning. */
+  .bignum{padding:var(--s-7) var(--s-6)}
+  .bignum .bv2{flex-direction:column;gap:var(--s-3)}
+  .bignum .bnum{font-size:3.1rem}
+  /* An intent row is a name, a bar and a count. The bar is the part
+     that can go — the number is the information. */
+  .irow .ibar{display:none}
+  .irow.gap{flex-wrap:wrap}
+  .irow.gap .igapl{order:4;width:100%;padding-top:var(--s-3)}
+  .nrow .nv{width:38px}
+  .mine .mv b{font-size:1.55rem}
+}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></symbol><symbol id="i-book-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></symbol><symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></symbol><symbol id="i-calendar-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /> <path d="m9 15 2 2 4-4" /></symbol><symbol id="i-chart-column" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></symbol><symbol id="i-circle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></symbol><symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></symbol><symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /> <path d="M12 17h.01" /></symbol><symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol><symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></symbol><symbol id="i-ear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0" /> <path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4" /></symbol><symbol id="i-ellipsis" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /> <circle cx="19" cy="12" r="1" /> <circle cx="5" cy="12" r="1" /></symbol><symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" /> <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" /> <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /> <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></symbol><symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol><symbol id="i-languages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></symbol><symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol><symbol id="i-list-checks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /></symbol><symbol id="i-message-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></symbol><symbol id="i-message-square-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /> <path d="M7 11h10" /> <path d="M7 15h6" /> <path d="M7 7h8" /></symbol><symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="3" width="5" height="18" rx="1" /> <rect x="5" y="3" width="5" height="18" rx="1" /></symbol><symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-phone-forwarded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6h8" /> <path d="m18 2 4 4-4 4" /> <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-rotate-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /></symbol><symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /></symbol><symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /> <rect width="20" height="8" x="2" y="14" rx="2" ry="2" /> <line x1="6" x2="6.01" y1="6" y2="6" /> <line x1="6" x2="6.01" y1="18" y2="18" /></symbol><symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></symbol><symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></symbol><symbol id="i-triangle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></symbol><symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol><symbol id="i-audio-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /></symbol></defs></svg>
+<div class="bar">
+  <span class="lg"><span class="mk"><svg><use href="#i-chart-column"/></svg></span><span><b>Subiza</b><span>Flow 1.14 · results</span></span></span>
+  <div class="sp"></div>
+  <select class="scen" id="scen" aria-label="Scenario">
+    <optgroup label="A normal week">
+      <option value="normal">What Subiza did for her</option>
+      <option value="audit">Opening the number</option>
+      <option value="counted">What is counted, and what isn't</option>
+    </optgroup>
+    <optgroup label="What her customers asked">
+      <option value="intents">The ranked list</option>
+      <option value="gaps">The questions it couldn't answer</option>
+    </optgroup>
+    <optgroup label="How well it worked">
+      <option value="quality">Plain statements, not metrics</option>
+      <option value="degraded">Bad news, with the fix attached</option>
+      <option value="suggest">What she could do next</option>
+    </optgroup>
+    <optgroup label="The weekly message">
+      <option value="report">Monday morning, under 60 words</option>
+      <option value="quietweek">A quiet week, said honestly</option>
+      <option value="zero">No calls at all — check the forwarding</option>
+      <option value="settings">Turning it off</option>
+    </optgroup>
+    <optgroup label="When the number is weaker">
+      <option value="rung4">She answers everything herself</option>
+      <option value="firstweek">The first week</option>
+      <option value="money">Her own figure, not ours</option>
+    </optgroup>
+    <optgroup label="States">
+      <option value="offline">No connection</option>
+      <option value="error">Our side is down</option>
+    </optgroup>
+  </select>
+  <div class="seg" role="group" aria-label="Width">
+    <button data-w="phone" aria-pressed="true">Phone</button>
+    <button data-w="wide" aria-pressed="false">Desktop</button>
+  </div>
+  <div class="seg" role="group" aria-label="Language">
+    <button data-lang="rw" aria-pressed="false">RW</button>
+    <button data-lang="en" aria-pressed="true">EN</button>
+  </div>
+  <div class="seg" role="group" aria-label="View">
+    <button data-mode="proto" aria-pressed="true">Prototype</button>
+    <button data-mode="spec" aria-pressed="false">Spec</button>
+  </div>
+</div>
+
+<div class="mode on" id="m-proto">
+<div class="auth">
+  <div class="authmain">
+    <div class="authbody">
+
+      <div class="appframe" id="frame">
+        <nav class="appnav" aria-label="Sections">
+          <span class="nvh" data-rw="Subiza Studio">Subiza Studio</span>
+          <a data-nav="home"><svg><use href="#i-house"/></svg><span data-rw="Ahabanza">Home</span></a>
+          <a data-nav="conv"><svg><use href="#i-message-square-text"/></svg><span data-rw="Ibiganiro">Conversations</span></a>
+          <a data-nav="agent"><svg><use href="#i-bot"/></svg><span data-rw="Umufasha wanjye">My agent</span></a>
+          <a data-nav="conn"><svg><use href="#i-link"/></svg><span data-rw="Aho ihuriye">Connections</span></a>
+          <a class="on" data-nav="results"><svg><use href="#i-chart-column"/></svg><span data-rw="Ibyavuyemo">Results</span></a>
+          <a data-nav="credit"><svg><use href="#i-wallet"/></svg><span data-rw="Amafaranga">Credit</span></a>
+          <span class="nvsp"></span>
+          <a data-nav="settings"><svg><use href="#i-settings"/></svg><span data-rw="Igenamiterere">Settings</span></a>
+        </nav>
+
+        <div class="appcol">
+          <header class="apphead">
+            <div class="ahtop">
+              <span class="greet">
+                <b id="headT" data-rw="Ibyavuyemo">Results</b>
+                <span id="headSub" data-rw="Icyo Subiza yakoreye ubucuruzi bwawe">What Subiza did for your business</span>
+              </span>
+              <button class="pausebtn" id="pauseNow" aria-label="Pause Subiza">
+                <svg class="bi"><use href="#i-pause"/></svg>
+              </button>
+            </div>
+            <div class="statebar">
+              <button class="schip live" id="chPill"><i aria-hidden="true"></i><span data-rw="Yakira iyo mufunze">Answering after hours</span></button>
+              <button class="schip" id="chCredit"><svg class="bi"><use href="#i-wallet"/></svg><span class="sv">14,200 RWF</span></button>
+              <button class="schip ok" id="chHealth"><svg class="bi"><use href="#i-link"/></svg><span data-rw="Imirongo 4 irakora">4 channels working</span></button>
+            </div>
+          </header>
+
+          <div class="feed" id="feed">
+
+            <!-- ═══════════ v1 · WHAT SUBIZA DID ═══════════ -->
+            <section class="screen on" id="v1">
+              <div class="periods" id="periods">
+                <button class="per on" data-p="week"><span data-rw="Iki cyumweru">This week</span></button>
+                <button class="per" data-p="last"><span data-rw="Icyumweru gishize">Last week</span></button>
+                <button class="per" data-p="month"><span data-rw="Uku kwezi">This month</span></button>
+              </div>
+
+              <!-- The headline is a control. SC 16.5: every counted
+                   conversation listed and openable — auditability is
+                   the number's only defence, so it is one tap. -->
+              <button class="bignum" id="bigNum" data-go="v2">
+                <span class="bv2">
+                  <span class="bnum" id="bigV">31</span>
+                  <span class="blab" id="bigL" data-rw="byaje mufunze cyangwa uri ku yindi">came in while you were closed, or already on another call</span>
+                </span>
+                <span class="bsub">
+                  <svg class="bi"><use href="#i-check"/></svg>
+                  <span id="bigS" data-rw="Muri 47 byose byasubijwe iki cyumweru">Out of 47 answered altogether this week</span>
+                </span>
+                <span class="bopen"><svg class="bi"><use href="#i-list-checks"/></svg><span data-rw="Fungura byose 31">Open all 31</span></span>
+              </button>
+
+              <div class="nlist">
+                <div class="nrow"><span class="nv">9</span><span class="nl" data-rw="bahinduwe kwiyandikisha">became bookings</span></div>
+                <div class="nrow"><span class="nv">6</span><span class="nl" data-rw="ubutumwa bwakwegerejwe">messages passed to you</span></div>
+                <div class="nrow"><span class="nv">2</span><span class="nl" data-rw="byagusabye, kandi warabikemuye">needed you, and you handled them</span></div>
+                <div class="nrow quietrow"><span class="nv">0</span><span class="nl" data-rw="byarangiye nabi">ended badly</span><span class="nn" data-rw="icyumweru gishize hari 1">1 last week</span></div>
+              </div>
+
+              <div class="whenbox">
+                <div class="wdays" id="wdays">
+                  <span class="wday low"><i style="height:18%"></i></span>
+                  <span class="wday"><i style="height:44%"></i></span>
+                  <span class="wday"><i style="height:38%"></i></span>
+                  <span class="wday"><i style="height:52%"></i></span>
+                  <span class="wday"><i style="height:61%"></i></span>
+                  <span class="wday peak"><i style="height:100%"></i></span>
+                  <span class="wday low"><i style="height:12%"></i></span>
+                </div>
+                <div class="wlabs">
+                  <span data-rw="Mbe">Mon</span><span data-rw="Kbi">Tue</span><span data-rw="Kta">Wed</span>
+                  <span data-rw="Kne">Thu</span><span data-rw="Gtn">Fri</span><span data-rw="Gtd">Sat</span>
+                  <span data-rw="Cyu">Sun</span>
+                </div>
+                <div class="wnote">
+                  <span data-rw-html="Byinshi: <b>ku wa gatandatu saa tatu</b>">Busiest: <b>Saturday 09:00–10:00</b></span>
+                  <span data-rw-html="Bike: <b>ku wa kabiri nyuma ya saa sita</b>">Quietest: <b>Tuesday afternoon</b></span>
+                </div>
+              </div>
+
+              <button class="btn btn-secondary btn-block" data-go="v3"><svg class="bi"><use href="#i-circle-help"/></svg><span data-rw="Uko uwo mubare ubarwa">How that number is counted</span></button>
+            </section>
+
+            <!-- ═══════════ v2 · OPENING THE NUMBER ═══════════
+                 SC 16.5. A number she can poke a hole in is worse than a
+                 smaller one she trusts — so all 31 are here, openable. -->
+            <section class="screen" id="v2">
+              <button class="dback" id="v2back"><svg class="bi"><use href="#i-arrow-left"/></svg><span data-rw="Subira ku byavuyemo">Back to results</span></button>
+              <h1 data-rw="Byose uko ari 31">All thirty-one</h1>
+              <p class="sub" data-rw="Buri kimwe kiri hano, kandi ushobora kugifungura usome ibyavuzwe. Niba kimwe kitabaye ngombwa, urabibona — kandi tuzabikureho.">Every one is here, and you can open any of them and read what was said. If one of them shouldn't be counted, you will see it — and we will take it out.</p>
+
+              <div class="clist" style="border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;max-height:none">
+                <div class="cday" data-rw="Ku wa gatandatu">Saturday</div>
+                <button class="crow">
+                  <span class="cav">MK</span>
+                  <span class="cbody">
+                    <span class="ctop"><span class="cname">Marie K.</span><svg class="cch bi"><use href="#i-phone"/></svg><span class="ctime">21:14</span></span>
+                    <span class="csum" data-rw="Yabajije ibiciro by'ugufatanya umusatsi, yiyandikisha ku wa gatandatu.">Asked about braid prices and booked Saturday.</span>
+                    <span class="oc booked"><svg class="bi"><use href="#i-calendar-check"/></svg><span data-rw="Yiyandikishije">Booked</span></span>
+                  </span>
+                </button>
+                <button class="crow">
+                  <span class="cav">JP</span>
+                  <span class="cbody">
+                    <span class="ctop"><span class="cname">Jean-Paul</span><svg class="cch bi"><use href="#i-message-circle"/></svg><span class="ctime">22:40</span></span>
+                    <span class="csum" data-rw="Yabajije igiciro cy'umwana. Ntibyari bihari.">Asked the price for a child. It wasn't on file.</span>
+                    <span class="oc needs"><svg class="bi"><use href="#i-hand"/></svg><span data-rw="Byagusabye">Needed you</span></span>
+                  </span>
+                </button>
+                <div class="cday" data-rw="Ku wa gatanu">Friday</div>
+                <button class="crow">
+                  <span class="cav">DN</span>
+                  <span class="cbody">
+                    <span class="ctop"><span class="cname">Divine N.</span><svg class="cch bi"><use href="#i-phone"/></svg><span class="ctime">19:52</span></span>
+                    <span class="csum" data-rw="Yabajije amasaha mufungura.">Asked what time you open.</span>
+                    <span class="oc"><svg class="bi"><use href="#i-check"/></svg><span data-rw="Byasubijwe">Answered</span></span>
+                  </span>
+                </button>
+                <button class="crow">
+                  <span class="cav">CM</span>
+                  <span class="cbody">
+                    <span class="ctop"><span class="cname">Consolee M.</span><svg class="cch bi"><use href="#i-phone"/></svg><span class="ctime">06:31</span></span>
+                    <span class="csum" data-rw="Yiyandikishije koroshya umusatsi ku wa kane.">Booked a relaxer for Thursday.</span>
+                    <span class="oc booked"><svg class="bi"><use href="#i-calendar-check"/></svg><span data-rw="Yiyandikishije">Booked</span></span>
+                  </span>
+                </button>
+              </div>
+
+              <p class="microfoot" data-rw="Hasigaye 27. Buri kimwe cyabaye mu masaha mufunze, cyangwa mu gihe wari ku yindi terefone — ni yo mpamvu cyabarwa.">27 more. Every one of them arrived while you were closed, or while you were already on another call — which is why it counted.</p>
+            </section>
+
+            <!-- ═══════════ v3 · WHAT IS AND ISN'T COUNTED ═══════════ -->
+            <section class="screen" id="v3">
+              <button class="dback" id="v3back"><svg class="bi"><use href="#i-arrow-left"/></svg><span data-rw="Subira ku byavuyemo">Back to results</span></button>
+              <h1 data-rw="Ibyo tubara, n'ibyo tutabara">What we count, and what we leave out</h1>
+              <p class="sub" data-rw="Ibyo tutabara ni byo bifite akamaro kurusha ibyo tubara. Umubare ushobora kwamaganwa ni mubi kuruta umubare muto wizerwa — kandi nudufata twiyongereza, indi mibare yose muri iki gicuruzwa ihita iba ikekwa.">The exclusions matter more than the inclusions. A number you can poke a hole in is worse than a smaller number you trust — and if you ever catch us inflating it, every other number in this product becomes suspect.</p>
+
+              <div class="counted">
+                <div class="ch3" data-rw="Bibarwa">Counted</div>
+                <div class="crow2 in">
+                  <svg class="bi"><use href="#i-check"/></svg>
+                  <span class="cw2"><b data-rw="Byaje mufunze">Arrived while you were closed</b><span data-rw="Nta we wari aho. Amasaha yawe ni wowe wayashyizeho.">Nobody was there. Your hours are the ones you set.</span></span>
+                  <span class="cn2">19</span>
+                </div>
+                <div class="crow2 in">
+                  <svg class="bi"><use href="#i-check"/></svg>
+                  <span class="cw2"><b data-rw="Byaje uri ku yindi terefone">Arrived while your line was busy</b><span data-rw="Ntushoboraga kubyakira. Umurongo ni wo wabidubwiye.">You could not have taken it. The network told us, not a guess.</span></span>
+                  <span class="cn2">8</span>
+                </div>
+                <div class="crow2 in">
+                  <svg class="bi"><use href="#i-check"/></svg>
+                  <span class="cw2"><b data-rw="Byavuze ntiwabyakira">Rang and you didn't answer</b><span data-rw="Telefone yavuze, ntiwakira, hanyuma byaza kuri Subiza.">Your phone rang, you didn't pick up, and it came to Subiza.</span></span>
+                  <span class="cn2">4</span>
+                </div>
+
+                <div class="ch3" data-rw="Ntibibarwa" style="border-top:1px solid var(--rule)">Not counted</div>
+                <div class="crow2 out">
+                  <svg class="bi"><use href="#i-x"/></svg>
+                  <span class="cw2"><b data-rw="Ibyo wagerageje ubwawe">Your own test calls</b><span data-rw="Ntabwo ari abakiriya.">Not customers.</span></span>
+                  <span class="cn2">3</span>
+                </div>
+                <div class="crow2 out">
+                  <svg class="bi"><use href="#i-x"/></svg>
+                  <span class="cw2"><b data-rw="Umuntu umwe uhamagaye kenshi mu isaha">The same person calling twice in an hour</b><span data-rw="Ni umukiriya umwe wabuze, atari babiri.">That is one customer you'd have missed, not two.</span></span>
+                  <span class="cn2">2</span>
+                </div>
+                <div class="crow2 out" id="r4excl" hidden>
+                  <svg class="bi"><use href="#i-x"/></svg>
+                  <span class="cw2"><b data-rw="Guhamagara washoboraga kwakira">Calls you might have answered yourself</b><span data-rw="Kuva Subiza yakira byose, ntidushobora kumenya ayo wari kwakira. Ntibishoboka kubigaragaza, bityo ntitubibara.">Since Subiza answers everything, we cannot know which of them you'd have taken. Unprovable, so excluded.</span></span>
+                  <span class="cn2">16</span>
+                </div>
+              </div>
+
+              <div class="banner banner-info">
+                <svg class="bi"><use href="#i-circle-help"/></svg>
+                <div><b data-rw="Niba utabyemera">If you don't believe it</b><span data-rw="Kanda kuri wa mubare ku paji ibanza urebe byose. Niba hari kimwe kitabaye ngombwa, tubibwire — tuzagikuraho kandi tuzabwira abandi bose bagize ikibazo nk'icyo.">Tap the number on the previous screen and read all of them. If one of them shouldn't be there, tell us — we will take it out, and out of everyone else's with the same problem.</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ v4 · WHAT CUSTOMERS ASKED ═══════════
+                 Atlas §4.2: "the most valuable screen in the product for
+                 the business itself." No Rwandan SME has ever had a
+                 ranked list of what their own customers ask. -->
+            <section class="screen" id="v4">
+              <h1 data-rw="Ibyo abakiriya bawe babaza">What your customers asked</h1>
+              <p class="sub" data-rw="Ntabwo ari imibare yacu — ni amakuru mashya ku bucuruzi bwawe. Nta bucuruzi buto bwo mu Rwanda bwabonye urutonde nk'uru rw'ibyo abakiriya babaza.">These are not our numbers — this is new information about your own business. No small business here has previously had a ranked list of what its customers ask.</p>
+
+              <div class="intents" id="intents">
+                <div class="irow">
+                  <span class="iname" data-rw="Ibiciro by'ugufatanya umusatsi">Braid prices</span>
+                  <span class="ibar"><i style="width:100%"></i></span>
+                  <span class="ict">18</span>
+                </div>
+                <div class="irow">
+                  <span class="iname" data-rw="Amasaha mufungura">Opening hours</span>
+                  <span class="ibar"><i style="width:61%"></i></span>
+                  <span class="ict">11</span>
+                </div>
+                <div class="irow">
+                  <span class="iname" data-rw="Kwiyandikisha">Booking</span>
+                  <span class="ibar"><i style="width:50%"></i></span>
+                  <span class="ict">9</span>
+                </div>
+                <div class="irow">
+                  <span class="iname" data-rw="Aho muherereye">Where you are</span>
+                  <span class="ibar"><i style="width:28%"></i></span>
+                  <span class="ict">5</span>
+                </div>
+                <div class="irow gap" data-g="parking">
+                  <span class="iname" data-rw="Aho bapaka imodoka">Parking</span>
+                  <span class="ibar"><i style="width:17%"></i></span>
+                  <span class="ict">3</span>
+                  <span class="igapl"><svg class="bi"><use href="#i-circle-help"/></svg><span data-rw="ntiyabizi">it didn't know</span></span>
+                </div>
+                <div class="irow gap" data-g="delivery">
+                  <span class="iname" data-rw="Kuzana ibicuruzwa">Delivery</span>
+                  <span class="ibar"><i style="width:11%"></i></span>
+                  <span class="ict">2</span>
+                  <span class="igapl"><svg class="bi"><use href="#i-circle-help"/></svg><span data-rw="ntiyabizi">it didn't know</span></span>
+                </div>
+                <!-- The gap rows are the valuable half: real demand,
+                     already quantified, converting into a two-minute
+                     task instead of a guess about what to write. -->
+                <div class="ifix" id="ifix">
+                  <p data-rw="Abantu batatu babajije aho bapaka imodoka kandi Subiza ntiyabizi. Ni interuro imwe — kandi ntabwo uri kukeka ko ari ngombwa, urabibona.">Three people asked about parking and Subiza couldn't answer. It is one sentence — and you are not guessing that it matters, you can see that it does.</p>
+                  <div class="ib">
+                    <button class="btn btn-primary btn-sm" id="teachPark"><svg class="bi"><use href="#i-book-open"/></svg><span data-rw="Yibwirize ku ipaki">Teach it about parking</span></button>
+                    <button class="btn btn-ghost btn-sm" id="skipPark"><span data-rw="Ntidukora ibyo">We don't do that</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <p class="microfoot" data-rw="Iyo ibibazo nk'ibi bibaye kuri salon nyinshi, ntabwo biba ikibazo cyawe — biba ikibazo cy'icyitegererezo cyacu, kandi turagikosora ku bose.">When many salons cannot answer the same question, that is not your problem — it is a problem with our template, and we fix it for everybody.</p>
+            </section>
+
+            <!-- ═══════════ v5 · HOW WELL IT WORKED ═══════════
+                 Plain statements, never metric names. And bad news
+                 arrives with the fix already attached. -->
+            <section class="screen" id="v5">
+              <h1 data-rw="Uko byagenze">How well it worked</h1>
+              <p class="sub" data-rw="Nta majwi y'ubuhanga hano. Ni interuro z'ukuri — kandi ibitagenze neza biri hano na byo, hamwe n'uko byakosorwa.">No jargon here. Plain sentences — and where it went badly that is here too, with the way to fix it.</p>
+
+              <div class="plain" id="plain">
+                <div class="prow2">
+                  <span class="pi2"><svg class="bi"><use href="#i-check"/></svg></span>
+                  <span class="pw3">
+                    <b data-rw="Subiza yakemuye 8 kuri 10 ubwayo">Subiza handled 8 out of 10 on its own</b>
+                    <span data-rw="Ibindi bibiri yaguhamagaye, nk'uko yagombaga.">The other two it fetched you for, which is what it is supposed to do.</span>
+                  </span>
+                </div>
+                <div class="prow2">
+                  <span class="pi2"><svg class="bi"><use href="#i-ear"/></svg></span>
+                  <span class="pw3">
+                    <b data-rw="Yumvise abahamagaye neza">It understood callers well</b>
+                    <span data-rw="Rimwe gusa yasabye gusubiramo mu cyumweru cyose.">It asked somebody to repeat only once all week.</span>
+                  </span>
+                </div>
+                <div class="prow2">
+                  <span class="pi2"><svg class="bi"><use href="#i-hand"/></svg></span>
+                  <span class="pw3">
+                    <b data-rw="Abakiriya 2 basabye umuntu, bombi baramubonye">2 customers asked for a person and both got one</b>
+                    <span data-rw="Umwe wowe, undi Aline.">One was you, one was Aline.</span>
+                  </span>
+                </div>
+                <!-- Shown only when it degrades. A latency number on a
+                     good week is noise; on a bad week it is the answer. -->
+                <div class="prow2 bad" id="badLang" hidden>
+                  <span class="pi2"><svg class="bi"><use href="#i-triangle-alert"/></svg></span>
+                  <span class="pw3">
+                    <b data-rw="Abantu 3 bavuze Igiswahili, Subiza ntiyabafashije">3 people spoke Swahili and Subiza couldn't help them</b>
+                    <span data-rw="Barahagaritse. Ntabwo twabihishe kuko wabimenya uvuye ku mukiriya wisanzuye.">They rang off. We are not hiding this, because the alternative is you hearing it from an unhappy customer.</span>
+                    <button class="btn btn-primary btn-sm" id="addSw"><svg class="bi"><use href="#i-languages"/></svg><span data-rw="Ongeraho Igiswahili">Add Swahili</span></button>
+                  </span>
+                </div>
+                <div class="prow2 bad" id="badSlow" hidden>
+                  <span class="pi2"><svg class="bi"><use href="#i-clock"/></svg></span>
+                  <span class="pw3">
+                    <b data-rw="Ku wa gatandatu yatinze kwitaba">On Saturday it was slow to answer</b>
+                    <span data-rw="Amasegonda atatu aho kuba imwe, hagati ya saa tatu na saa yine. Ni ikibazo cyacu, turi kubikorana.">Three seconds instead of one, between nine and ten. That is our problem and we are working on it.</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="band">
+                <div class="bh2"><span class="bv" id="contV">76%</span><span class="bt" data-rw="yakemuye itaguhamagaye">handled without fetching you</span></div>
+                <div class="btrack"><span class="bok" style="left:70%;width:10%"></span><span class="bmark" id="contM" style="left:76%"></span></div>
+                <div class="bends"><span>0%</span><span data-rw="70–80% ni aho bikwiye kuba">70–80% is where this should sit</span><span>100%</span></div>
+                <p data-rw="Kuba hejuru cyane ni umuburo nk'ukuba hasi cyane: bivuga ko isubiza ibyo yagombye kukuzanira.">Too high is a warning as loud as too low: it would mean it is answering things it should be bringing to you.</p>
+              </div>
+            </section>
+
+            <!-- ═══════════ v6 · WHAT SHE COULD DO NEXT ═══════════ -->
+            <section class="screen" id="v6">
+              <h1 data-rw="Ibyo washobora gukora">What you could do next</h1>
+              <p class="sub" data-rw="Bitatu gusa, kandi buri kimwe kivuye mu mibare yawe bwite. Nta nama rusange — nta rutonde rw'ibyifuzo.">Three at most, and each one comes from your own numbers. No general advice, and no wishlist.</p>
+
+              <div class="suggs" id="suggs">
+                <div class="sug" data-s="park">
+                  <span class="sev">
+                    <svg class="bi"><use href="#i-circle-help"/></svg>
+                    <span data-rw-html="Aho bapaka imodoka babajije <b>inshuro 3</b> kandi Subiza ntiyabizi.">Parking was asked <b>3 times</b> and Subiza couldn't answer.</span>
+                  </span>
+                  <div class="sa2">
+                    <button class="btn btn-primary btn-sm" data-act="park"><span data-rw="Ongeraho igisubizo">Add the answer</span></button>
+                    <button class="btn btn-ghost btn-sm" data-dis="park"><span data-rw="Ntibikenewe">Not needed</span></button>
+                  </div>
+                </div>
+                <div class="sug" data-s="wa">
+                  <span class="sev">
+                    <svg class="bi"><use href="#i-message-circle"/></svg>
+                    <span data-rw-html="Wabonye <b>ubutumwa 12</b> kuri WhatsApp iki cyumweru, ariko Subiza ntiyubwakira.">You had <b>12 WhatsApp messages</b> this week that Subiza isn't answering.</span>
+                  </span>
+                  <div class="sa2">
+                    <button class="btn btn-primary btn-sm" data-act="wa"><span data-rw="Huza WhatsApp">Connect WhatsApp</span></button>
+                    <button class="btn btn-ghost btn-sm" data-dis="wa"><span data-rw="Ntibikenewe">Not needed</span></button>
+                  </div>
+                </div>
+                <div class="sug" data-s="rung">
+                  <span class="sev">
+                    <svg class="bi"><use href="#i-trending-up"/></svg>
+                    <span data-rw-html="Yakemuye <b>guhamagara 34</b> nta kibazo. Yemerere no kwakira iyo uri ku yindi?">It has handled <b>34 calls</b> with no trouble. Let it answer when you're busy too?</span>
+                  </span>
+                  <div class="sa2">
+                    <button class="btn btn-primary btn-sm" data-act="rung"><span data-rw="Yego">Yes</span></button>
+                    <button class="btn btn-ghost btn-sm" data-dis="rung"><span data-rw="Ntabwo ubu">Not now</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="empty" id="noSugg" hidden>
+                <svg class="bi"><use href="#i-check"/></svg>
+                <b data-rw="Nta kintu tubona">Nothing we can see</b>
+                <span data-rw="Ibyari byo gukosora byarangiye. Tuzakubwira igihe imibare yawe izagaragaza ikindi.">Everything we had is dealt with. We'll tell you when your numbers show something else.</span>
+              </div>
+            </section>
+
+            <!-- ═══════════ v7 · THE WEEKLY MESSAGE ═══════════ -->
+            <section class="screen" id="v7">
+              <h1 data-rw="Ubutumwa bwa buri wa mbere">The Monday message</h1>
+              <p class="sub" data-rw="Butangwa kuri WhatsApp, atari kuri imeyili. Bukugeraho aho usanzwe uri, ntibukugure amakuru — kandi ubutumwa ubwabwo ni ikimenyetso cy'uko igicuruzwa gikora.">It comes on WhatsApp, not by email. It reaches you where you already are, costs you no data — and the message is itself an instance of the thing you are paying for.</p>
+
+              <div class="repwrap">
+                <div class="wamsg">
+                  <div class="wamsg-h">
+                    <span class="m"><svg class="bi"><use href="#i-audio-lines"/></svg></span>
+                    <div><b>Subiza</b><span data-rw="ubu">now</span></div>
+                  </div>
+                  <div class="wamsg-b">
+                    <div class="wabub" id="repBody" data-rw-html="Muraho Claudine. Iki cyumweru Subiza yakiriye <b>47</b> guhamagara n'ubutumwa. <b>31</b> byaje mufunze cyangwa uri ku yindi. <b>9</b> byahindutse kwiyandikisha. Icyabajijwe cyane: ibiciro by'ugufatanya umusatsi.">Muraho Claudine. This week Subiza answered <b>47</b> calls and messages. <b>31</b> came in while you were closed or busy. <b>9</b> became bookings. Most asked: braid prices.</div>
+                  </div>
+                </div>
+                <div class="repcount">
+                  <span id="repWords"></span>
+                  <span data-rw="Urugero: 60">limit 60</span>
+                </div>
+                <div class="reptmpl">
+                  <svg class="bi"><use href="#i-shield-check"/></svg>
+                  <span data-rw-html="Ubu ni <b>ubutumwa bw'akazi</b>, atari ubw'ubucuruzi — ni amakuru ku serivisi ye bwite. Ibyo ni byo bituma yemererwa, kandi ni cyo cyiciro cyanditswe."><b>This is a utility message, not a marketing one</b> — it is an account update about her own service. That is what makes it permitted, and it is the category it is filed under.</span>
+                </div>
+              </div>
+
+              <div class="offsw">
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Ku wa mbere mu gitondo">Monday morning</b><span data-rw="Mu gihe cyawe. Ushobora kubihindura.">In your timezone. You can move it.</span></span>
+                  <button class="btn btn-ghost btn-sm" id="whenBtn"><span data-rw="Hindura">Change</span></button>
+                </div>
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Rimwe mu cyumweru, ntarenga">Once a week, never more</b><span data-rw="Uko byaba byinshi kose. Nta bundi butumwa buvuye hano.">However much happened. Nothing else comes from here.</span></span>
+                </div>
+              </div>
+
+              <button class="btn btn-secondary btn-block" data-go="v8"><span data-rw="Icyumweru kicecekeye kivugwa gute?">What a quiet week says</span><svg class="bi"><use href="#i-arrow-right"/></svg></button>
+            </section>
+
+            <!-- ═══════════ v8 · A QUIET WEEK ═══════════ -->
+            <section class="screen" id="v8">
+              <h1 data-rw="Icyumweru cyicecekeye">A quiet week</h1>
+              <p class="sub" data-rw="Guhimba ibyishimo ku cyumweru kidafite byinshi ni bwo buryo ubutumwa buhinduka urusaku umuntu aceceka. Bityo turabivuga uko biri, tunakubwire ikintu gifite akamaro.">Inventing enthusiasm about a slow week is how a message becomes noise somebody mutes. So it says what happened, and adds something useful.</p>
+
+              <div class="wamsg">
+                <div class="wamsg-h">
+                  <span class="m"><svg class="bi"><use href="#i-audio-lines"/></svg></span>
+                  <div><b>Subiza</b><span data-rw="ku wa mbere">Monday</span></div>
+                </div>
+                <div class="wamsg-b">
+                  <div class="wabub" data-rw-html="Muraho Claudine. Icyumweru kicecekeye — ibiganiro <b>4</b>. <b>3</b> byaje mufunze. Usanzwe ufite byinshi ku wa gatandatu.">Muraho Claudine. Quiet week — <b>4</b> conversations. <b>3</b> came in while you were closed. Your busiest day is usually Saturday.</div>
+                </div>
+              </div>
+
+              <div class="banner banner-info" style="margin-top:var(--s-6)">
+                <svg class="bi"><use href="#i-circle-check"/></svg>
+                <div><b data-rw="Butangwa nubwo ari buke">It goes out anyway</b><span data-rw="Ubutumwa bwa mbere butangwa ku mpera z'icyumweru cya mbere, n'ubwo imibare iba mike. Ikimenyetso cyaza kare kirusha agaciro ikimenyetso gitangaje.">The first one goes at the end of the first week even when the numbers are small. Early proof matters more than impressive proof.</span></div>
+              </div>
+
+              <button class="btn btn-secondary btn-block" data-go="v9" style="margin-top:var(--s-6)"><span data-rw="Naho iyo nta na kimwe?">And when there was nothing at all?</span><svg class="bi"><use href="#i-arrow-right"/></svg></button>
+            </section>
+
+            <!-- ═══════════ v9 · ZERO IS NOT QUIET ═══════════
+                 Atlas §9: zero traffic usually means broken forwarding,
+                 not a quiet week. "Quiet week!" over a dead line is the
+                 single worst message this product could send. -->
+            <section class="screen" id="v9">
+              <h1 data-rw="Nta guhamagara na kumwe">Not one call</h1>
+              <p class="sub" data-rw="Ibi ntabwo ari icyumweru cyicecekeye. Ubusanzwe bivuga ko itangwa ry'guhamagara ryahagaze — kandi kuvuga «icyumweru cyicecekeye» ku murongo wapfuye ni ubutumwa bubi kurusha ubundi bwose twashobora kohereza.">This is not a quiet week. Usually it means the forwarding has stopped — and saying “quiet week” over a dead line is the worst message this product could send.</p>
+
+              <div class="fwdcheck">
+                <div class="fl"><svg class="bi"><use href="#i-triangle-alert"/></svg><span data-rw="Ubutumwa bwoherejwe">What we sent instead</span></div>
+                <b data-rw="«Muraho Claudine. Nta guhamagara na kumwe kwaje iki cyumweru. Reka turebe niba itangwa ry'guhamagara rikiri ku murongo.»">“Muraho Claudine. No calls came through this week. Let's check your forwarding is still on.”</b>
+                <p data-rw="Nta mubare, nta kwishimira, nta «byakomeje neza». Iyo nta na kimwe cyaje, ikibazo cya mbere ni ukumenya niba umurongo ukora — atari ukwerekana igicuruzwa.">No number, no encouragement, no “all good”. When nothing arrived, the first question is whether the line works — not how the product looks.</p>
+                <button class="btn btn-primary btn-block" id="checkFwd"><svg class="bi"><use href="#i-phone-forwarded"/></svg><span data-rw="Genzura itangwa ry'guhamagara">Check the forwarding</span></button>
+              </div>
+
+              <div class="stages">
+                <div class="stage done"><span class="sn"><svg class="bi" style="width:12px;height:12px"><use href="#i-check"/></svg></span><span class="sw"><b data-rw="Twagenzuye umurongo">We tested the line</b><span data-rw="Twahamagaye nimero yawe. Ntiyaje kuri Subiza.">We rang your number. It did not reach Subiza.</span></span><span class="swhen" data-rw="ubu">now</span></div>
+                <div class="stage now"><span class="sn">2</span><span class="sw"><b data-rw="Kode yo kongera kuyishyiraho">The code to switch it back on</b><span data-rw="Interuro imwe uhamagara kuri telefone yawe. Bifata amasegonda 10.">One short code you dial on your phone. Ten seconds.</span></span><span class="swhen" data-rw="ikurikira">next</span></div>
+                <div class="stage next"><span class="sn">3</span><span class="sw"><b data-rw="Umuntu araguhamagara">A person calls you</b><span data-rw="Niba bitakosowe mu minsi ibiri. Si ubutumwa bwa robo.">If it isn't fixed within two days. Not an automated message.</span></span><span class="swhen" data-rw="niba bikenewe">if needed</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ v10 · SHE ANSWERS EVERYTHING HERSELF ═══════════
+                 Atlas §9: at rung 4 the counterfactual is weaker. It says
+                 to show "answered when you were busy or closed" separately
+                 from the total and be explicit about which is which. -->
+            <section class="screen" id="v10">
+              <h1 data-rw="Subiza yakira guhamagara kose">Subiza answers every call</h1>
+              <p class="sub" data-rw="Uko uyikoresha, umubare uhinduka. Ntidushobora kuvuga ayo wari kubura, kuko telefone yawe ntiyongera kuvuga na gato — bityo tuvuga ibyo tuzi gusa.">The way you have it set, the number changes shape. We cannot say which you'd have missed, because your phone no longer rings at all — so we only say what we know.</p>
+
+              <div class="week">
+                <div class="wtop">
+                  <div class="wnum"><b>63</b><span data-rw="ibiganiro byasubijwe iki cyumweru">conversations answered this week</span></div>
+                  <p class="wsub" data-rw="Guhamagara n'ubutumwa hamwe, kuva ku wa mbere.">Calls and messages together, since Monday.</p>
+                </div>
+                <div class="wclaim" style="background:var(--surface-2);border-top-color:var(--rule)">
+                  <svg class="bi" style="color:var(--ink-3)"><use href="#i-circle-help"/></svg>
+                  <div>
+                    <b data-rw="Muri byo, 24 byaje mufunze">Of those, 24 came in while you were closed</b>
+                    <span data-rw="Ibyo ni ibyo tuzi neza. Ibindi 39 byaje mu masaha mufunguye — hari ayo wari kwakira, ariko ntidushobora kumenya ayahe, bityo ntitubara.">Those we are sure of. The other 39 arrived during your open hours — you'd have taken some of them, but we cannot know which, so we don't count them.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="banner banner-info" style="margin-top:var(--s-6)">
+                <svg class="bi"><use href="#i-circle-alert"/></svg>
+                <div><b data-rw="Umubare munini wari kuba mwiza kuri twe">A bigger number would suit us better</b><span data-rw="Twashoboraga kwandika 63 nk'ibyo wari kubura. Ntibyaba ari ukuri, kandi umunsi wabimenya, indi mibare yose yacu yahita iba ikekwa.">We could write 63 as calls you'd have missed. It would not be true, and the day you worked that out, every other number we show you would become suspect.</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ v11 · THE FIRST WEEK ═══════════ -->
+            <section class="screen" id="v11">
+              <h1 data-rw="Icyumweru cya mbere">Your first week</h1>
+              <p class="sub" data-rw="Ibiganiro bitandatu. Ni bike ku kuvuga ikintu ku cyerekezo, ariko ni byinshi ku kuvuga ko ikora.">Six conversations. Too few to say anything about a pattern, and enough to say it works.</p>
+
+              <div class="week">
+                <div class="wtop">
+                  <div class="wnum"><b>4</b><span data-rw="byaje mufunze">came in while you were closed</span></div>
+                  <p class="wsub" data-rw="Muri 6 byose. Ushobora kubifungura byose hano hasi.">Out of 6 altogether. You can open every one of them below.</p>
+                </div>
+                <div class="tooearly">
+                  <b data-rw="Ntidushobora kukubwira icyerekezo">We can't tell you a pattern yet</b>
+                  <p data-rw="Ibiganiro bitandatu ntibihagije ngo bivuge ikintu ku wa gatandatu cyangwa ku bibazo abakiriya babaza. Icyumweru cyangwa bibiri, tuzabikubwira — kandi kugeza ubwo, kubara bitandatu ntacyo bimaze.">Six conversations cannot tell you anything about Saturdays, or about what your customers ask. In a week or two we will — and until then, counting six would just be counting.</p>
+                  <div class="tedots"><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i></div>
+                </div>
+              </div>
+
+              <div class="banner banner-ok" style="margin-top:var(--s-6)">
+                <svg class="bi"><use href="#i-send"/></svg>
+                <div><b data-rw="Ubutumwa bwa mbere buracyoherezwa">The first message still goes out</b><span data-rw="«Icyumweru cyawe cya mbere: ibiganiro 6, 4 wari kubura.» Ikimenyetso cyaza kare kirusha agaciro ikimenyetso gitangaje.">“Your first week: 6 conversations, 4 that came in while you were closed.” Early proof matters more than impressive proof.</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ v12 · HER FIGURE, NOT OURS ═══════════
+                 Atlas 16.b asks whether the headline should be revenue.
+                 It is more persuasive and requires an average-job-value
+                 we cannot verify — so we ask her for it, or we show none. -->
+            <section class="screen" id="v12">
+              <h1 data-rw="Amafaranga — niba ubidubwiye">In money — if you tell us</h1>
+              <p class="sub" data-rw="Ntidushobora kumenya igiciro cyawe cy'akazi kamwe, kandi ntituzagihimba. Niba utubwiye, imibare iba iyawe kandi tuvuge ko ari iyawe.">We cannot know what one job is worth to you, and we are not going to invent it. If you tell us, the arithmetic becomes yours and we say so.</p>
+
+              <div class="askmine" id="askMine">
+                <b data-rw="Akazi kamwe kakuzanira angahe?">What does one job bring in, roughly?</b>
+                <p data-rw="Impuzandengo ni ihagije. Bikoreshwa hano gusa, kandi ushobora kubihindura cyangwa kubikuraho igihe icyo ari cyo cyose.">A rough average is enough. It is used only here, and you can change it or remove it whenever you like.</p>
+                <div class="ar">
+                  <div class="inpwrap">
+                    <input class="inp" id="avgIn" type="text" inputmode="numeric" value="15000" data-rw-ph="urugero 15 000" placeholder="e.g. 15,000">
+                  </div>
+                  <button class="btn btn-primary btn-sm" id="setAvg"><span data-rw="Bika">Save</span></button>
+                </div>
+              </div>
+
+              <div class="mine" id="mineBox" hidden>
+                <div class="ml"><svg class="bi"><use href="#i-wallet"/></svg><span data-rw="Ukoresheje umubare wawe">Using your figure</span></div>
+                <div class="mv"><b id="mineV">135,000</b><span data-rw="Frw, kuva ku kwiyandikisha 9 kw'iki cyumweru">Frw, from this week's 9 bookings</span></div>
+                <div class="msrc">
+                  <svg class="bi"><use href="#i-circle-help"/></svg>
+                  <span id="mineSrc" data-rw-html="9 × <b>15 000 Frw</b>, umubare watanze ku ya 12 Nzeri. Ntabwo ari uwacu, kandi ntitwawugereranyije — niba ari mubi, uhindure.">9 × <b>15,000 Frw</b>, the figure you gave on 12 September. Not ours, and not estimated — if it's wrong, change it.</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="clearAvg" style="margin-top:var(--s-5)"><span data-rw="Bikureho">Remove this</span></button>
+              </div>
+
+              <div class="banner banner-info">
+                <svg class="bi"><use href="#i-circle-x"/></svg>
+                <div><b data-rw="Ntituzerekana amafaranga utabidubwiye">No money figure appears unless you give us one</b><span data-rw="Umubare w'amafaranga twahimbye wakwemeza kurushaho — kandi ni na wo wangiza byose iyo utabaye ukuri. Ntabwo tugurana ibyo.">An invented money figure would persuade you more — and it is also the one that destroys everything if it turns out to be wrong. We are not making that trade.</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ v13 · TURNING IT OFF ═══════════ -->
+            <section class="screen" id="v13">
+              <h1 data-rw="Guhagarika ubutumwa">Turning the message off</h1>
+              <p class="sub" data-rw="Kanda rimwe, kandi ntitubaza impamvu. Niba ubutumwa bwacu bubabaje, ikibazo ni ubutumwa, atari wowe.">One tap, and we do not ask why. If our message is annoying you, the message is the problem, not you.</p>
+
+              <div class="offsw">
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Ubutumwa bwa buri cyumweru">The weekly message</b><span data-rw="Kuri WhatsApp, ku wa mbere mu gitondo">On WhatsApp, Monday morning</span></span>
+                  <label class="tgl"><input type="checkbox" id="repOn" checked><span class="track"></span></label>
+                </div>
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Ibyavuyemo biracyaboneka hano">Results stay here either way</b><span data-rw="Guhagarika ubutumwa ntibihagarika imibare. Uza kuyireba igihe ubishakiye.">Switching the message off does not switch off the numbers. They are here when you want them.</span></span>
+                </div>
+              </div>
+
+              <div class="banner banner-ok" id="offConf" hidden>
+                <svg class="bi"><use href="#i-check"/></svg>
+                <div><b data-rw="Byahagaritswe ubu">Off, from now</b><span data-rw="Nta bundi butumwa buzaza. Nta «twagusanga», nta «turakubuze» — ntacyo.">No more messages. No “we miss you”, no “are you sure” — nothing.</span></div>
+              </div>
+
+              <p class="microfoot" data-rw="Kandi niba ubuhagaritse, ntibivuze ko ibintu bimeze nabi. Bivuze ko ubutumwa bwacu butari ngombwa kuri wowe, kandi ni amakuru mafite akamaro kuri twe.">And if you switch it off, that is not a bad sign. It means our message wasn't useful to you, which is information we want.</p>
+            </section>
+
+            <!-- ═══════════ STATES ═══════════ -->
+            <section class="screen" id="x1">
+              <div class="banner banner-ok">
+                <svg class="bi"><use href="#i-phone"/></svg>
+                <div><b data-rw="Subiza iracyakira">Subiza is still answering</b><span data-rw="Nta interineti kuri iyi telefone. Imibare yaje mbere iracyahari; iyi y'uyu munsi izaza umurongo ugarutse.">No connection on this device. The numbers that already loaded are still here; today's will arrive when it returns.</span></div>
+              </div>
+              <div class="week" style="margin-top:var(--s-6)">
+                <div class="wtop">
+                  <div class="wnum"><b>31</b><span data-rw="byaje mufunze — ku wa gatanu saa kumi">came in while you were closed — as of Friday 16:00</span></div>
+                  <p class="wsub" data-rw="Ibi ni ibyari bihari ubwo interineti yari ihari. Bishobora kuba byariyongereye.">This is what we had when you were last online. It may have grown since.</p>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-block" id="retryNet" style="margin-top:var(--s-6)"><svg class="bi"><use href="#i-rotate-cw"/></svg><span data-rw="Ongera ugerageze">Try again</span></button>
+              <p class="microfoot" data-rw="Ntituzakwereka umubare tutizeye. Igihe cyanditse ku mubare ni cyo kikubwira ko ari uwa kera.">We will not show you a number we are unsure of. The timestamp on it is how you know it is old.</p>
+            </section>
+
+            <section class="screen" id="x2">
+              <div class="banner banner-risk">
+                <svg class="bi"><use href="#i-server"/></svg>
+                <div><b data-rw="Ntitubona imibare yawe">We can't load your numbers</b><span data-rw="Ni ikibazo cyacu, cyatangiye saa yine n'iminota 40. Ibiganiro biracyafatwa kandi bibikwa — ni ukubara byonyine kutagenda.">Our problem, since 10:40. Conversations are still being answered and recorded — it is only the counting that is down.</span></div>
+              </div>
+              <div class="banner banner-ok" style="margin-top:var(--s-5)">
+                <svg class="bi"><use href="#i-phone-forwarded"/></svg>
+                <div><b data-rw="Umufasha wawe ntacyo abaye">Your agent is unaffected</b><span data-rw="Aracyakira guhamagara. Nta kiganiro na kimwe kizabura kubera ibi.">It is still answering. Not one conversation will be lost because of this.</span></div>
+              </div>
+              <div class="gathering" style="margin-top:var(--s-6)">
+                <b data-rw="Nta mubare hano">No number here</b>
+                <p data-rw="Twashoboraga kwerekana uwa ejo nk'aho ari uw'uyu munsi. Ntitwabikora — umubare mubi urusha kuba mubi kuruta kutagira umubare.">We could show you yesterday's as if it were today's. We won't — a wrong number is worse than no number.</p>
+                <button class="btn btn-secondary btn-sm" id="retryAll"><svg class="bi"><use href="#i-rotate-cw"/></svg><span data-rw="Ongera ugerageze">Try again</span></button>
+              </div>
+            </section>
+
+          </div><!-- /feed -->
+
+          <nav class="tabbar" aria-label="Sections">
+            <a data-nav="home"><svg><use href="#i-house"/></svg><span data-rw="Ahabanza">Home</span></a>
+            <a data-nav="conv"><svg><use href="#i-message-square-text"/></svg><span data-rw="Ibiganiro">Chats</span></a>
+            <a data-nav="agent"><svg><use href="#i-bot"/></svg><span data-rw="Umufasha">Agent</span></a>
+            <a class="on" data-nav="more"><svg><use href="#i-ellipsis"/></svg><span data-rw="Ibindi">More</span></a>
+          </nav>
+        </div><!-- /appcol -->
+      </div><!-- /appframe -->
+
+    </div><!-- /authbody -->
+  </div><!-- /authmain -->
+
+  <aside class="authaside">
+
+    <div class="asidepane on" id="as-num">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-chart-column"/></svg><span data-rw="Icyemezo cy'ingenzi">The decision this flow turns on</span></div>
+        <p class="gq" data-rw-html="Ibyo tutabara <mark>bifite akamaro kurusha</mark> ibyo tubara.">The exclusions <mark>matter more than</mark> the inclusions.</p>
+        <p class="gt" data-rw="Umubare ushobora kwamaganwa ni mubi kuruta umubare muto wizerwa. Nudufata twiyongereza rimwe, indi mibare yose muri iki gicuruzwa ihita iba ikekwa — kandi ntiyongera kwizerwa.">A number the owner can poke a hole in is worse than a smaller number they trust. If they catch us inflating it once, every other number in the product becomes suspect — and stays suspect.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Umubare ni buto">The number is a button</h3>
+        <p data-rw="Kanda kuri 31 urebe byose uko ari 31, ushobora kubifungura. Kugenzura ntabwo ari ikintu cyiyongera hano — ni cyo cyonyine gitanga agaciro k'umubare wiyongera n'ubwinshi bw'abahamagara, waba mwiza cyangwa mubi.">Tap 31 and all thirty-one are there, openable. Auditability is not a feature here — it is the only thing that makes a number worth anything when that number grows with traffic whether the product is good or not.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Igitabo kivuga «wari kubura»">The atlas says “you would have missed”</h3>
+        <p data-rw="Iyi dosiye ivuga «byaje mufunze». Bisobanura kimwe, ariko icya kabiri ni ikintu twabonye, naho icya mbere ni ikintu twakeka ku isi itabaye. Igitabo ubwacyo kirabyemera mu kubara kwacyo: guhamagara ku ntambwe ya 4 ntikibarwa kuko «bidashobora kugaragazwa».">This file says “came in while you were closed”. Same meaning, but the second is something we observed and the first is a guess about a world that never happened. The atlas's own arithmetic already agrees: at rung 4 it excludes calls because they are “unprovable”.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Nta mafaranga tutabwiwe">No money unless she gives it</h3>
+        <p data-rw="Igitabo cyibaza niba umubare wagombye kuba amafaranga. Yaba wemeza kurushaho, kandi asaba igiciro cy'akazi kamwe tudashobora kugenzura. Bityo turamubaza — niba atubwiye, imibare iba iye kandi tuvuge aho yavuye; niba atabwiye, nta mafaranga agaragara.">Atlas 16.b asks whether the headline should be revenue. It would persuade more, and it needs an average job value we cannot verify. So we ask her — if she answers, the arithmetic is hers and we cite it; if she doesn't, no money figure appears at all.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-int">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-list-checks"/></svg><span data-rw="Amakuru mashya ku bucuruzi bwe">New information about her own business</span></div>
+        <p class="gq" data-rw-html="Nta bucuruzi buto bwo mu Rwanda <mark>bwabonye urutonde</mark> rw'ibyo abakiriya babaza.">No small business here has ever had <mark>a ranked list</mark> of what its customers ask.</p>
+        <p class="gt" data-rw="Ibi ntabwo ari imibare y'igicuruzwa cyacu — ni ibye. Kandi imirongo ifite akamaro kurusha iyindi ni iyo Subiza itashoboye kusubiza: ni ibyifuzo bibarwa, bihinduka umurimo w'iminota ibiri.">These are not our product metrics — they are hers. And the most valuable rows are the ones Subiza could not answer: demand, already quantified, converting into a two-minute task.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ibyifuzo bibarwa, atari ukukeka">Quantified demand, not a guess</h3>
+        <p data-rw="«Ongeraho ibisubizo» ni ikibazo kitamenyekana. «Abantu batatu babajije aho bapaka imodoka» ni umurimo. Itandukaniro ni uko atakeka ko ari ngombwa — arabibona.">“Add more answers” is an unanswerable request. “Three people asked about parking” is a task. The difference is that she is not guessing whether it matters — she can see that it does.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Kandi ni ikimenyetso kuri twe">And it is a signal for us</h3>
+        <p data-rw="Iyo ikibazo kimwe kinanira salon nyinshi, ntabwo ari ikibazo cye — ni ikibazo cy'icyitegererezo cyacu, kandi kigomba kubakemurirwa bose. Ibyo bivugwa kuri iyi paji kuko kubyihisha ni ukumwereka ko ari we wibeshye.">When one question defeats many salons, that is not her problem — it is a problem with our template, and it should be fixed for all of them. The screen says so, because hiding it implies the fault was hers.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-qual">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-message-square-text"/></svg><span data-rw="Interuro, atari ibipimo">Sentences, not metrics</span></div>
+        <p class="gq" data-rw-html="«Yakemuye 8 kuri 10 ubwayo» — <mark>atari «igipimo cyo kwakira: 80%»</mark>.">“Handled 8 out of 10 on its own” — <mark>not “containment rate: 80%”</mark>.</p>
+        <p class="gt" data-rw="Nyir'ubucuruzi ntacyo akora ku «gipimo». Akora ku nteruro azi. Kandi igipimo kitagaragara keretse iyo cyangiritse ni ikimenyetso, naho igihoraho ni urusaku.">An owner has nothing to do with a rate. She has something to do with a sentence. And a measure that only appears when it degrades is a signal; one that is always there is furniture.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Amakuru mabi hamwe n'uko bikosorwa">Bad news, with the fix attached</h3>
+        <p data-rw="«Abantu batatu bavuze Igiswahili, Subiza ntiyabafashije» iherekejwe na buto yongeraho Igiswahili. Guhisha intege nke bitanga nyir'ubucuruzi uzimenya avuye ku mukiriya warakaye — kandi icyo gihe ntabwo ari amakuru, ni ikimwaro.">“3 people spoke Swahili and Subiza couldn't help them”, with a button that adds Swahili. Hiding weakness produces an owner who learns it from an angry customer — and at that point it is not information, it is humiliation.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Bitatu, ntarenga">Three, at most</h3>
+        <p data-rw="Buri cyifuzo kivuye mu mibare ye, kirimo umubare, kandi ni umurimo w'iminota ibiri. Urutonde rw'ibyifuzo icumi ni urutonde nta we usoma.">Each suggestion comes from her numbers, carries a count, and is a two-minute task. A list of ten suggestions is a list nobody reads.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-rep">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-send"/></svg><span data-rw="Ubutumwa ubwabwo ni ikimenyetso">The message is itself the proof</span></div>
+        <p class="gq" data-rw-html="Butangwa kuri WhatsApp <mark>aho asanzwe ari</mark>, ntibumugura amakuru.">Delivered on WhatsApp, <mark>where she already is</mark>, costing her no data.</p>
+        <p class="gt" data-rw="Kandi ubutumwa bwa buri cyumweru ni urugero rw'icyo yishyura: ubwenge bw'ubukorano bwandika ubutumwa bwumvikana kuri WhatsApp. Imeyili yaba ari inyandiko atazasoma.">And the weekly message is an instance of the thing she pays for: an AI writing a clear WhatsApp message. An email would be a document she does not open.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Amagambo 60, ntarenga">Sixty words, and no more</h3>
+        <p data-rw="Ni ubutumwa, atari ikinyamakuru. Umubare umwe, ikimenyetso kimwe, ikintu kimwe abakiriya babajije, na link imwe. Rimwe mu cyumweru, uko byaba byinshi kose.">It is a message, not a newsletter. One number, one supporting fact, one thing customers asked, one link. Once a week, however much happened.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ubusa ntabwo ari ubucecekere">Zero is not quiet</h3>
+        <p data-rw="Iyo nta na kimwe cyaje, ubusanzwe itangwa ry'guhamagara ryahagaze. Kuvuga «icyumweru cyicecekeye» ku murongo wapfuye ni ubutumwa bubi kurusha ubundi bwose iki gicuruzwa cyashobora kohereza — bityo ubutumwa buhinduka igenzura.">When nothing arrived, the forwarding has usually stopped. “Quiet week” over a dead line is the worst message this product could send — so the message becomes a check instead.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Guhagarika ni kanda rimwe">Off is one tap</h3>
+        <p data-rw="Nta «uzi neza», nta «twagusanga», nta kubaza impamvu. Niba ubutumwa bwacu bubabaje, ikibazo ni ubutumwa. Kandi guhagarika ubutumwa ntibihagarika imibare — ibyo byaba ari igihano.">No “are you sure”, no “we'll miss you”, no asking why. If our message is annoying her, the message is the problem. And switching it off does not switch off the numbers — that would be a punishment.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-weak">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-circle-help"/></svg><span data-rw="Iyo tudashobora kuvuga">When we cannot say</span></div>
+        <p class="gq" data-rw-html="Umubare munini wari kuba mwiza kuri twe. <mark>Ntibyaba ari ukuri.</mark>">A bigger number would suit us better. <mark>It would not be true.</mark></p>
+        <p class="gt" data-rw="Ku ntambwe ya 4, telefone ye ntiyongera kuvuga, bityo nta kimenyetso na kimwe cy'icyo yari kwakira. Igitabo ubwacyo kivuga ko bidashobora kugaragazwa — bityo umubare uhinduka isura aho kwiyongera.">At rung 4 her phone no longer rings, so there is no evidence at all about what she'd have taken. The atlas itself calls those calls unprovable — so the number changes shape rather than growing.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ibiri byerekanwa bitandukanye">Two figures, kept apart</h3>
+        <p data-rw="Igiteranyo, hanyuma igice tuzi neza. Kubihuza byaba ari ukwiyongereza mu buryo butagaragara, kandi ni bwo buryo umuntu abura icyizere burundu: atari ubwo yafatwa abeshya, ni ubwo yamenya ko yashoboraga kubeshywa.">The total, then the part we are sure of. Merging them would be inflation you could not see — which is how trust is lost for good: not by being caught lying, but by realising you could have been.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Icyumweru cya mbere">The first week</h3>
+        <p data-rw="Ibiganiro bitandatu ntibihagije ku cyerekezo, ariko birahagije ku kuvuga ko ikora. Bityo umubare uboneka, icyerekezo kirategereza, kandi paji ivuga itandukaniro.">Six conversations are too few for a pattern and enough to prove it works. So the number appears, the pattern waits, and the screen says which is which.</p>
+      </div>
+    </div>
+
+  </aside>
+</div><!-- /auth -->
+</div><!-- /m-proto -->
+
+<div class="mode" id="m-spec">
+<div class="specwrap">
+  <p style="font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 var(--s-5)">Flow 1.14 · atlas F-16 · blocks renewal</p>
+  <h1 style="font-family:var(--f-display);font-size:clamp(2rem,1.5rem + 2vw,2.9rem);font-variation-settings:'opsz' 48;font-weight:600;letter-spacing:-.032em;line-height:1.06;margin:0 0 var(--s-6)">Results</h1>
+  <p style="max-width:70ch;color:var(--ink-2);font-size:var(--t-body-l);line-height:1.68;margin:0">Where the subscription renews, and where it is lost silently. Fifteen screens, one number, and a great deal of care about what that number is allowed to claim.</p>
+
+  <div class="sechd"><span class="n">01</span><h2>The failure mode is silence, not dissatisfaction</h2></div>
+  <p>Atlas §1: <i>“The product works, the owner never notices, and they cancel while describing it as ‘not really doing much’.”</i> That is a different problem from a product people dislike, and it has a different fix — not persuasion, but visibility of something specific enough to remember.</p>
+
+  <div class="sechd"><span class="n">02</span><h2>The exclusions are the design</h2></div>
+  <p>Atlas §2 carries the sentence this whole file is built around:</p>
+  <p style="font-family:var(--f-display);font-size:1.15rem;font-variation-settings:'opsz' 20;font-weight:600;letter-spacing:-.018em;line-height:1.4;margin:var(--s-6) 0;padding-left:var(--s-6);border-left:2px solid var(--signal-lo)">A number the owner can poke a hole in is worse than a smaller number they trust. If they ever catch us inflating it, every other number in the product becomes suspect.</p>
+  <p>Two consequences, both structural rather than editorial. <b>First, the headline is a control.</b> SC 16.5 requires every counted conversation to be listed and openable, so the number is a button and <code>v2</code> is the list. A count that grows with traffic whether the product is good or not has exactly one defence, and this is it.</p>
+  <p><b>Second, the exclusions get their own screen</b> — <code>v3</code>, reachable from the headline — and they are itemised with counts, including the awkward one: <i>3 of your own test calls, not counted</i>. Showing the subtractions is the only way a total means anything.</p>
+
+  <div class="sechd"><span class="n">03</span><h2>Carrying Home's correction forward</h2></div>
+  <p>Atlas §2 words the headline as <b>“31 calls you would have missed”</b>. <code>home.html</code> corrected that to the observation that entails it — <b>“31 came in while you were closed”</b> — and this file keeps the correction, for the same reason plus a new one: <b>the atlas's own arithmetic already agrees.</b> Its inclusion table is entirely observational (arrived outside hours · line was busy · rang unanswered), and its exclusion table rules out rung-4 calls explicitly because they are <i>“unprovable”</i>. The counterfactual survives only in the headline's grammar, not in the sum.</p>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Rung</th><th>Headline</th><th>Basis</th></tr></thead>
+    <tbody>
+      <tr><td>2 — after hours</td><td>31 came in while you were closed</td><td>Her stated hours. Observed</td></tr>
+      <tr><td>3 — calls she misses</td><td>…or you were already on another call</td><td>A carrier condition fired. Recorded, not inferred</td></tr>
+      <tr><td>4 — everything</td><td><b>63 answered</b>, of which <b>24</b> while closed</td><td>Two figures kept apart, because the rest is unknowable</td></tr>
+      <tr><td>Week one</td><td>4 of 6, and no pattern claimed</td><td>Six conversations is not a trend</td></tr>
+    </tbody>
+  </table></div>
+  <div class="why2"><svg><use href="#i-circle-alert"/></svg><p><b>Rung 4 is where an honest product loses a marketing line.</b> <code>v10</code> says it out loud: <i>we could write 63 as calls you'd have missed; it would not be true, and the day you worked that out every other number would become suspect.</i> Merging the two figures would be inflation you could not see — which is how trust actually dies, not by being caught lying but by realising you could have been.</p></div>
+
+  <div class="sechd"><span class="n">04</span><h2>Atlas 16.b, answered: no money unless she supplies it</h2></div>
+  <p>The atlas asks whether the headline should be revenue — more persuasive, but it needs an average transaction value we cannot verify. Both horns are bad: a made-up multiplier is the single most destructive number we could print, and refusing to talk about money at all leaves the most motivating framing on the table.</p>
+  <p><b>So we ask her.</b> <code>v12</code> offers one optional field — <i>what does one job bring in, roughly?</i> — and if she fills it, the arithmetic appears with its source on its face: <i>9 × 15,000 Frw, the figure you gave on 12 September. Not ours, and not estimated.</i> If she doesn't, no money figure exists anywhere in the product. The persuasive version becomes available without us inventing anything.</p>
+
+  <div class="sechd"><span class="n">05</span><h2>The intent ranking, and why it is the best screen here</h2></div>
+  <p>Atlas §4.2 calls it <i>“the most valuable screen in the product for the business itself”</i>, and the reason is that it is not a product metric at all — it is new information about her own business that no Rwandan SME has previously had.</p>
+  <p>The rows that matter most are the ones Subiza could not answer. They are <b>demand, already quantified</b>: <i>three people asked about parking</i> is a two-minute task, where <i>add more answers</i> is an unanswerable request. And the screen states that when the same question defeats many salons it is our template's fault rather than hers — because hiding that implies the fault was hers.</p>
+
+  <div class="sechd"><span class="n">06</span><h2>Plain statements, and bad news with a fix</h2></div>
+  <p>Atlas §4.3 asks for statements rather than metrics, and the reason is that an owner has nothing to do with a rate and something to do with a sentence. <i>“Subiza handled 8 out of 10 on its own”</i>, never <i>containment rate: 80%</i>. Latency appears <b>only when it degrades</b> — a measure that is always present is furniture; one that appears when it breaks is a signal.</p>
+  <p>And weakness is shown with the remedy already attached: <i>“3 people spoke Swahili and Subiza couldn't help them”</i> plus a button that adds Swahili. The alternative is an owner who discovers it from an angry customer, at which point it is not information, it is humiliation.</p>
+  <p>Containment is the band from <code>escalation.html</code>, unchanged, with both edges live. 95% would not be a triumph.</p>
+
+  <div class="sechd"><span class="n">07</span><h2>Zero traffic is not a quiet week</h2></div>
+  <p>The single highest-value edge case in the atlas, §9: <i>zero traffic often means broken forwarding, not a quiet week.</i> So the weekly message has three shapes, and the third is not a report at all:</p>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Week</th><th>What goes out</th></tr></thead>
+    <tbody>
+      <tr><td>Normal</td><td>The number, one supporting fact, one thing customers asked. 38 words</td></tr>
+      <tr><td>Quiet</td><td><i>“Quiet week — 4 conversations… your busiest day is usually Saturday.”</i> Honest, plus something useful</td></tr>
+      <tr><td><b>Zero</b></td><td><b>No number and no encouragement.</b> <i>“No calls came through this week. Let's check your forwarding is still on.”</i></td></tr>
+    </tbody>
+  </table></div>
+  <p>Sending “quiet week!” over a dead line is the worst message this product could produce, and it is also the easiest one to produce by accident — a template that always leads with a figure will happily print a zero.</p>
+
+  <div class="sechd"><span class="n">08</span><h2>The message, and the platform rules it lives inside</h2></div>
+  <p>Delivered on WhatsApp because it reaches her where she already is, costs her no data, and <b>is itself an instance of the thing she pays for</b> — an AI writing a clear WhatsApp message. Under 60 words, with the count rendered on the mock so the constraint is visible rather than aspirational.</p>
+  <p>W6 makes this business-initiated, so it needs an approved template; W18 means the categorisation has to be right or it is rejected. The screen states plainly that this is a <b>utility</b> message — an account update about her own service — because that is both true and the condition of it being delivered at all. W19's per-message billing from 1 October 2026 leaves one message per tenant per week comfortably inside the free allowance, but it belongs in the cost model rather than on this screen.</p>
+  <p>The off switch is one tap, and <code>v13</code> carries the two sentences that make it honest: switching the message off does not switch off the numbers, and switching it off is information we want rather than a loss to be argued with.</p>
+
+  <div class="sechd"><span class="n">09</span><h2>Where this flow stops</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>The tap</th><th>Owned by</th><th>What this file does</th></tr></thead>
+    <tbody>
+      <tr><td>Any conversation in the audit list</td><td>Flow 14 — Conversations</td><td>Lists them in that file's own row component. Draws no transcript</td></tr>
+      <tr><td>Teach it about parking</td><td>Flow 10 — Knowledge</td><td>Names the gap and its count, then hands over</td></tr>
+      <tr><td>Add Swahili</td><td>Flow 12 — Language</td><td>Names who it failed and how many</td></tr>
+      <tr><td>Let it answer when you're busy</td><td>Flow 13 — Test &amp; go live</td><td>Cites the evidence; that file owns the ladder</td></tr>
+      <tr><td>Connect WhatsApp</td><td>Flow 08 — Channels</td><td>States the 12 messages it isn't answering</td></tr>
+      <tr><td>Check the forwarding</td><td>Flow 07 — Phone</td><td>Says the line test failed. Does not draw the GSM code</td></tr>
+      <tr><td>The monthly statement</td><td>Flow 17 — Billing</td><td>Not drawn here at all</td></tr>
+      <tr><td>Churn signals and the ops queue</td><td>Flow 21 — Tenant lifecycle</td><td>Only the owner-facing half appears: <i>a person calls you if it isn't fixed in two days</i></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sechd"><span class="n">10</span><h2>The eight states</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>State</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>Loading</td><td>Inherited skeleton. No chart ever renders half-drawn — G14 forbids a chart library, so there is nothing to animate in</td></tr>
+      <tr><td>Empty</td><td><code>v11</code> first week, and <code>v9</code> zero traffic. Two completely different emptinesses with two different answers</td></tr>
+      <tr><td>Offline</td><td><code>x1</code> — the last known number, <b>stamped with when it was true</b>, which is how she knows it is old</td></tr>
+      <tr><td>Partial</td><td>Folded into offline. A partially-counted week is a wrong number, and we do not show those</td></tr>
+      <tr><td>Permission denied</td><td>Not drawn. A Viewer sees Results; who may is Flow 18's</td></tr>
+      <tr><td>Not found</td><td>Not drawn. A period with no data is <code>v11</code>, which is a designed screen rather than an error</td></tr>
+      <tr><td>Rate limited</td><td>The one-per-week frequency cap, stated on <code>v7</code> as a promise rather than a limit</td></tr>
+      <tr><td>Server error</td><td><code>x2</code> — and it says <b>no number at all</b> rather than yesterday's dressed as today's</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sechd"><span class="n">11</span><h2>Redesigned for 360, not reflowed</h2></div>
+  <p>The <b>headline stacks</b>. A 4rem numeral and a two-line label cannot share a baseline at 360, and the label is the half carrying the meaning — <i>came in while you were closed</i> is the entire claim.</p>
+  <p>The <b>intent bar disappears</b> below 640 and the count stays. The bar is a comparison aid; the number is the information, and dropping the right one is the whole skill.</p>
+  <p>The <b>gap label</b> wraps to its own line rather than squeezing between a name and a count, because <i>it didn't know</i> is the reason the row is interesting.</p>
+
+  <div class="sechd"><span class="n">12</span><h2>Open questions this file does not settle</h2></div>
+  <p>Atlas <b>16.a</b> — whether the counterfactual survives translation into Kinyarwanda — is partly dissolved by the change above: an observation translates cleanly where a counterfactual does not, which is a second argument for it that we did not go looking for. <b>16.c</b>, whether Monday morning competes with the start-of-week rush, is untested; the time is configurable and the screen says so. <b>16.d</b> — whether owners want intent rankings or whether it is an analyst's idea of value — is the biggest open question in this file, and the honest answer is that we find it compelling and have not proven she will. <b>16.f</b>, whether Meta approves the template as a utility message in Rwanda, is a delivery risk this design cannot mitigate; if it is refused, the SMS fallback becomes the primary channel and the 60-word limit becomes a 160-character one.</p>
+  <p>And the standing caveat: <b>the Kinyarwanda is carefully written and has not been reviewed by a native speaker.</b> Atlas SC 16.12 requires the report to render correctly in all four languages; two are wired here, and G15 asks for four.</p>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+var S={scen:'normal',lang:'en',width:'phone',screen:'v1',avg:null};
+
+var PANE={v1:'as-num',v2:'as-num',v3:'as-num',v4:'as-int',v5:'as-qual',v6:'as-qual',
+          v7:'as-rep',v8:'as-rep',v9:'as-rep',v13:'as-rep',
+          v10:'as-weak',v11:'as-weak',v12:'as-num',x1:'as-num',x2:'as-num'};
+var HEAD={
+ v1:['Ibyavuyemo','Results','Icyo Subiza yakoreye ubucuruzi bwawe','What Subiza did for your business'],
+ v2:['Byose uko ari 31','All thirty-one','Buri kimwe kirashobora kufungurwa','Every one can be opened'],
+ v3:['Uko bibarwa','How it is counted','Ibyo tutabara bifite akamaro kurushaho',"The exclusions matter more"],
+ v4:['Ibyo babaza','What they asked','Amakuru ku bucuruzi bwawe','Information about your business'],
+ v5:['Uko byagenze','How it worked','Interuro, atari ibipimo','Sentences, not metrics'],
+ v6:['Ibikurikira','What next','Bitatu, byavuye mu mibare yawe','Three, from your own numbers'],
+ v7:['Ubutumwa bwa buri cyumweru','The weekly message','Kuri WhatsApp, ku wa mbere','On WhatsApp, Monday'],
+ v8:['Icyumweru cyicecekeye','A quiet week','Bivugwa uko biri','Said honestly'],
+ v9:['Nta na kimwe','Nothing at all','Ubusanzwe ni itangwa ryahagaze','Usually the forwarding stopped'],
+ v10:['Yakira byose','It answers everything','Umubare uhinduka isura','The number changes shape'],
+ v11:['Icyumweru cya mbere','Your first week','Bike ku cyerekezo, bihagije ku kwemeza','Too few for a pattern'],
+ v12:['Amafaranga','In money','Niba ubidubwiye','Only if you tell us'],
+ v13:['Guhagarika ubutumwa','Turning it off','Kanda rimwe, nta kibazo','One tap, no questions'],
+ x1:['Nta interineti','Offline','Imibare ya nyuma yabonetse','The last numbers we had'],
+ x2:['Ni ikibazo cyacu','Our problem','Nta mubare hano','No number here']
+};
+
+function t(rw,en){ return S.lang==='rw'?rw:en; }
+function setText(n,rw,en){ if(!n)return; n.setAttribute('data-rw',rw); n.setAttribute('data-en',en); n.textContent=t(rw,en); }
+
+function show(id){
+  var el=document.getElementById(id); if(!el) return;
+  S.screen=id;
+  $$('.screen').forEach(function(s){s.classList.toggle('on',s===el);});
+  $$('.asidepane').forEach(function(p){p.classList.toggle('on',p.id===(PANE[id]||'as-num'));});
+  var h=HEAD[id];
+  if(h){ setText($('#headT'),h[0],h[1]); setText($('#headSub'),h[2],h[3]); }
+  var f=$('#feed'); if(f) f.scrollTop=0;
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest && e.target.closest('[data-go]');
+  if(b){ e.preventDefault(); show(b.getAttribute('data-go')); }
+});
+var b1=$('#v2back'); if(b1) b1.addEventListener('click',function(){show('v1');});
+var b2=$('#v3back'); if(b2) b2.addEventListener('click',function(){show('v1');});
+
+/* ── The period picker ───────────────────────────────────────────── */
+$$('.per').forEach(function(p){
+  p.addEventListener('click',function(){
+    $$('.per').forEach(function(x){x.classList.toggle('on',x===p);});
+    var v=p.getAttribute('data-p');
+    var d={week:['31','47'],last:['26','39'],month:['118','171']}[v];
+    $('#bigV').textContent=d[0];
+    setText($('#bigS'),'Muri '+d[1]+' byose byasubijwe','Out of '+d[1]+' answered altogether');
+    var op=$('.bopen span'); if(op) setText(op,'Fungura byose '+d[0],'Open all '+d[0]);
+  });
+});
+
+/* ── Her figure, never ours. Atlas 16.b answered by asking. ─────── */
+function paintMine(){
+  var box=$('#mineBox'), ask=$('#askMine');
+  if(S.avg==null){ box.hidden=true; ask.hidden=false; return; }
+  box.hidden=false; ask.hidden=true;
+  var total=S.avg*9;
+  $('#mineV').textContent=total.toLocaleString('en-US');
+  var f=S.avg.toLocaleString('en-US');
+  var n=$('#mineSrc');
+  n.setAttribute('data-rw-html','9 × <b>'+f+' Frw</b>, umubare watanze ku ya 12 Nzeri. Ntabwo ari uwacu, kandi ntitwawugereranyije — niba ari mubi, uhindure.');
+  n.setAttribute('data-en-html','9 × <b>'+f+' Frw</b>, the figure you gave on 12 September. Not ours, and not estimated — if it&rsquo;s wrong, change it.');
+  n.innerHTML = S.lang==='rw' ? n.getAttribute('data-rw-html') : n.getAttribute('data-en-html');
+}
+var sa=$('#setAvg'); if(sa) sa.addEventListener('click',function(){
+  var v=parseInt(($('#avgIn').value||'').replace(/[^0-9]/g,''),10);
+  if(!v){ toast(t('Andika umubare.','Enter a number.')); return; }
+  S.avg=v; paintMine();
+  toast(t('Ni umubare wawe. Ushobora kuwukuraho igihe icyo ari cyo cyose.','That is your figure. You can remove it whenever you like.'));
+});
+var ca=$('#clearAvg'); if(ca) ca.addEventListener('click',function(){
+  S.avg=null; paintMine();
+  toast(t('Byakuweho. Nta mafaranga azongera kugaragara.','Removed. No money figure will appear again.'));
+});
+
+/* ── The intent gaps convert into tasks ──────────────────────────── */
+var tp=$('#teachPark'); if(tp) tp.addEventListener('click',function(){
+  toast(t('Ibi bikorerwa mu Bumenyi — indi flow.','This is done in Knowledge — another flow.'));
+});
+var sp=$('#skipPark'); if(sp) sp.addEventListener('click',function(){
+  var r=$('.irow[data-g="parking"]'); if(r) r.remove();
+  $('#ifix').hidden=true;
+  toast(t('Byanditswe. Ntituzongera kubikubaza.','Noted. We won’t raise it again.'));
+});
+$$('.irow.gap').forEach(function(r){
+  r.addEventListener('click',function(){
+    if(r.getAttribute('data-g')==='delivery')
+      toast(t('Babajije kabiri. Nabyo bishobora kongerwamo.','Asked twice. That one can be added too.'));
+  });
+});
+
+/* ── Suggestions: three at most, and dismissal is permanent ─────── */
+$$('[data-act]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var n={park:['Ubumenyi','Knowledge'],wa:['Aho ihuriye','Connections'],rung:['Kugerageza no Gutangira','Test & go live']}[b.getAttribute('data-act')];
+    toast(t(n[0]+' ni indi flow.',n[1]+' is another flow.'));
+  });
+});
+$$('[data-dis]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var s=b.closest('.sug'); if(s) s.classList.add('gone');
+    if($$('.sug:not(.gone)').length===0) $('#noSugg').hidden=false;
+    toast(t('Ntituzongera kubikubaza.','We won’t suggest that again.'));
+  });
+});
+var asw=$('#addSw'); if(asw) asw.addEventListener('click',function(){
+  toast(t('Indimi ni indi flow.','Language is another flow.'));
+});
+
+/* ── Word count on the report, visible rather than aspirational ── */
+function countWords(){
+  var b=$('#repBody'), c=$('#repWords'); if(!b||!c) return;
+  var n=(b.textContent||'').trim().split(/\s+/).filter(Boolean).length;
+  setText(c,n+' amagambo',n+' words');
+  c.classList.toggle('over',n>60);
+}
+
+/* ── The off switch ─────────────────────────────────────────────── */
+var ro=$('#repOn'); if(ro) ro.addEventListener('change',function(){
+  $('#offConf').hidden=this.checked;
+  if(!this.checked) toast(t('Byahagaritswe. Nta kindi kibazo.','Off. No further questions.'));
+});
+var wb=$('#whenBtn'); if(wb) wb.addEventListener('click',function(){
+  toast(t('Igihe gihindurwa mu Igenamiterere.','The time is changed in Settings.'));
+});
+var cf=$('#checkFwd'); if(cf) cf.addEventListener('click',function(){
+  toast(t('Guhuza telefone ni indi flow.','Phone connection is another flow.'));
+});
+['retryNet','retryAll'].forEach(function(id){
+  var b=$('#'+id); if(b) b.addEventListener('click',function(){ toast(t('Turongera kugerageza…','Trying again…')); });
+});
+$$('.crow').forEach(function(r){
+  r.addEventListener('click',function(){ toast(t('Ikiganiro kirambuwe mu Biganiro.','The transcript lives in Conversations.')); });
+});
+$$('[data-nav]').forEach(function(a){
+  a.addEventListener('click',function(){
+    var d=a.getAttribute('data-nav');
+    if(d==='results'||d==='more'){ show('v1'); return; }
+    var n={home:['Ahabanza','Home'],conv:['Ibiganiro','Conversations'],agent:['Umufasha wanjye','My agent'],
+           conn:['Aho ihuriye','Connections'],credit:['Amafaranga','Credit'],
+           settings:['Igenamiterere','Settings']}[d]||['',''];
+    toast(t(n[0]+' ni indi flow.',n[1]+' is another flow.'));
+  });
+});
+var pn=$('#pauseNow'); if(pn) pn.addEventListener('click',function(){
+  toast(t('Guhagarika ni muri Kugerageza no Gutangira.','Pausing lives in Test & go live.'));
+});
+[['chPill','Kugerageza no Gutangira','Test & go live'],
+ ['chCredit','Kwishyura','Billing'],
+ ['chHealth','Aho ihuriye','Connections']].forEach(function(x){
+  var e=$('#'+x[0]); if(e) e.addEventListener('click',function(){ toast(t(x[1]+' ni indi flow.',x[2]+' is another flow.')); });
+});
+
+var tt=null;
+function toast(msg){
+  var el=$('#toast');
+  if(!el){ el=document.createElement('div'); el.className='toast'; el.id='toast'; el.setAttribute('role','status'); document.body.appendChild(el); }
+  el.textContent=msg; el.classList.add('on');
+  if(tt) clearTimeout(tt);
+  tt=setTimeout(function(){el.classList.remove('on');},2600);
+}
+
+/* ── Shell ───────────────────────────────────────────────────────── */
+$$('[data-w]').forEach(function(b){
+  b.addEventListener('click',function(){
+    S.width=b.getAttribute('data-w');
+    $('#frame').classList.toggle('wide',S.width==='wide');
+    $$('[data-w]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+  });
+});
+function setLang(l){
+  S.lang=l;
+  $$('[data-rw]').forEach(function(n){
+    if(!n.hasAttribute('data-en')) n.setAttribute('data-en',n.textContent);
+    n.textContent = l==='rw' ? n.getAttribute('data-rw') : n.getAttribute('data-en');
+  });
+  $$('[data-rw-html]').forEach(function(n){
+    if(!n.hasAttribute('data-en-html')) n.setAttribute('data-en-html',n.innerHTML);
+    n.innerHTML = l==='rw' ? n.getAttribute('data-rw-html') : n.getAttribute('data-en-html');
+  });
+  $$('[data-rw-ph]').forEach(function(n){
+    if(!n.hasAttribute('data-en-ph')) n.setAttribute('data-en-ph',n.placeholder||'');
+    n.placeholder = l==='rw' ? n.getAttribute('data-rw-ph') : n.getAttribute('data-en-ph');
+  });
+  document.documentElement.lang = l==='rw'?'rw':'en';
+  $$('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===l));});
+  countWords();
+}
+$$('[data-lang]').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-lang'));});});
+$$('[data-mode]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var m=b.getAttribute('data-mode');
+    $$('[data-mode]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+    $('#m-proto').classList.toggle('on',m==='proto');
+    $('#m-spec').classList.toggle('on',m==='spec');
+    window.scrollTo(0,0);
+  });
+});
+
+/* ── Scenarios ───────────────────────────────────────────────────── */
+var SCEN={
+ normal:'v1', audit:'v2', counted:'v3',
+ intents:'v4', gaps:'v4',
+ quality:'v5', degraded:'v5', suggest:'v6',
+ report:'v7', quietweek:'v8', zero:'v9', settings:'v13',
+ rung4:'v10', firstweek:'v11', money:'v12',
+ offline:'x1', error:'x2'
+};
+function applyScen(k){
+  S.scen=k;
+  /* degraded shows what a good week hides — and only then */
+  var bad = (k==='degraded');
+  $('#badLang').hidden=!bad;
+  $('#badSlow').hidden=!bad;
+  var cv=$('#contV'), cm=$('#contM');
+  if(bad){ cv.textContent='68%'; cm.style.left='68%'; }
+  else { cv.textContent='76%'; cm.style.left='76%'; }
+
+  /* the rung-4 exclusion row only exists at rung 4 */
+  $('#r4excl').hidden = (k!=='rung4');
+
+  /* gaps scenario scrolls the fix into view; intents leaves it closed */
+  $('#ifix').hidden = (k!=='gaps' && k!=='intents');
+
+  if(k==='money'){ S.avg=null; paintMine(); }
+
+  var sw=$('#repOn');
+  if(k==='settings'){ sw.checked=true; $('#offConf').hidden=true; }
+
+  $$('.sug').forEach(function(s){s.classList.remove('gone');});
+  $('#noSugg').hidden=true;
+
+  show(SCEN[k]||'v1');
+  if(k==='gaps'){ var r=$('.irow.gap'); if(r) r.scrollIntoView({block:'center'}); }
+}
+var sc=$('#scen'); if(sc) sc.addEventListener('change',function(){applyScen(sc.value);});
+
+setLang('en');
+paintMine();
+applyScen('normal');
+})();
+</script>

@@ -1,11 +1,14 @@
 import { getRequestConfig } from "next-intl/server";
-import en from "../../../../packages/i18n/src/messages/en.json";
-import fr from "../../../../packages/i18n/src/messages/fr.json";
-import rw from "../../../../packages/i18n/src/messages/rw.json";
-import sw from "../../../../packages/i18n/src/messages/sw.json";
+import sharedEn from "../../../../packages/i18n/src/messages/en.json";
+import sharedRw from "../../../../packages/i18n/src/messages/rw.json";
+import siteEn from "../../messages/en.json";
+import siteRw from "../../messages/rw.json";
 import { routing } from "./routing";
 
-const catalogs = { en, fr, rw, sw } as const;
+const catalogs = {
+  en: { ...sharedEn, ...siteEn },
+  rw: { ...sharedRw, ...siteRw },
+} as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;

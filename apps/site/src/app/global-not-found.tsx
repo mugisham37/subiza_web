@@ -8,12 +8,18 @@ export default function GlobalNotFound() {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <main className="wrap">
-          <h1>We cannot find that page</h1>
-          <p>It may have moved. Go back to the design system.</p>
-          <a className="btn btn-primary" href="/en/design-system">
-            Design system
-          </a>
+        <title>We cannot find that page — Subiza</title>
+        <main id="content" className="sec">
+          <div className="sc sc-n">
+            <h1>We cannot find that page</h1>
+            <p>It is not the homepage in disguise. The address is wrong, or the page has moved.</p>
+            <a className="btn btn-primary" href="/en">
+              Back to Subiza
+            </a>
+            <a className="btn btn-secondary" href="/en/how">
+              See how it works
+            </a>
+          </div>
         </main>
       </body>
     </html>

@@ -195,3 +195,20 @@
 .rowitem .rmain span{display:block;font-size:var(--t-cap);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rowitem .rside{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:var(--s-2)}
 .rowitem .rside time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* ── Pricing tiers (banner is not optional) ─────────────────────── */
+.pricing-block{display:grid;gap:var(--s-9)}
+.tiers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s-6)}
+.tier{position:relative;display:flex;flex-direction:column;gap:var(--s-4);padding:var(--s-7);background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-lg)}
+.tier.key{border-color:var(--signal-edge);background:var(--signal-soft);box-shadow:var(--e-1)}
+.tier .tag{position:absolute;top:var(--s-5);right:var(--s-5)}
+.tier .tn{font-family:var(--f-display);font-size:var(--t-h3);font-weight:600;letter-spacing:-.02em}
+.tier .tw{font-size:var(--t-cap);color:var(--ink-2)}
+.tier .tp{font-family:var(--f-display);font-size:clamp(1.6rem,1.2rem + 1.4vw,2.1rem);font-weight:600;letter-spacing:-.03em;display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--s-3)}
+.tier .tp small{font-family:var(--f-body);font-size:var(--t-cap);color:var(--ink-2);font-weight:500}
+.tier .tu{font-size:var(--t-cap);color:var(--ink-2);margin:0}
+.tier ul{list-style:none;margin:var(--s-4) 0 var(--s-6);padding:0;display:grid;gap:var(--s-3);flex:1}
+.tier li{display:flex;gap:var(--s-3);align-items:flex-start;font-size:var(--t-body-s)}
+.tier li svg{flex:none;margin-top:3px;color:var(--signal-text)}
+@media (max-width:1080px){.tiers{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.tiers{grid-template-columns:1fr}}

@@ -12,6 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@subiza/auth-tenant": "workspace:*",
     "@subiza/core": "workspace:*",
     "@subiza/i18n": "workspace:*",
     "@subiza/ui": "workspace:*",

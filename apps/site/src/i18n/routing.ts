@@ -1,8 +1,9 @@
 import { defineRouting } from "next-intl/routing";
-import { defaultLocale, locales } from "@subiza/i18n";
+import { siteLocales } from "@subiza/i18n";
 
 export const routing = defineRouting({
-  locales,
-  defaultLocale,
+  locales: siteLocales,
+  defaultLocale: "rw",
   localePrefix: "always",
+  localeDetection: true,
 });

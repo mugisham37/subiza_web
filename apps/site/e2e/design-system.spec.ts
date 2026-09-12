@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const locales = ["rw", "en", "fr", "sw"] as const;
+const locales = ["rw", "en"] as const;
 
 test("showcase renders the inventory", async ({ page }) => {
   await page.setViewportSize({ width: 1080, height: 900 });

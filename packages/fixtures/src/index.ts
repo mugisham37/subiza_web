@@ -1,5 +1,7 @@
 import { asConversationId, asTenantId, type ViewState } from "@subiza/core";
 
+export { businessTemplates, templateFor } from "./templates";
+
 export const demoTenantId = asTenantId("ten_demo_remera");
 export const demoConversationId = asConversationId("con_demo_001");
 

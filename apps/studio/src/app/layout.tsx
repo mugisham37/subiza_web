@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { Bricolage_Grotesque, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import { motionInitScript, themeInitScript } from "@subiza/ui/preferences";
 import "./globals.css";
+
+function criticalSprite() {
+  try {
+    return readFileSync(
+      join(process.cwd(), "../../packages/ui/src/icons/sprite-critical.svg"),
+      "utf8",
+    );
+  } catch {
+    return "";
+  }
+}
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -24,10 +39,12 @@ export const metadata: Metadata = {
   description: "The business console.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
     <html
-      lang="rw"
+      lang={locale}
       suppressHydrationWarning
       className={`${display.variable} ${body.variable} ${mono.variable}`}
     >
@@ -36,10 +53,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: motionInitScript }} />
       </head>
       <body>
+        <div dangerouslySetInnerHTML={{ __html: criticalSprite() }} hidden />
         <a className="skip-link" href="#content">
           Skip to content
         </a>
-        {children}
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

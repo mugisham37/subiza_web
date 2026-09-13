@@ -5,4 +5,5 @@
 @import "@subiza/ui/base.css";
 @import "@subiza/ui/components.css";
 @import "@subiza/ui/product.css";
+@import "@subiza/ui/wizard.css";
 @source "../../../../packages/ui/src";

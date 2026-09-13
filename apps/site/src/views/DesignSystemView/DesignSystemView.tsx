@@ -407,6 +407,8 @@ export function DesignSystemView({ lang }: { lang: string }) {
             </div>
             <ForwardingCodeCard
               number="250788123456"
+              code="**61*250788123456*11*20#"
+              telHref="tel:**61*250788123456*11*20%23"
               platformNote="On iPhone, tel: MMI codes fail silently. On Android they only pre-fill."
             />
           </section>

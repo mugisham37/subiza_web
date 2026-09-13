@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   experimental: {
     inlineCss: true,
   },
-  transpilePackages: ["@subiza/ui", "@subiza/core", "@subiza/i18n", "@subiza/auth-tenant"],
+  transpilePackages: ["@subiza/ui", "@subiza/core", "@subiza/i18n", "@subiza/auth-tenant", "@subiza/domain", "@subiza/fixtures"],
   images: {
     qualities: [50, 75],
   },

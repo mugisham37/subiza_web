@@ -13,9 +13,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@subiza/core": "workspace:*"
+    "@subiza/core": "workspace:*",
+    "@subiza/domain": "workspace:*"
   },
   "devDependencies": {
+    "@subiza/fixtures": "workspace:*",
     "@types/node": "^20",
     "typescript": "5.9.3",
     "vitest": "^3.2.4"

@@ -131,6 +131,20 @@ export const claims = {
     mark: "green",
     asOf: "2026-01-01",
   },
+  forwardedLegTariff: {
+    value: "unknown",
+    unit: "RWF per diverted minute",
+    source: "docs/13 Q2 — MTN and Airtel Rwanda forwarded-leg rates are unmeasured. Do not invent them.",
+    mark: "red",
+    asOf: "2026-09-13",
+  },
+  smartphonePenetrationRw: {
+    value: 22,
+    unit: "percent of connections that are smartphones, GSMA 2023",
+    source: "GSMA Mobile Economy / smartphone share of connections — not household ownership, not internet penetration",
+    mark: "amber",
+    asOf: "2023-01-01",
+  },
   forwardingSince: {
     value: 1993,
     unit: "year",

@@ -12,6 +12,8 @@
   "dependencies": {
     "@subiza/auth-tenant": "workspace:*",
     "@subiza/core": "workspace:*",
+    "@subiza/domain": "workspace:*",
+    "@subiza/fixtures": "workspace:*",
     "@subiza/i18n": "workspace:*",
     "@subiza/ui": "workspace:*",
     "next": "16.3.5",

@@ -33,6 +33,12 @@ export type AuthStore = {
   lastDevOtp: string | null;
   circuit: CircuitState;
   pages: string[];
+  documents: Map<string, import("./activation").TenantBundle>;
+  activationEvents: { tenantId: string; at: number; event: import("@subiza/domain").TenantEvent }[];
+  onboardingAttempts: { tenantId: string; at: number }[];
+  privateReplyClaims: Map<string, import("@subiza/domain").PrivateReplyClaim>;
+  webhookInbox: { id: string; timestamp: number; tenantId: string; kind: string }[];
+  signupCodes: Map<string, { issuedAt: number; used: boolean }>;
 };
 
 function emptyStore(): AuthStore {
@@ -60,6 +66,12 @@ function emptyStore(): AuthStore {
       spendDayRwf: 0,
     },
     pages: [],
+    documents: new Map(),
+    activationEvents: [],
+    onboardingAttempts: [],
+    privateReplyClaims: new Map(),
+    webhookInbox: [],
+    signupCodes: new Map(),
   };
 }
 

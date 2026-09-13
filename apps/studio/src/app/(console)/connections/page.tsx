@@ -1,3 +1,10 @@
+import { Suspense } from "react";
+import { ConnectionsSurface } from "@/views/console/ReadOnlySurfaces";
+
 export default function Page() {
-  return <main><h1>Connections</h1><p>Prompts 05–06.</p></main>;
+  return (
+    <Suspense>
+      <ConnectionsSurface />
+    </Suspense>
+  );
 }

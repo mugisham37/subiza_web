@@ -145,6 +145,12 @@ importers:
       '@subiza/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@subiza/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
+      '@subiza/fixtures':
+        specifier: workspace:*
+        version: link:../../packages/fixtures
       '@subiza/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -199,7 +205,13 @@ importers:
       '@subiza/core':
         specifier: workspace:*
         version: link:../core
+      '@subiza/domain':
+        specifier: workspace:*
+        version: link:../domain
     devDependencies:
+      '@subiza/fixtures':
+        specifier: workspace:*
+        version: link:../fixtures
       '@types/node':
         specifier: ^20
         version: 20.19.43
@@ -221,11 +233,30 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.13)
 
+  packages/domain:
+    dependencies:
+      '@subiza/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: ^4.1.5
+        version: 4.6.2
+    devDependencies:
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.13)
+
   packages/fixtures:
     dependencies:
       '@subiza/core':
         specifier: workspace:*
         version: link:../core
+      '@subiza/domain':
+        specifier: workspace:*
+        version: link:../domain
 
   packages/i18n: {}
 

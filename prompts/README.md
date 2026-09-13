@@ -20,10 +20,10 @@ customer's own journey from landing page to daily use.
 | ------ | --------------------------------------------------------------------------------- | -------------------- | --------- |
 | **01** | [Foundation & Design System](01-foundation-and-design-system.md)                  | `design-system.html` | **Built** |
 | **02** | [Landing page & public routes](02-landing-and-public-routes.md)                   | `landing.html`       | **Built** |
-| **03** | [Authentication & authorization](03-authentication-and-authorization.md)          | `auth.html`          | **Ready** |
-| **04** | [Guided activation](04-guided-activation.md)                                      | `activation.html`    | **Ready** |
-| 05     | Phone connection                                                                  | `phone.html`         | pending   |
-| 06     | Messaging channel connection                                                      | `channels.html`      | pending   |
+| **03** | [Authentication & authorization](03-authentication-and-authorization.md)          | `auth.html`          | **Built** |
+| **04** | [Guided activation](04-guided-activation.md)                                      | `activation.html`    | **Built** |
+| **05** | [Phone connection](05-phone-connection.md)                                        | `phone.html`         | **Built** |
+| **06** | [Messaging channel connection](06-messaging-channels.md)                          | `channels.html`      | **Ready** |
 | 07     | Agent design                                                                      | `agent.html`         | pending   |
 | 08     | Knowledge base                                                                    | `knowledge.html`     | pending   |
 | 09     | Voice, cloning and consent                                                        | `voice.html`         | pending   |

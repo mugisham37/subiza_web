@@ -1,3 +1,10 @@
+import { Suspense } from "react";
+import { AgentSurface } from "@/views/console/ReadOnlySurfaces";
+
 export default function Page() {
-  return <main><h1>Agent</h1><p>Prompt 07–10.</p></main>;
+  return (
+    <Suspense>
+      <AgentSurface />
+    </Suspense>
+  );
 }

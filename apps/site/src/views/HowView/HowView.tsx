@@ -24,6 +24,8 @@ export async function HowView({ lang }: { lang: SiteLocale }) {
                 {n === 2 ? (
                   <ForwardingCodeCard
                     number="250788456123"
+                    code="**61*250788456123*11*20#"
+                    telHref="tel:**61*250788456123*11*20%23"
                     platformNote={t("how.plat")}
                     heading={t("how.heading")}
                     offNote={t("how.off")}

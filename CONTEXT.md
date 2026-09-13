@@ -118,3 +118,33 @@ in §8.4) and `web-vitals` (instrumentation in §19.3). Neither enters the
 
 **Theme keys.** `subiza-theme` and `subiza-motion` in `localStorage`, inside
 `try/catch`. The HTML showcase used `subiza-ds-theme`; the product does not.
+
+**Phone connection — auth strength (Prompt 05 §3.2 defect 4).** Decision **(b)**:
+`dal.changeForwarding` exists. Surface-initiated first-time registration
+accepts an `otp` session (`can(role)` + manual audit). Changing the forwarded-to
+destination after a verified forward still requires `elevated`. Activation w8
+stays on `completeSignupAndActivation`. Written down in
+`packages/auth-tenant/src/phone.ts` as `PHONE_SURFACE_AUTH`.
+
+**Messaging channels — Prompt 06.** `packages/domain/src/channel.ts` is the
+document. Routes live at `/connections/messaging/[channel]/[step]` so they do
+not collide with `/connections/phone`. Connect requires `elevated` on entry
+(`CHANNEL_SURFACE_AUTH`); disconnect is owner-only (`elevated` + scope `full`).
+A recovered session is refused. Embedded Signup is v4 only.
+
+**Escalate to the founder — BSP tier.** Until a Solution Partner BSP is
+confirmed, `BSP_TIER` stays `tech-provider-pending`. Screen `wa8` states the
+card wall plainly and offers the other channels. Tech Provider puts an
+international card in front of the highest-value channel in this market.
+
+**Escalate to the founder — training prohibition.** WhatsApp Business Solution
+Data, including anonymous, aggregate, or derived forms, may not train any model
+except a fine-tune for the individual tenant's exclusive use. `canTrainOn("whatsapp")`
+is `false` and `trainingCorpusFor("whatsapp")` returns nothing. This constrains
+the language moat. The section survives termination.
+
+**Phone connection — what proves a forward.** The loop closing on our own
+trunk, not audio, not AMD, not a query API. `CARRIER_FORWARDING` stays `false`
+until docs/13 Q2 is answered on live SIMs. Recurring checks reject with SIP 486;
+only the one-time activation check answers. Re-verification is scheduled inside
+08:00–19:00 Africa/Kigali, never at 02:00.

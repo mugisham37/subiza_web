@@ -11,6 +11,7 @@
     "./base.css": "./src/tokens/base.css",
     "./components.css": "./src/tokens/components.css",
     "./product.css": "./src/tokens/product.css",
+    "./wizard.css": "./src/tokens/wizard.css",
     "./scripts/*": "./src/scripts/*"
   },
   "scripts": {
@@ -21,6 +22,7 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
     "@subiza/core": "workspace:*",
+    "@subiza/domain": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "react": "19.2.8",
     "react-dom": "19.2.8"

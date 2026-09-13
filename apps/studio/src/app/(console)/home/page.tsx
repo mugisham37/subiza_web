@@ -1,8 +1,11 @@
-export default function HomePage() {
+import { Suspense } from "react";
+import { HomeView } from "@/views/HomeView/HomeView";
+
+export default async function Page({ searchParams }: PageProps<"/home">) {
+  const q = await searchParams;
   return (
-    <main>
-      <h1>Home</h1>
-      <p>The feed arrives in Prompt 12. This is a skeleton.</p>
-    </main>
+    <Suspense>
+      <HomeView paused={q["paused"] === "1"} />
+    </Suspense>
   );
 }

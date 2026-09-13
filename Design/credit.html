@@ -1,0 +1,2255 @@
+<title>Subiza — Credit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUBIZA DESIGN SYSTEM
+   Tokens are declared once, in full, on :root — the light theme.
+   Dark redefines only what changes, twice: once for the system
+   preference, once for the explicit toggle. No hex is ever inverted.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* ── Ground & surface ─────────────────────────────────────────── */
+  --ground:#FAF9F4;          /* warm paper. never pure white */
+  --surface:#FFFFFF;
+  --surface-2:#F2F1EA;       /* sunken: inputs, wells, code */
+  --surface-3:#EAE9E0;       /* hover on surface-2 */
+  --overlay:rgba(20,21,15,.42);
+
+  /* ── Ink ──────────────────────────────────────────────────────── */
+  --ink:#14150F;             /* 17.4:1 on ground */
+  --ink-2:#4A4C42;           /* 8.3:1  */
+  --ink-3:#6E7063;           /* 4.8:1 — the floor. nothing lighter carries text */
+  --ink-inv:#FAF9F4;
+
+  /* ── Hairlines. this system draws with lines, not shadows ─────── */
+  --rule:rgba(20,21,15,.09);
+  --rule-2:rgba(20,21,15,.16);
+  --rule-3:rgba(20,21,15,.28);
+
+  /* ── Signal: the lime. A FILL. NEVER A TEXT COLOUR. ───────────── */
+  --signal:#C6F24E;          /* 1.2:1 on ground — unusable as text, by design */
+  --signal-hi:#D3F86B;       /* hover */
+  --signal-lo:#B3E033;       /* pressed */
+  --signal-ink:#14150F;      /* 14.2:1 on signal — what sits ON the lime */
+  --signal-soft:#EEF9CE;     /* the wash: selected rows, soft callouts */
+  --signal-edge:#D6E9A0;
+  --signal-text:#3D5C10;     /* 7.3:1 — the ONLY green allowed to be text */
+
+  /* ── Panel: the deep surface. inverted regions, not dark mode ─── */
+  --panel:#1C2A12;
+  --panel-2:#26361A;
+  --panel-ink:#FFFFFF;       /* 15.1:1 */
+  --panel-ink-2:#B9C7A6;
+  --panel-rule:rgba(255,255,255,.14);
+
+  /* ── Status ───────────────────────────────────────────────────── */
+  --ok:#3D5C10; --ok-fill:#C6F24E; --ok-soft:#EEF9CE; --ok-edge:#D6E9A0;
+  --warn:#7A5300; --warn-fill:#F0B840; --warn-soft:#FCF0D6; --warn-edge:#EFD9A4;
+  --risk:#A6311D; --risk-fill:#C4442E; --risk-soft:#FBE7E2; --risk-edge:#F0C4B9;
+  --info:#2C4A6B; --info-fill:#5B87B8; --info-soft:#E4EDF6; --info-edge:#C0D5E8;
+  --live:#C4442E;            /* the on-air dot. red because a call is live */
+
+  /* ── Type ─────────────────────────────────────────────────────── */
+  --f-display:'Bricolage Grotesque','Bricolage Grotesque Fallback',Georgia,serif;
+  --f-body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+
+  --t-d1:clamp(2.6rem,1.6rem + 4.4vw,4.75rem);
+  --t-d2:clamp(2.1rem,1.45rem + 2.9vw,3.5rem);
+  --t-h1:clamp(1.7rem,1.3rem + 1.8vw,2.5rem);
+  --t-h2:clamp(1.35rem,1.15rem + .9vw,1.75rem);
+  --t-h3:1.125rem;
+  --t-h4:1rem;
+  --t-body-l:1.0625rem;
+  --t-body:.9375rem;
+  --t-body-s:.875rem;
+  --t-cap:.8125rem;
+  --t-label:.6875rem;
+
+  /* ── Space. 4px base, no arbitrary values anywhere ────────────── */
+  --s-1:2px;  --s-2:4px;  --s-3:6px;  --s-4:8px;  --s-5:12px;
+  --s-6:16px; --s-7:20px; --s-8:24px; --s-9:32px; --s-10:40px;
+  --s-11:56px;--s-12:72px;--s-13:96px;--s-14:128px;
+
+  /* ── Radius. three steps and a pill. deliberate, not uniform ──── */
+  --r-sm:4px;   /* inputs, chips, tags, small tiles */
+  --r-md:12px;  /* cards, sheets, buttons */
+  --r-lg:24px;  /* feature panels, media, the hero */
+  --r-pill:999px;
+
+  /* ── Elevation. four levels; three of them have no shadow ─────── */
+  --e-0:none;
+  --e-1:none;                                  /* hairline only */
+  --e-2:0 1px 2px rgba(20,21,15,.05);          /* raised, still grounded */
+  --e-3:0 6px 16px -4px rgba(20,21,15,.10),0 2px 4px rgba(20,21,15,.05);   /* menus */
+  --e-4:0 24px 48px -12px rgba(20,21,15,.20),0 8px 16px -8px rgba(20,21,15,.10); /* modal */
+
+  /* ── Motion. ceiling is 300ms. exits run ~20% faster than entries ─ */
+  --t-micro:120ms;  /* hover, focus, colour */
+  --t-ui:200ms;     /* the default: expand, slide, reveal */
+  --t-panel:280ms;  /* sheets, modals, drawers */
+  --t-exit:160ms;
+  --e-out:cubic-bezier(.22,1,.36,1);
+  --e-in:cubic-bezier(.55,0,1,.45);
+  --e-inout:cubic-bezier(.65,0,.35,1);
+  --e-spring:linear(0,.42 8.7%,.75 17.5%,.96 25.4%,1.06 32.1%,1.09 39.3%,1.06 47.5%,1.01 60.2%,.99 76.2%,1);
+
+  --nav-w:264px;
+  --measure:70ch;
+}
+
+:root:not([data-theme=light]){ @media (prefers-color-scheme:dark){
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}}
+:root[data-theme=dark]{
+  --ground:#0D0F0A; --surface:#15180F; --surface-2:#1D2115; --surface-3:#262B1D;
+  --overlay:rgba(0,0,0,.62);
+  --ink:#F2F3EC; --ink-2:#A9AC9E; --ink-3:#8A8D80; --ink-inv:#14150F;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.17); --rule-3:rgba(255,255,255,.30);
+  --signal:#CDF459; --signal-hi:#DBF97E; --signal-lo:#B2DC38; --signal-ink:#14150F;
+  --signal-soft:#252E12; --signal-edge:#3B4A1D; --signal-text:#A8D65C;
+  --panel:#1D2115; --panel-2:#262B1D; --panel-ink:#F2F3EC; --panel-ink-2:#A9AC9E;
+  --panel-rule:rgba(255,255,255,.12);
+  --ok:#A8D65C; --ok-fill:#CDF459; --ok-soft:#252E12; --ok-edge:#3B4A1D;
+  --warn:#F0B840; --warn-fill:#F0B840; --warn-soft:#302512; --warn-edge:#4D3C17;
+  --risk:#F08268; --risk-fill:#C4442E; --risk-soft:#331812; --risk-edge:#54281D;
+  --info:#8FB6DE; --info-fill:#5B87B8; --info-soft:#141F2B; --info-edge:#24384C;
+  --live:#F08268;
+  --e-2:0 1px 2px rgba(0,0,0,.4);
+  --e-3:0 6px 16px -4px rgba(0,0,0,.5),0 2px 4px rgba(0,0,0,.3);
+  --e-4:0 24px 48px -12px rgba(0,0,0,.6),0 8px 16px -8px rgba(0,0,0,.4);
+}
+
+/* ═══ Base ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--f-body); font-size:var(--t-body); line-height:1.6;
+  font-feature-settings:"cv05" 1,"ss01" 1;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:var(--f-display); font-weight:600; letter-spacing:-.022em; line-height:1.12; margin:0; text-wrap:balance}
+h1{font-size:var(--t-h1); font-variation-settings:"opsz" 40}
+h2{font-size:var(--t-h2); font-variation-settings:"opsz" 28}
+h3{font-size:var(--t-h3); font-variation-settings:"opsz" 18; letter-spacing:-.012em}
+h4{font-size:var(--t-h4); font-variation-settings:"opsz" 14; letter-spacing:-.006em}
+p{margin:0 0 var(--s-5)}
+a{color:inherit}
+svg{display:block}
+code{font-family:var(--f-mono); font-size:.85em; background:var(--surface-2); border:1px solid var(--rule); border-radius:var(--r-sm); padding:.1em .38em}
+::selection{background:var(--signal); color:var(--signal-ink)}
+
+/* Focus. Dual-tone so it survives any background it lands on.
+   WCAG 2.2 §2.4.13: perimeter ≥ 2px, ≥3:1 against adjacent colours. */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--ink); outline-offset:2px;
+  box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink);
+  border-radius:var(--r-sm);
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Button ─────────────────────────────────────────────────────── */
+.btn{
+  --bh:44px;
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-4);
+  height:var(--bh);padding:0 var(--s-7);border-radius:var(--r-pill);
+  font-family:var(--f-body);font-size:var(--t-body-s);font-weight:600;letter-spacing:-.008em;
+  border:1px solid transparent;background:none;color:var(--ink);
+  cursor:pointer;text-decoration:none;white-space:nowrap;position:relative;
+  transition:background var(--t-micro) var(--e-out),border-color var(--t-micro),
+             color var(--t-micro),transform var(--t-micro) var(--e-out),opacity var(--t-micro);
+}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:17px;height:17px;flex:none}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.42;pointer-events:none}
+
+.btn-primary{background:var(--signal);color:var(--signal-ink);border-color:var(--signal-lo)}
+.btn-primary:hover{background:var(--signal-hi)}
+.btn-primary:active{background:var(--signal-lo)}
+
+.btn-solid{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-solid:hover{background:var(--ink-2);border-color:var(--ink-2)}
+
+.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--rule-2)}
+.btn-secondary:hover{background:var(--surface-2);border-color:var(--rule-3)}
+
+.btn-ghost{color:var(--ink-2)}
+.btn-ghost:hover{background:var(--surface-2);color:var(--ink)}
+
+.btn-danger{background:var(--risk-fill);color:#fff;border-color:var(--risk-fill)}
+.btn-danger:hover{filter:brightness(1.08)}
+
+.btn-sm{--bh:34px;padding:0 var(--s-5);font-size:var(--t-cap);gap:var(--s-3)}
+.btn-sm svg{width:15px;height:15px}
+.btn-lg{--bh:54px;padding:0 var(--s-8);font-size:var(--t-body-l)}
+.btn-lg svg{width:19px;height:19px}
+.btn-icon{padding:0;width:var(--bh);border-radius:var(--r-pill)}
+.btn-block{display:flex;width:100%}
+
+/* loading: the label stays, so width never jumps */
+.btn-load{color:transparent!important;pointer-events:none}
+.btn-load::after{
+  content:"";position:absolute;inset:0;margin:auto;width:17px;height:17px;
+  border:2px solid currentColor;border-radius:50%;
+  border-top-color:transparent;color:var(--signal-ink);
+  animation:spin .7s linear infinite;
+}
+.btn-secondary.btn-load::after,.btn-ghost.btn-load::after{color:var(--ink)}
+.btn-solid.btn-load::after{color:var(--ground)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Chip / filter / tag ────────────────────────────────────────── */
+.chip{
+  display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);
+  border:1px solid var(--rule-2);border-radius:var(--r-pill);background:var(--surface);
+  font-size:var(--t-cap);font-weight:500;color:var(--ink-2);cursor:pointer;
+  transition:all var(--t-micro) var(--e-out);
+}
+.chip:hover{border-color:var(--rule-3);color:var(--ink)}
+.chip[aria-pressed=true],.chip.on{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink);font-weight:600}
+.chip svg{width:14px;height:14px}
+.chip .ct{display:inline-block;min-width:17px;height:17px;line-height:17px;text-align:center;border-radius:var(--r-pill);background:var(--surface-2);font-family:var(--f-mono);font-size:10px;padding:0 4px}
+.chip.on .ct{background:rgba(20,21,15,.14)}
+
+.tag{display:inline-flex;align-items:center;gap:var(--s-2);padding:2px var(--s-4);border-radius:var(--r-sm);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.06em;text-transform:uppercase;font-weight:500;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-2)}
+.tag-ok{background:var(--ok-soft);border-color:var(--ok-edge);color:var(--ok)}
+.tag-warn{background:var(--warn-soft);border-color:var(--warn-edge);color:var(--warn)}
+.tag-risk{background:var(--risk-soft);border-color:var(--risk-edge);color:var(--risk)}
+.tag-info{background:var(--info-soft);border-color:var(--info-edge);color:var(--info)}
+
+/* status dot — shape as well as colour, so it is not colour-only */
+.dot{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);font-weight:500}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot-ok::before{background:var(--ok-fill);box-shadow:0 0 0 3px var(--ok-soft)}
+.dot-warn::before{background:var(--warn-fill);box-shadow:0 0 0 3px var(--warn-soft);border-radius:2px}
+.dot-risk::before{background:var(--risk-fill);box-shadow:0 0 0 3px var(--risk-soft);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0;width:9px;height:9px}
+.dot-live::before{background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in oklab,var(--live) 55%,transparent)}55%{box-shadow:0 0 0 6px transparent}}
+
+/* ── Field ──────────────────────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:var(--s-3);margin-bottom:var(--s-6)}
+.field > label{font-size:var(--t-body-s);font-weight:600;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:var(--s-4)}
+.field > label .opt{font-weight:400;color:var(--ink-3);font-size:var(--t-cap)}
+.hint{font-size:var(--t-cap);color:var(--ink-3);margin:0}
+.inp{
+  height:48px;padding:0 var(--s-5);width:100%;
+  background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  font-family:var(--f-body);font-size:var(--t-body);color:var(--ink);
+  transition:border-color var(--t-micro),background var(--t-micro),box-shadow var(--t-micro);
+}
+textarea.inp{height:auto;padding:var(--s-5);min-height:110px;line-height:1.6;resize:vertical}
+.inp::placeholder{color:var(--ink-3)}
+.inp:hover{border-color:var(--rule-3)}
+.inp:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.inp:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed}
+.inp[aria-invalid=true]{border-color:var(--risk-fill);background:var(--risk-soft)}
+.inp[aria-invalid=true]:focus{box-shadow:0 0 0 3px var(--risk-soft)}
+.err{display:flex;align-items:flex-start;gap:var(--s-3);font-size:var(--t-cap);color:var(--risk);margin:0}
+.err svg{width:14px;height:14px;flex:none;margin-top:2px}
+.inpwrap{position:relative;display:flex;align-items:center}
+.inpwrap .lead{position:absolute;left:var(--s-5);color:var(--ink-3);pointer-events:none}
+.inpwrap .lead svg{width:17px;height:17px}
+.inpwrap .lead + .inp{padding-left:42px}
+.inpwrap .trail{position:absolute;right:var(--s-3)}
+
+/* phone field — country code is a real control, not decoration */
+.phonefield{display:flex;border:1px solid var(--rule-2);border-radius:var(--r-sm);background:var(--surface);overflow:hidden;transition:border-color var(--t-micro),box-shadow var(--t-micro)}
+.phonefield:focus-within{border-color:var(--ink);box-shadow:0 0 0 3px var(--signal-soft)}
+.phonefield .cc{display:flex;align-items:center;gap:var(--s-3);height:48px;padding:0 var(--s-5);border-right:1px solid var(--rule);background:var(--surface-2);font-family:var(--f-mono);font-size:var(--t-body-s);color:var(--ink);cursor:pointer;border:none;flex:none}
+.phonefield .inp{border:none;background:none;box-shadow:none!important;font-family:var(--f-mono);letter-spacing:.04em}
+
+/* OTP — ONE input, six slots.
+   The six slots are decoration; the control underneath is a single
+   <input>, because a six-input field breaks paste, breaks iOS autofill
+   and is named as a failure example in the WCAG 2.2 SC 3.3.8
+   Understanding document. See the Forms section for the full reasoning. */
+.otp{position:relative;display:flex;gap:var(--s-4)}
+.otp > input{
+  position:absolute;inset:0;width:100%;height:100%;z-index:2;
+  border:none;background:none;padding:0;margin:0;
+  font-family:var(--f-mono);font-size:1.35rem;letter-spacing:1em;text-indent:.5em;
+  color:transparent;caret-color:transparent;
+}
+.otp > input:focus{outline:none}
+.otp .slot{
+  flex:1;min-width:0;height:58px;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:1.35rem;font-weight:600;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  transition:background var(--t-micro),border-color var(--t-micro),transform var(--t-micro) var(--e-out);
+}
+.otp .slot.filled{background:var(--signal-soft);border-color:var(--signal-edge)}
+.otp > input:focus ~ .slots .slot.cursor,.otp .slots .slot.cursor{border-color:var(--ink);background:var(--surface);transform:translateY(-2px)}
+.otp .slot.cursor::after{content:"";width:2px;height:24px;background:var(--ink);border-radius:1px;animation:caret 1.1s steps(1) infinite}
+@keyframes caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.otp .slot.cursor::after{animation:none}}
+.otp .slots{display:flex;gap:var(--s-4);width:100%}
+.otp:focus-within{border-radius:var(--r-sm);outline:2px solid var(--ink);outline-offset:4px;box-shadow:0 0 0 6px var(--ground),0 0 0 8px var(--ink)}
+.otp[aria-invalid=true] .slot{border-color:var(--risk-fill);background:var(--risk-soft)}
+
+/* toggle */
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+
+/* choice card — a radio you can actually hit on a phone */
+.choice{display:block;position:relative;cursor:pointer}
+.choice input{position:absolute;opacity:0;width:0;height:0}
+.choice .cbody{
+  display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);transition:all var(--t-ui) var(--e-out);height:100%;
+}
+.choice:hover .cbody{border-color:var(--rule-3);background:var(--surface-2)}
+.choice input:checked + .cbody{border-color:var(--signal-lo);background:var(--signal-soft);box-shadow:inset 0 0 0 1px var(--signal-lo)}
+.choice input:focus-visible + .cbody{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.choice .cico{width:38px;height:38px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none;transition:background var(--t-ui)}
+.choice input:checked + .cbody .cico{background:var(--signal);color:var(--signal-ink)}
+.choice .cico svg{width:19px;height:19px}
+.choice h4{margin-bottom:2px}
+.choice .cd{font-size:var(--t-cap);color:var(--ink-2);margin:0;line-height:1.5}
+.choice .cmark{position:absolute;top:var(--s-6);right:var(--s-6);width:20px;height:20px;border:1px solid var(--rule-3);border-radius:50%;display:grid;place-items:center;transition:all var(--t-micro)}
+.choice input:checked ~ .cbody .cmark,.choice input:checked + .cbody .cmark{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.choice .cmark svg{width:12px;height:12px;opacity:0;transition:opacity var(--t-micro)}
+.choice input:checked + .cbody .cmark svg{opacity:1}
+
+/* ── Card ───────────────────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.card-i{padding:0;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);padding:var(--s-6) var(--s-7);border-bottom:1px solid var(--rule)}
+.card-bd{padding:var(--s-7)}
+.card-ft{padding:var(--s-5) var(--s-7);border-top:1px solid var(--rule);background:var(--surface-2);display:flex;gap:var(--s-4);align-items:center;justify-content:space-between}
+.card-link{display:block;text-decoration:none;transition:border-color var(--t-ui) var(--e-out),transform var(--t-ui) var(--e-out)}
+.card-link:hover{border-color:var(--rule-3);transform:translateY(-2px)}
+
+/* stat */
+.stat{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-6) var(--s-7);position:relative;overflow:hidden}
+.stat .sl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+.stat .sv{font-family:var(--f-display);font-size:2.35rem;font-variation-settings:"opsz" 36;font-weight:600;letter-spacing:-.035em;line-height:1;display:flex;align-items:baseline;gap:var(--s-3)}
+.stat .sv small{font-size:.95rem;font-weight:500;color:var(--ink-3);letter-spacing:0;font-family:var(--f-body)}
+.stat .sd{display:flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-4)}
+.stat .sd svg{width:13px;height:13px}
+.stat .up{color:var(--signal-text);font-weight:600}
+.stat .down{color:var(--risk);font-weight:600}
+.stat-key{background:var(--signal-soft);border-color:var(--signal-edge)}
+
+/* banner */
+.banner{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);align-items:flex-start}
+.banner svg.bi{width:19px;height:19px;flex:none;margin-top:1px}
+.banner h4{margin-bottom:2px}
+.banner p{font-size:var(--t-body-s);color:var(--ink-2);margin:0}
+.banner .ba{margin-left:auto;flex:none}
+.banner-ok{background:var(--ok-soft);border-color:var(--ok-edge)} .banner-ok svg.bi{color:var(--ok)}
+.banner-warn{background:var(--warn-soft);border-color:var(--warn-edge)} .banner-warn svg.bi{color:var(--warn)}
+.banner-risk{background:var(--risk-soft);border-color:var(--risk-edge)} .banner-risk svg.bi{color:var(--risk)}
+.banner-info{background:var(--info-soft);border-color:var(--info-edge)} .banner-info svg.bi{color:var(--info)}
+
+/* toast */
+.toast{display:flex;align-items:center;gap:var(--s-5);background:var(--panel);color:var(--panel-ink);border:1px solid var(--panel-rule);border-radius:var(--r-md);padding:var(--s-5) var(--s-6);box-shadow:var(--e-3);max-width:400px}
+.toast svg{width:18px;height:18px;flex:none;color:var(--signal)}
+.toast .tt{font-size:var(--t-body-s);font-weight:500}
+.toast button{margin-left:auto;background:none;border:none;color:var(--panel-ink-2);cursor:pointer;padding:var(--s-2);display:grid;place-items:center;border-radius:var(--r-sm)}
+.toast button:hover{color:var(--panel-ink);background:rgba(255,255,255,.1)}
+
+/* empty state */
+.empty{text-align:center;padding:var(--s-11) var(--s-7);max-width:420px;margin:0 auto}
+.empty .eart{margin:0 auto var(--s-7);width:112px;height:84px}
+.empty h3{margin-bottom:var(--s-4)}
+.empty p{font-size:var(--t-body-s);color:var(--ink-2);margin-bottom:var(--s-7)}
+
+/* skeleton */
+.sk{background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface-3) 37%,var(--surface-2) 63%);
+  background-size:400% 100%;animation:shim 1.4s ease-in-out infinite;border-radius:var(--r-sm)}
+@keyframes shim{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none;background:var(--surface-2)}}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRODUCT COMPONENTS
+   The parts that only exist because Subiza answers phones.
+   Nothing here is a repurposed generic; nothing here is stock art.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Live call card ─────────────────────────────────────────────── */
+.callcard{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-7);position:relative;overflow:hidden;isolation:isolate}
+.callcard::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(120% 90% at 88% -12%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.cc-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-live{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);font-weight:600}
+.cc-live i{width:7px;height:7px;border-radius:50%;background:var(--live);animation:pulse 1.8s var(--e-inout) infinite}
+.cc-time{font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2);font-variant-numeric:tabular-nums}
+.cc-who{display:flex;align-items:center;gap:var(--s-5);margin-bottom:var(--s-6)}
+.cc-av{width:44px;height:44px;border-radius:50%;background:var(--panel-2);border:1px solid var(--panel-rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:1rem;flex:none}
+.cc-who b{display:block;font-size:var(--t-body-l);font-weight:600;letter-spacing:-.01em}
+.cc-who span{display:block;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--panel-ink-2)}
+.cc-acts{display:flex;gap:var(--s-4);margin-top:var(--s-6)}
+.cc-acts .btn-secondary{background:var(--panel-2);border-color:var(--panel-rule);color:var(--panel-ink)}
+.cc-acts .btn-secondary:hover{background:#314323;border-color:rgba(255,255,255,.24)}
+
+/* the waveform. bars are driven by CSS custom props, not a canvas —
+   it survives 2G, costs nothing, and honours reduced motion. */
+.wave{display:flex;align-items:center;justify-content:space-between;gap:3px;height:44px;padding:0 var(--s-2)}
+.wave i{flex:0 1 4px;min-width:2px;max-width:4px;border-radius:var(--r-pill);background:var(--signal);
+  height:var(--h,20%);transform-origin:center;
+  animation:wv 1.15s var(--e-inout) infinite alternate;animation-delay:var(--d,0s)}
+@keyframes wv{from{transform:scaleY(.28)}to{transform:scaleY(1)}}
+.wave.muted i{background:var(--panel-ink-2);animation:none;transform:scaleY(.3)}
+@media (prefers-reduced-motion:reduce){.wave i{animation:none}}
+
+/* ── Transcript stream ──────────────────────────────────────────── */
+.tscript{display:flex;flex-direction:column;gap:var(--s-5)}
+.turn{display:flex;gap:var(--s-5);max-width:100%}
+.turn .tav{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.02em}
+.turn.ai .tav{background:var(--signal);color:var(--signal-ink)}
+.turn.human .tav{background:var(--surface-3);color:var(--ink-2)}
+.turn .tb{flex:1;min-width:0}
+.turn .tmeta{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-3);flex-wrap:wrap}
+.turn .tmeta b{font-size:var(--t-cap);font-weight:600}
+.turn .tmeta time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.turn .tt{font-size:var(--t-body-s);line-height:1.62;color:var(--ink);background:var(--surface-2);border:1px solid var(--rule);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);margin:0}
+.turn.ai .tt{background:var(--signal-soft);border-color:var(--signal-edge)}
+.turn .tt em{font-style:normal;color:var(--ink-3)}
+/* the original-language line, always shown under a translation */
+.turn .torig{font-size:var(--t-cap);color:var(--ink-3);margin:var(--s-3) 0 0;padding-left:var(--s-5);border-left:2px solid var(--rule-2)}
+/* confidence: never a bare percentage, always a judgement */
+.conf{display:inline-flex;align-items:center;gap:var(--s-2);font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.conf i{display:flex;gap:1.5px}
+.conf i b{width:3px;height:9px;border-radius:1px;background:var(--rule-3)}
+.conf.hi i b:nth-child(-n+3){background:var(--signal-lo)}
+.conf.mid i b:nth-child(-n+2){background:var(--warn-fill)}
+.conf.lo i b:nth-child(1){background:var(--risk-fill)}
+/* the escalation marker in the stream */
+.tmark{display:flex;align-items:center;gap:var(--s-4);margin:var(--s-2) 0}
+.tmark::before,.tmark::after{content:"";height:1px;background:var(--risk-edge);flex:1}
+.tmark span{display:inline-flex;align-items:center;gap:var(--s-3);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;color:var(--risk);font-weight:600;white-space:nowrap}
+.tmark svg{width:13px;height:13px}
+
+/* ── Channel tile ───────────────────────────────────────────────── */
+.chan{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);transition:all var(--t-ui) var(--e-out)}
+.chan:hover{border-color:var(--rule-3)}
+.chan .cico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:none;color:#fff}
+.chan .cico svg{width:21px;height:21px}
+.chan-wa .cico{background:#25D366;color:#0B2C17}
+.chan-ig .cico{background:linear-gradient(135deg,#F58529,#DD2A7B 52%,#8134AF)}
+.chan-tg .cico{background:#2AABEE}
+.chan-ph .cico{background:var(--ink);color:var(--ground)}
+.chan .cmeta{flex:1;min-width:0}
+.chan .cmeta b{display:block;font-size:var(--t-body-s);font-weight:600}
+.chan .cmeta span{display:block;font-size:var(--t-cap);color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chan.is-off{background:var(--surface-2);border-style:dashed}
+.chan.is-off .cico{filter:grayscale(1);opacity:.5}
+.chan.is-err{border-color:var(--risk-edge);background:var(--risk-soft)}
+
+/* ── Credit meter ───────────────────────────────────────────────── */
+.credit{border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);padding:var(--s-7)}
+.credit-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-5);margin-bottom:var(--s-5)}
+.credit-v{font-family:var(--f-display);font-size:1.9rem;font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.03em;line-height:1}
+.credit-v small{font-family:var(--f-mono);font-size:.7rem;color:var(--ink-3);letter-spacing:.06em;margin-left:6px}
+.meter{height:10px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;position:relative}
+.meter i{display:block;height:100%;border-radius:var(--r-pill);background:var(--signal);
+  width:var(--pct,50%);transition:width 600ms var(--e-out)}
+.meter.warn i{background:var(--warn-fill)} .meter.risk i{background:var(--risk-fill)}
+/* the threshold ticks are visible, so "low" is a place, not a surprise */
+.meter::after{content:"";position:absolute;top:0;bottom:0;left:20%;width:1px;background:var(--rule-3)}
+.credit-ft{display:flex;justify-content:space-between;gap:var(--s-5);margin-top:var(--s-4);font-size:var(--t-cap);color:var(--ink-2)}
+.credit-ft b{font-weight:600;color:var(--ink)}
+
+/* ── Forwarding code card ───────────────────────────────────────── */
+/* the single most important object in activation: a dial string. */
+.fcode{border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.fcode-h{padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:var(--s-4);font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.fcode-h svg{width:14px;height:14px}
+.fcode-b{padding:var(--s-7) var(--s-6);text-align:center;background:var(--surface-2)}
+.fcode-s{font-family:var(--f-mono);font-size:clamp(1.25rem,1rem + 1.2vw,1.75rem);font-weight:600;letter-spacing:.01em;color:var(--ink);line-height:1.3;overflow-wrap:break-word}
+.fcode-s span{display:inline-block;white-space:nowrap}
+.fcode-s b{color:var(--signal-text);font-weight:600;background:var(--signal-soft);border-radius:3px;padding:0 3px;box-decoration-break:clone}
+.fcode-n{font-size:var(--t-cap);color:var(--ink-2);margin:var(--s-5) 0 0}
+.fcode-a{display:flex;gap:var(--s-4);padding:var(--s-5) var(--s-6);border-top:1px solid var(--rule)}
+.fcode-a .btn{flex:1}
+.fcode-plat{display:flex;gap:var(--s-4);align-items:flex-start;margin:0;padding:0 var(--s-6) var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.fcode-plat svg{width:14px;height:14px;flex:none;margin-top:2px}
+.fcode-plat b{color:var(--ink-2);font-weight:600}
+
+/* ── Escalation ladder ──────────────────────────────────────────── */
+.ladder{display:flex;flex-direction:column;gap:0;counter-reset:rung}
+.rung{display:flex;gap:var(--s-6);padding:var(--s-5) 0;position:relative}
+.rung::before{counter-increment:rung;content:counter(rung);
+  width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:11px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-2);z-index:1}
+.rung::after{content:"";position:absolute;left:12.5px;top:34px;bottom:-8px;width:1px;background:var(--rule-2)}
+.rung:last-child::after{display:none}
+.rung.done::before{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.rung.now::before{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.rung.now{background:linear-gradient(90deg,var(--signal-soft),transparent 70%);border-radius:var(--r-sm);padding-left:var(--s-4);margin-left:calc(var(--s-4) * -1)}
+.rung .rb b{display:block;font-size:var(--t-body-s);font-weight:600}
+.rung .rb span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.rung .rt{margin-left:auto;font-family:var(--f-mono);font-size:var(--t-cap);color:var(--ink-3);white-space:nowrap;padding-left:var(--s-5)}
+
+/* ── Weekly report — rendered as the WhatsApp message it actually is ─ */
+.wamsg{max-width:340px;background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden}
+.wamsg-h{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);background:#075E54;color:#fff}
+.wamsg-h .m{width:28px;height:28px;border-radius:50%;background:var(--signal);display:grid;place-items:center;color:var(--signal-ink);flex:none}
+.wamsg-h .m svg{width:15px;height:15px}
+.wamsg-h b{font-size:var(--t-body-s);font-weight:600}
+.wamsg-h span{display:block;font-size:10px;opacity:.8}
+.wamsg-b{padding:var(--s-6);background:var(--surface-2);background-image:radial-gradient(var(--rule) .5px,transparent .5px);background-size:12px 12px}
+.wabub{background:var(--surface);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);font-size:var(--t-body-s);line-height:1.6;box-shadow:var(--e-2);position:relative}
+.wabub .big{font-family:var(--f-display);font-size:1.6rem;font-variation-settings:"opsz" 26;font-weight:600;letter-spacing:-.03em;display:block;line-height:1.1;margin:var(--s-3) 0}
+.wabub a{color:var(--signal-text);font-weight:600}
+.wabub time{display:block;text-align:right;font-family:var(--f-mono);font-size:10px;color:var(--ink-3);margin-top:var(--s-3)}
+
+/* ── Coverage ring — "what your agent can actually answer" ──────── */
+.ring{display:flex;align-items:center;gap:var(--s-6)}
+.ring svg{width:76px;height:76px;flex:none;transform:rotate(-90deg)}
+.ring .rtrack{fill:none;stroke:var(--surface-3);stroke-width:9}
+.ring .rval{fill:none;stroke:var(--signal-lo);stroke-width:9;stroke-linecap:round;
+  stroke-dasharray:var(--dash,201);stroke-dashoffset:var(--off,60);
+  transition:stroke-dashoffset 800ms var(--e-out)}
+.ring .rnum{font-family:var(--f-display);font-size:1.5rem;font-variation-settings:"opsz" 24;font-weight:600;letter-spacing:-.03em;line-height:1}
+.ring .rlab{font-size:var(--t-cap);color:var(--ink-2);margin-top:2px}
+
+/* ── Data viz. hand-drawn SVG. no chart library, no 90KB payload. ── */
+.spark{display:block;width:100%;height:40px;overflow:visible}
+.spark path.ln{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.spark path.ar{fill:var(--signal-soft);stroke:none}
+.spark circle{fill:var(--signal);stroke:var(--surface);stroke-width:2}
+.bars{display:flex;align-items:flex-end;gap:var(--s-3);height:120px}
+.bars .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:var(--s-3);height:100%}
+.bars .b i{width:100%;max-width:28px;background:var(--surface-3);border-radius:3px 3px 0 0;height:var(--h,20%);
+  transition:height 600ms var(--e-out),background var(--t-micro)}
+.bars .b.on i{background:var(--signal)}
+.bars .b:hover i{background:var(--signal-lo)}
+.bars .b span{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* ── Nav: desktop rail ──────────────────────────────────────────── */
+.applayout{display:grid;grid-template-columns:224px 1fr;min-height:340px;background:var(--ground);border-radius:var(--r-md);overflow:hidden;border:1px solid var(--rule)}
+.appnav{background:var(--surface);border-right:1px solid var(--rule);padding:var(--s-5)}
+.appnav a{display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:var(--t-body-s);font-weight:500;transition:all var(--t-micro)}
+.appnav a svg{width:16px;height:16px;opacity:.75}
+.appnav a:hover{background:var(--surface-2);color:var(--ink)}
+.appnav a.on{background:var(--signal);color:var(--signal-ink);font-weight:600}
+.appnav a.on svg{opacity:1}
+.appnav a .nb{margin-left:auto;font-family:var(--f-mono);font-size:10px;background:var(--risk-fill);color:#fff;border-radius:var(--r-pill);padding:1px 6px}
+.appbody{padding:var(--s-7)}
+
+/* ── Nav: the phone. NOT the rail, reflowed — a different component. ─ */
+.phone{width:290px;border:1px solid var(--rule-2);border-radius:26px;overflow:hidden;background:var(--ground);box-shadow:var(--e-3);flex:none}
+.phone-top{height:26px;background:var(--surface);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;padding:0 var(--s-5);font-family:var(--f-mono);font-size:9px;color:var(--ink-3)}
+.phone-bd{padding:var(--s-6);min-height:200px}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-3) var(--s-2) var(--s-5)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:var(--s-3) 0;text-decoration:none;color:var(--ink-3);font-size:9.5px;font-weight:600;position:relative;min-height:48px;justify-content:center;border-radius:8px;transition:color var(--t-micro)}
+.tabbar a svg{width:19px;height:19px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2.5px;border-radius:var(--r-pill);background:var(--signal-lo)}
+.tabbar a .nb{position:absolute;top:2px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;background:var(--risk-fill);border:1.5px solid var(--surface)}
+
+/* ── Sheet / modal ──────────────────────────────────────────────── */
+.sheet{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:var(--s-7);box-shadow:var(--e-4);position:relative}
+.sheet::before{content:"";position:absolute;top:var(--s-4);left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:var(--r-pill);background:var(--rule-3)}
+.sheet h3{margin:var(--s-5) 0 var(--s-4)}
+.modal{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-lg);padding:var(--s-8);box-shadow:var(--e-4);max-width:460px}
+
+/* ── Table → list, on small screens ─────────────────────────────── */
+.rowlist{border:1px solid var(--rule);border-radius:var(--r-md);overflow:hidden;background:var(--surface)}
+.rowitem{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background var(--t-micro)}
+.rowitem:last-child{border-bottom:none}
+.rowitem:hover{background:var(--surface-2)}
+.rowitem .rav{width:36px;height:36px;border-radius:50%;background:var(--surface-2);border:1px solid var(--rule);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.8rem;flex:none}
+.rowitem .rmain{flex:1;min-width:0}
+.rowitem .rmain b{display:block;font-size:var(--t-body-s);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rmain span{display:block;font-size:var(--t-cap);color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .rside{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:var(--s-2)}
+.rowitem .rside time{font-family:var(--f-mono);font-size:10px;color:var(--ink-3)}
+
+/* shell */
+html{overflow-x:clip}
+body{overflow-x:clip}
+
+/* ── Studio toolbar (not part of the product) ───────────────────── */
+.bar{position:sticky;top:0;z-index:80;display:flex;align-items:center;flex-wrap:wrap;
+  gap:var(--s-4) var(--s-5);min-height:56px;padding:var(--s-4) var(--s-7);
+  background:var(--panel);color:var(--panel-ink);border-bottom:1px solid var(--panel-rule)}
+.bar > *{min-width:0}
+.bar .lg{display:flex;align-items:center;gap:var(--s-4);flex:none}
+.bar .lg .mk{width:26px;height:26px;border-radius:7px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.bar .lg .mk svg{width:15px;height:15px}
+.bar .lg b{font-family:var(--f-display);font-size:.95rem;font-weight:700;letter-spacing:-.022em}
+.bar .lg span{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-ink-2);display:block;margin-top:-2px}
+.bar .sp{margin-left:auto}
+.seg{display:flex;gap:2px;background:rgba(255,255,255,.09);border-radius:var(--r-pill);padding:3px}
+.seg button{border:none;background:none;color:var(--panel-ink-2);font:inherit;font-size:var(--t-cap);font-weight:600;
+  padding:6px var(--s-6);border-radius:var(--r-pill);cursor:pointer;min-height:32px;transition:all var(--t-micro)}
+.seg button[aria-pressed=true]{background:var(--signal);color:var(--signal-ink)}
+.bar .mini{display:inline-flex;align-items:center;gap:var(--s-3);height:32px;padding:0 var(--s-5);border-radius:var(--r-pill);
+  border:1px solid var(--panel-rule);background:none;color:var(--panel-ink-2);font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all var(--t-micro)}
+.bar .mini:hover{color:var(--panel-ink);border-color:rgba(255,255,255,.3)}
+.bar .mini svg{width:13px;height:13px}
+.bar select{height:32px;max-width:min(230px,42vw);border-radius:var(--r-pill);border:1px solid var(--panel-rule);background:rgba(255,255,255,.06);
+  color:var(--panel-ink);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;padding:0 var(--s-4);cursor:pointer}
+.bar select option{color:var(--ink);background:var(--surface)}
+
+/* ── Modes ──────────────────────────────────────────────────────── */
+.mode{display:none} .mode.on{display:block}
+
+/* ── The product frame ──────────────────────────────────────────── */
+.auth{min-height:calc(100vh - 56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr)}
+.authmain{display:flex;flex-direction:column;padding:var(--s-9) var(--s-10) var(--s-11);background:var(--ground)}
+.authaside{background:var(--surface-2);border-left:1px solid var(--rule);padding:var(--s-9) var(--s-10);display:flex;flex-direction:column;justify-content:center;gap:var(--s-7)}
+.authhead{display:flex;align-items:center;justify-content:space-between;gap:var(--s-6);margin-bottom:var(--s-10)}
+.blogo{display:flex;align-items:center;gap:var(--s-4)}
+.blogo .mk{width:30px;height:30px;border-radius:8px;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center}
+.blogo .mk svg{width:17px;height:17px}
+.blogo b{font-family:var(--f-display);font-size:1.05rem;font-weight:700;letter-spacing:-.026em}
+.authbody{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:440px;width:100%;margin:0 auto}
+.authfoot{margin-top:var(--s-10);max-width:440px;width:100%;margin-left:auto;margin-right:auto}
+
+/* progress: five marks, no numbers — the flow is short enough that a
+   counter is noise, but a shape that fills is reassurance */
+.prog{display:flex;gap:var(--s-3);margin-bottom:var(--s-9)}
+.prog i{flex:1;height:3px;border-radius:var(--r-pill);background:var(--surface-3);transition:background 400ms var(--e-out)}
+.prog i.done{background:var(--signal-lo)} .prog i.now{background:var(--signal)}
+
+.screen{display:none;animation:sin var(--t-panel) var(--e-out)}
+.screen.on{display:block}
+@keyframes sin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.screen.back{animation:sinb var(--t-panel) var(--e-out)}
+@keyframes sinb{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen,.screen.back{animation:none}}
+
+.screen h1{font-family:var(--f-display);font-size:clamp(1.55rem,1.3rem + 1.1vw,2rem);font-variation-settings:"opsz" 32;
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:0 0 var(--s-5);text-wrap:balance}
+.screen .sub{color:var(--ink-2);font-size:var(--t-body);margin:0 0 var(--s-8);line-height:1.6}
+.screen .sub a{color:var(--signal-text);font-weight:600}
+.microfoot{font-size:var(--t-cap);color:var(--ink-3);text-align:center;margin:var(--s-6) 0 0}
+.microfoot a{color:var(--signal-text);font-weight:600}
+.backlink{display:inline-flex;align-items:center;gap:var(--s-3);font-size:var(--t-cap);font-weight:600;color:var(--ink-2);
+  background:none;border:none;cursor:pointer;padding:var(--s-3) 0;margin-bottom:var(--s-6)}
+.backlink:hover{color:var(--ink)} .backlink svg{width:14px;height:14px}
+
+/* ── Entry banners ──────────────────────────────────────────────── */
+.entryb{display:flex;gap:var(--s-5);align-items:flex-start;padding:var(--s-5) var(--s-6);border-radius:var(--r-md);
+  background:var(--signal-soft);border:1px solid var(--signal-edge);margin-bottom:var(--s-8);font-size:var(--t-body-s)}
+.entryb svg{width:16px;height:16px;flex:none;margin-top:2px;color:var(--signal-text)}
+.entryb b{font-weight:600}
+.entryb p{margin:0;color:var(--ink)}
+
+/* ── Delivery fallbacks ─────────────────────────────────────────── */
+.fallbacks{margin-top:var(--s-7);border-top:1px solid var(--rule);padding-top:var(--s-6)}
+.fbrow{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-5);border:1px solid var(--rule-2);
+  border-radius:var(--r-sm);background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);
+  margin-bottom:var(--s-4);transition:all var(--t-micro) var(--e-out)}
+.fbrow:hover:not(:disabled){border-color:var(--rule-3);background:var(--surface-2)}
+.fbrow:disabled{opacity:.45;cursor:not-allowed}
+.fbrow .fi{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none;background:var(--surface-2)}
+.fbrow .fi svg{width:16px;height:16px}
+.fbrow.wa .fi{background:#25D366;color:#0B2C17}
+.fbrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fbrow span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fbrow .fw{flex:1;min-width:0}
+.fbrow .ft{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);white-space:nowrap;text-transform:uppercase;letter-spacing:.08em}
+
+/* ── Greeting preview (aside) ───────────────────────────────────── */
+.gprev{background:var(--panel);color:var(--panel-ink);border-radius:var(--r-lg);padding:var(--s-8);position:relative;overflow:hidden}
+.gprev::before{content:"";position:absolute;inset:0;background:radial-gradient(110% 80% at 85% -10%,color-mix(in oklab,var(--signal) 20%,transparent),transparent 62%)}
+.gprev > *{position:relative}
+.gprev .gl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--signal);margin-bottom:var(--s-6);display:flex;align-items:center;gap:var(--s-4)}
+.gprev .gl svg{width:14px;height:14px}
+.gprev .gq{font-family:var(--f-display);font-size:1.35rem;font-variation-settings:"opsz" 22;font-weight:500;letter-spacing:-.018em;line-height:1.35;margin:0}
+.gprev .gq mark{background:none;color:var(--signal);font-weight:600}
+.gprev .gt{font-size:var(--t-cap);color:var(--panel-ink-2);margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--panel-rule)}
+
+.asidecard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.asidecard h3{margin-bottom:var(--s-5);font-size:var(--t-h4)}
+.asidecard ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.asidecard li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink-2);line-height:1.55;align-items:flex-start}
+.asidecard li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--signal-text)}
+.asidecard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.asidepane{display:none} .asidepane.on{display:grid;gap:var(--s-6);animation:sin var(--t-panel) var(--e-out)}
+@media (prefers-reduced-motion:reduce){.asidepane.on{animation:none}}
+
+/* ── Consent ────────────────────────────────────────────────────── */
+.summ{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);padding:var(--s-7);margin-bottom:var(--s-7)}
+.summ ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s-5)}
+.summ li{display:flex;gap:var(--s-4);font-size:var(--t-body-s);color:var(--ink);line-height:1.55;align-items:flex-start}
+.summ li svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--ink-3)}
+.summ .sfoot{margin:var(--s-6) 0 0;padding-top:var(--s-5);border-top:1px solid var(--rule);font-size:var(--t-cap);color:var(--ink-3)}
+.summ .sfoot a{color:var(--signal-text);font-weight:600}
+.consent{display:flex;gap:var(--s-5);padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);cursor:pointer;margin-bottom:var(--s-5);transition:all var(--t-ui) var(--e-out)}
+.consent:hover{border-color:var(--rule-3)}
+.consent input{position:absolute;opacity:0;width:0;height:0}
+.consent .cbx{width:22px;height:22px;border:1.5px solid var(--rule-3);border-radius:5px;flex:none;display:grid;place-items:center;
+  margin-top:1px;transition:all var(--t-micro) var(--e-out);background:var(--surface)}
+.consent .cbx svg{width:13px;height:13px;opacity:0;color:var(--signal-ink);transform:scale(.6);transition:all var(--t-micro) var(--e-out)}
+.consent input:checked ~ .cw .cbx,.consent input:checked + .cbx{background:var(--signal);border-color:var(--signal-lo)}
+.consent input:checked + .cbx svg{opacity:1;transform:none}
+.consent input:focus-visible + .cbx{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.consent input:checked ~ *{}
+.consent.checked{border-color:var(--signal-lo);background:var(--signal-soft)}
+.consent .cw b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.consent .cw span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.consent .req{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-left:var(--s-3)}
+.receipt{font-family:var(--f-mono);font-size:10.5px;line-height:1.7;color:var(--ink-3);background:var(--surface-2);
+  border:1px solid var(--rule);border-radius:var(--r-sm);padding:var(--s-5);margin:var(--s-6) 0 0;overflow-x:auto}
+.receipt b{color:var(--ink-2);font-weight:500}
+.notyet{display:flex;gap:var(--s-4);margin-top:var(--s-6);font-size:var(--t-cap);color:var(--ink-3);line-height:1.55}
+.notyet svg{width:14px;height:14px;flex:none;margin-top:2px}
+
+/* ── Recovery hub ───────────────────────────────────────────────── */
+.recopt{display:flex;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);text-align:left;cursor:pointer;font:inherit;color:var(--ink);margin-bottom:var(--s-5);
+  transition:all var(--t-ui) var(--e-out)}
+.recopt:hover{border-color:var(--signal-lo);background:var(--signal-soft);transform:translateY(-1px)}
+.recopt .ri{width:36px;height:36px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.recopt .ri svg{width:18px;height:18px}
+.recopt b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.recopt span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5}
+.recopt .ra{margin-left:auto;align-self:center;color:var(--ink-3)}
+.recopt .ra svg{width:16px;height:16px}
+
+/* ── Workspace chooser ──────────────────────────────────────────── */
+.wsopt{display:flex;align-items:center;gap:var(--s-5);width:100%;padding:var(--s-6);border:1px solid var(--rule-2);
+  border-radius:var(--r-md);background:var(--surface);cursor:pointer;font:inherit;color:var(--ink);text-align:left;
+  margin-bottom:var(--s-4);transition:all var(--t-ui) var(--e-out)}
+.wsopt:hover{border-color:var(--signal-lo);background:var(--signal-soft)}
+.wsopt .wa{width:38px;height:38px;border-radius:10px;background:var(--surface-2);border:1px solid var(--rule);
+  display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.9rem;flex:none}
+.wsopt b{display:block;font-size:var(--t-body-s);font-weight:600}
+.wsopt span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+
+/* ── Done ───────────────────────────────────────────────────────── */
+.donemark{width:76px;height:76px;border-radius:50%;background:var(--signal);color:var(--signal-ink);
+  display:grid;place-items:center;margin-bottom:var(--s-8);position:relative}
+.donemark svg{width:34px;height:34px;stroke-dasharray:32;stroke-dashoffset:32;animation:draw 520ms var(--e-out) 160ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.donemark::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--signal-lo);animation:ripple 1.6s var(--e-out) 2}
+@keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.donemark svg{animation:none;stroke-dashoffset:0}.donemark::after{animation:none;opacity:0}}
+
+/* ── SPEC MODE ──────────────────────────────────────────────────── */
+.specwrap{max-width:1120px;margin:0 auto;padding:var(--s-11) var(--s-10) var(--s-13)}
+.specwrap .sechd{margin:var(--s-13) 0 var(--s-7)}
+.specwrap .sechd:first-of-type{margin-top:var(--s-9)}
+.specwrap .sechd .n{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-5)}
+.specwrap .sechd .n::before{content:"";display:inline-block;width:18px;height:1px;background:var(--rule-3);vertical-align:middle;margin-right:var(--s-4)}
+.specwrap h2{font-family:var(--f-display);font-size:clamp(1.4rem,1.15rem + 1vw,1.85rem);font-variation-settings:"opsz" 30;font-weight:600;letter-spacing:-.028em;margin:0}
+.specwrap > p,.sechd + p{max-width:70ch;color:var(--ink-2);margin:var(--s-5) 0 0}
+.stbl{width:100%;border-collapse:collapse;font-size:var(--t-body-s)}
+.stbl th{text-align:left;font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;padding:0 var(--s-5) var(--s-4);border-bottom:1px solid var(--rule-2);white-space:nowrap}
+.stbl td{padding:var(--s-5);border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.stbl td:first-child{color:var(--ink);font-weight:500}
+.stblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:var(--s-6) 0}
+.stblwrap .stbl{min-width:600px}
+.why2{display:flex;gap:var(--s-5);max-width:74ch;background:var(--signal-soft);border:1px solid var(--signal-edge);
+  border-radius:var(--r-md);padding:var(--s-5) var(--s-6);margin:var(--s-6) 0;font-size:var(--t-body-s);color:var(--ink)}
+.why2 svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--signal-text)}
+.why2 p{margin:0} .why2 b{font-weight:600}
+.why2.warn{background:var(--warn-soft);border-color:var(--warn-edge)} .why2.warn svg{color:var(--warn)}
+.sgrid{display:grid;gap:var(--s-6);grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));margin:var(--s-6) 0}
+.sgrid > *{min-width:0}
+.scard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s-7)}
+.scard h4{margin-bottom:var(--s-4)}
+.scard p{margin:0;font-size:var(--t-body-s);color:var(--ink-2);line-height:1.6}
+.scard .tagline{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-4)}
+
+/* flow map */
+.fmap{display:grid;gap:0;margin:var(--s-7) 0;max-width:520px}
+.fnode{background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-sm);padding:var(--s-5) var(--s-6)}
+.fnode b{display:block;font-size:var(--t-body-s);font-weight:600}
+.fnode span{display:block;font-size:var(--t-cap);color:var(--ink-2)}
+.fnode.key{background:var(--signal-soft);border-color:var(--signal-lo);border-width:2px}
+.fnode.term{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.fnode.term span{color:rgba(250,249,244,.72)}
+.fconn{width:1px;height:20px;margin:0 auto;background:var(--rule-3);position:relative}
+.fconn::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+  border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--rule-3)}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:980px){
+  .auth{grid-template-columns:minmax(0,1fr)}
+  .authaside{border-left:none;border-top:1px solid var(--rule);padding:var(--s-9) var(--s-8)}
+  .authmain{padding:var(--s-8) var(--s-8) var(--s-9)}
+  .specwrap{padding:var(--s-9) var(--s-8) var(--s-12)}
+}
+@media (max-width:640px){
+  .bar{padding:var(--s-4) var(--s-5)}
+  .bar .lg > span > span{display:none}
+  .bar .sp{margin-left:auto}
+  .bar .scen{order:5;width:100%}
+  .bar select{width:100%}
+  .auth{min-height:0}
+  .authmain{padding:var(--s-7) var(--s-6) var(--s-8)}
+  .authaside{padding:var(--s-8) var(--s-6)}
+  .specwrap{padding:var(--s-8) var(--s-6) var(--s-11)}
+  .authhead{margin-bottom:var(--s-8)}
+  .fallbacks .fbrow .ft{display:none}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INHERITED VERBATIM
+
+   Fifth surface on home.html's shell. The WhatsApp message mock and
+   the switch come from results.html; the stage list from
+   escalation.html. The .credit balance card already exists in the
+   shared foundation and is not re-declared — .days sits beside it as
+   the days-led form this flow argues for.
+   ═══════════════════════════════════════════════════════════════════ */
+/* ── The app shell, from home.html. Fifth surface. ─────────────── */
+.appframe{border:1px solid var(--rule-2);border-radius:var(--r-lg);background:var(--ground);
+  overflow:hidden;display:flex;flex-direction:column;height:720px;max-width:420px;margin:0 auto;
+  box-shadow:var(--sh-2);transition:max-width var(--t-page) var(--e-out)}
+.appframe.wide{max-width:100%;height:660px;flex-direction:row}
+.appframe.wide .appnav{display:flex}
+.appframe.wide .tabbar{display:none}
+.appcol{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.apphead{padding:var(--s-6) var(--s-6) var(--s-5);border-bottom:1px solid var(--rule);
+  background:var(--surface);flex:none}
+.apphead .pausebtn{width:34px;height:34px}
+.ahtop{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5)}
+.greet{flex:1;min-width:0}
+.greet b{display:block;font-family:var(--f-display);font-size:1.05rem;font-variation-settings:"opsz" 18;
+  font-weight:600;letter-spacing:-.018em;line-height:1.2}
+.greet span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:1px}
+.statebar{display:flex;align-items:center;gap:var(--s-4);overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch}
+.statebar::-webkit-scrollbar{display:none}
+.schip{display:inline-flex;align-items:center;gap:var(--s-3);height:26px;padding:0 var(--s-5);
+  border-radius:var(--r-pill);border:1px solid var(--rule-2);background:var(--surface-2);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.03em;color:var(--ink-2);
+  white-space:nowrap;flex:none;font-weight:600;cursor:pointer;font-family:inherit;
+  transition:all var(--t-micro) var(--e-out)}
+.schip:hover{border-color:var(--rule-3);color:var(--ink)}
+.schip svg{width:13px;height:13px}
+.schip i{width:7px;height:7px;border-radius:50%;background:var(--rule-3);flex:none}
+.schip.live i{background:var(--ok-fill)}
+.schip.ok{border-color:var(--signal-edge);background:var(--signal-soft);color:var(--signal-text)}
+.schip.warn{border-color:var(--warn-edge);background:var(--warn-soft);color:var(--warn)}
+.schip.risk{border-color:var(--risk-edge);background:var(--risk-soft);color:var(--risk)}
+.schip .sv{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.feed{flex:1;overflow-y:auto;padding:var(--s-6);background:var(--ground)}
+.feed::-webkit-scrollbar{width:6px}
+.feed::-webkit-scrollbar-thumb{background:var(--rule-2);border-radius:3px}
+.tabbar{display:flex;background:var(--surface);border-top:1px solid var(--rule);padding:var(--s-3) var(--s-2) var(--s-5)}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:var(--s-3) 0;text-decoration:none;color:var(--ink-3);font-size:9.5px;font-weight:600;position:relative;min-height:48px;justify-content:center;border-radius:8px;transition:color var(--t-micro)}
+.tabbar a svg{width:19px;height:19px}
+.tabbar a.on{color:var(--ink)}
+.tabbar a.on::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2.5px;border-radius:var(--r-pill);background:var(--signal-lo)}
+.tabbar a .nb{position:absolute;top:2px;right:calc(50% - 17px);width:7px;height:7px;border-radius:50%;background:var(--risk-fill);border:1.5px solid var(--surface)}
+.tabbar{flex:none;padding-bottom:max(var(--s-5),env(safe-area-inset-bottom))}
+.tabbar a{cursor:pointer;min-height:52px;justify-content:center}
+.appnav{background:var(--surface);border-right:1px solid var(--rule);padding:var(--s-5)}
+.appnav a{display:flex;align-items:center;gap:var(--s-4);padding:9px var(--s-5);border-radius:8px;text-decoration:none;color:var(--ink-2);font-size:var(--t-body-s);font-weight:500;transition:all var(--t-micro)}
+.appnav a svg{width:16px;height:16px;opacity:.75}
+.appnav a:hover{background:var(--surface-2);color:var(--ink)}
+.appnav a.on{background:var(--signal);color:var(--signal-ink);font-weight:600}
+.appnav a.on svg{opacity:1}
+.appnav a .nb{margin-left:auto;font-family:var(--f-mono);font-size:10px;background:var(--risk-fill);color:#fff;border-radius:var(--r-pill);padding:1px 6px}
+.appnav{display:none;flex-direction:column;gap:2px;width:208px;flex:none;padding:var(--s-6) var(--s-5);
+  overflow-y:auto}
+.appnav .nvh{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);padding:0 var(--s-5) var(--s-4)}
+.appnav a{cursor:pointer}
+.appnav .nvsp{flex:1}
+.skel{display:grid;gap:var(--s-4)}
+.skrow{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);padding:var(--s-6)}
+.skl{height:10px;border-radius:var(--r-pill);background:var(--surface-3);margin-bottom:var(--s-4);
+  animation:shim 1.4s var(--e-inout) infinite}
+.skl:last-child{margin-bottom:0}
+.pausebtn{width:32px;height:32px;border-radius:50%;border:1px solid var(--rule-2);background:var(--surface);
+  display:grid;place-items:center;cursor:pointer;color:var(--ink-2);flex:none;
+  transition:all var(--t-micro) var(--e-out)}
+.pausebtn:hover{border-color:var(--risk-edge);background:var(--risk-soft);color:var(--risk)}
+.pausebtn svg{width:15px;height:15px}
+.zone{margin-bottom:var(--s-8)}
+.zone:last-child{margin-bottom:0}
+.zone.z1 .zi{background:var(--warn-fill);color:#14150F}
+.zone.z2 .zi{background:var(--signal);color:var(--signal-ink)}
+.zone.z3 .zi{background:var(--surface-3);color:var(--ink-2)}
+.zh{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5)}
+.zh .zi{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;flex:none}
+.zh .zi svg{width:11px;height:11px}
+.zh b{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:600;color:var(--ink-2)}
+.zh .zn{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.08em;color:var(--ink-3)}
+
+/* ── The WhatsApp mock + the switch, from the files that own them ── */
+.wamsg{max-width:340px;background:var(--surface);border:1px solid var(--rule-2);border-radius:var(--r-md);overflow:hidden}
+.wamsg-h{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);background:#075E54;color:#fff}
+.wamsg-h .m{width:28px;height:28px;border-radius:50%;background:var(--signal);display:grid;place-items:center;color:var(--signal-ink);flex:none}
+.wamsg-h .m svg{width:15px;height:15px}
+.wamsg-h b{font-size:var(--t-body-s);font-weight:600}
+.wamsg-h span{display:block;font-size:10px;opacity:.8}
+.wamsg-b{padding:var(--s-6);background:var(--surface-2);background-image:radial-gradient(var(--rule) .5px,transparent .5px);background-size:12px 12px}
+.wabub{background:var(--surface);border-radius:2px var(--r-md) var(--r-md) var(--r-md);padding:var(--s-5) var(--s-6);font-size:var(--t-body-s);line-height:1.6;box-shadow:var(--e-2);position:relative}
+.wabub .big{font-family:var(--f-display);font-size:1.6rem;font-variation-settings:"opsz" 26;font-weight:600;letter-spacing:-.03em;display:block;line-height:1.1;margin:var(--s-3) 0}
+.wabub a{color:var(--signal-text);font-weight:600}
+.wabub time{display:block;text-align:right;font-family:var(--f-mono);font-size:10px;color:var(--ink-3);margin-top:var(--s-3)}
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+.tgl{display:flex;align-items:center;gap:var(--s-5);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tgl input{position:absolute;opacity:0;width:0;height:0}
+.tgl .track{width:46px;height:28px;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--rule-2);position:relative;flex:none;transition:background var(--t-ui) var(--e-out),border-color var(--t-ui)}
+.tgl .track::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--surface);box-shadow:var(--e-2);transition:transform var(--t-ui) var(--e-spring)}
+.tgl input:checked + .track{background:var(--signal);border-color:var(--signal-lo)}
+.tgl input:checked + .track::after{transform:translateX(18px)}
+.tgl input:focus-visible + .track{outline:2px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 4px var(--ground),0 0 0 6px var(--ink)}
+.tgl .tl{font-size:var(--t-body-s);font-weight:500}
+.dback{display:inline-flex;align-items:center;gap:var(--s-3);border:none;background:none;
+  font:inherit;font-size:var(--t-cap);color:var(--ink-2);cursor:pointer;padding:0;margin-bottom:var(--s-5)}
+.dback svg{width:14px;height:14px}
+.periods{display:flex;gap:var(--s-3);margin-bottom:var(--s-6);overflow-x:auto;
+  scrollbar-width:none;padding-bottom:2px}
+.periods::-webkit-scrollbar{display:none}
+.per{flex:none;height:30px;padding:0 var(--s-5);border-radius:var(--r-pill);
+  border:1px solid var(--rule-2);background:var(--surface);font:inherit;font-size:var(--t-cap);
+  font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap;
+  transition:all var(--t-micro) var(--e-out)}
+.per:hover{border-color:var(--rule-3);color:var(--ink)}
+.per.on{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.offsw{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.offrow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--rule)}
+.offrow:last-child{border-bottom:none}
+.offrow .ow{flex:1;min-width:0}
+.offrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.offrow span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:1px;line-height:1.45}
+
+/* ── The stage list, from escalation.html ──────────────────────── */
+.stages{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin-bottom:var(--s-6);
+  border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.stage{display:flex;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);
+  align-items:flex-start}
+.stage:last-child{border-bottom:none}
+.stage .sn{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-3);
+  font-family:var(--f-mono);font-size:10px;font-weight:600}
+.stage .sw{flex:1;min-width:0}
+.stage b{display:block;font-size:var(--t-body-s);font-weight:600}
+.stage span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55;margin-top:2px}
+.stage .swhen{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);flex:none;padding-top:4px}
+.stage.done .sn{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.stage.now{background:var(--warn-soft)}
+.stage.now .sn{background:var(--warn-fill);border-color:var(--warn-edge);color:#14150F}
+.stage.next{opacity:.6}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CREDIT & MOBILE MONEY
+
+   Atlas §1: "make sure running out of credit never leaves their
+   business less reachable than it was before." That is the whole flow.
+   The paying is the easy part; the not-punishing-them-for-not-paying is
+   the part that has to be built carefully.
+
+   Two things govern the layout.
+
+   §4.1 — "About 11 days" rather than "14,200 RWF" is the important
+   detail. A balance in francs makes her do arithmetic about her own
+   usage; days remaining is the answer to the question she is asking.
+   So days are the headline and the francs are the supporting fact —
+   which inverts the atlas's own §3 sketch, deliberately.
+
+   §4.3 — what "paused for credit" means is the most important
+   behaviour here, and it is a mechanism rather than a promise:
+   forwarding is never removed, Subiza simply declines, and the
+   carrier's no-answer rule falls through to her as it always did.
+   ═══════════════════════════════════════════════════════════════════ */
+.authmain{max-width:none}
+.authbody{max-width:none;padding:0}
+
+/* ── The balance, led by days ────────────────────────────────────── */
+.days{border:1px solid var(--rule-2);border-radius:var(--r-lg);background:var(--surface);
+  padding:var(--s-8) var(--s-7);margin-bottom:var(--s-5)}
+.days.low{border-color:var(--warn-edge);background:var(--warn-soft)}
+.days.crit{border-color:var(--risk-edge);background:var(--risk-soft)}
+.days .dtop{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:var(--s-4)}
+.days .dn{font-family:var(--f-display);font-size:clamp(2.6rem,2rem + 2.4vw,3.6rem);
+  font-variation-settings:"opsz" 44;font-weight:600;letter-spacing:-.038em;line-height:.92;
+  font-variant-numeric:tabular-nums}
+.days .dl{font-size:var(--t-body);line-height:1.25;font-weight:500}
+.days .dwhy{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.5;
+  margin-bottom:var(--s-6)}
+/* The francs are true and secondary. Both matter; only one is the
+   answer to "have I got enough". */
+.days .dfr{display:flex;align-items:baseline;gap:var(--s-4);padding-top:var(--s-5);
+  border-top:1px solid var(--rule);font-size:var(--t-cap);color:var(--ink-2)}
+.days .dfr b{font-family:var(--f-mono);font-size:var(--t-body-s);font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.dbar{height:8px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;
+  margin-bottom:var(--s-5)}
+.dbar i{display:block;height:100%;background:var(--signal);border-radius:var(--r-pill);
+  transition:width var(--t-page) var(--e-out)}
+.days.low .dbar i{background:var(--warn-fill)}
+.days.crit .dbar i{background:var(--risk-fill)}
+
+/* ── Usage, and the plan it sits inside ─────────────────────────── */
+.usage{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.urow{display:flex;align-items:center;gap:var(--s-5);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--rule)}
+.urow:last-child{border-bottom:none}
+.urow .uk{flex:1;min-width:0;font-size:var(--t-body-s)}
+.urow .uv{font-family:var(--f-mono);font-size:var(--t-body-s);font-weight:600;
+  font-variant-numeric:tabular-nums;flex:none}
+.urow .ub{width:78px;height:5px;border-radius:var(--r-pill);background:var(--surface-3);flex:none;
+  overflow:hidden}
+.urow .ub i{display:block;height:100%;background:var(--signal-lo)}
+.urow.over .ub i{background:var(--warn-fill)}
+.urow.head{background:var(--surface-2);font-family:var(--f-mono);font-size:var(--t-label);
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ── Top-up amounts. Four presets plus a field — G18: no card, ever,
+   anywhere, and the absence is the point. ───────────────────────── */
+.amounts{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-4);margin-bottom:var(--s-5)}
+.amt{padding:var(--s-6) var(--s-5);border:1px solid var(--rule-2);border-radius:var(--r-md);
+  background:var(--surface);font:inherit;color:var(--ink);cursor:pointer;text-align:left;
+  transition:all var(--t-micro) var(--e-out)}
+.amt:hover{border-color:var(--rule-3)}
+.amt.on{border-color:var(--signal-lo);background:var(--signal-soft);box-shadow:inset 0 0 0 1px var(--signal-lo)}
+.amt b{display:block;font-family:var(--f-mono);font-size:var(--t-body);font-weight:600;
+  font-variant-numeric:tabular-nums}
+.amt span{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:2px}
+.amt.on span{color:var(--signal-text)}
+
+/* ── The MoMo number, pre-filled from the account ───────────────── */
+.momo{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-6);margin-bottom:var(--s-5)}
+.momo .ml2{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3)}
+.momo .ml2 svg{width:13px;height:13px}
+.momo .mnum{display:flex;align-items:center;gap:var(--s-5)}
+.momo .mnum b{font-family:var(--f-mono);font-size:var(--t-body);font-weight:600;flex:1;min-width:0}
+.momo .mn2{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-4);line-height:1.5}
+
+/* ── The safety line. MoMo fraud in this market is endemic, and this
+   flow is the one place the product legitimately causes a PIN prompt.
+   So it names where the prompt comes from, and what we will never do. */
+.pinwarn{border:1px solid var(--signal-edge);border-radius:var(--r-md);background:var(--signal-soft);
+  padding:var(--s-6);margin-bottom:var(--s-6)}
+.pinwarn .pw4{display:flex;gap:var(--s-5);align-items:flex-start}
+.pinwarn .pw4 > svg{width:18px;height:18px;flex:none;margin-top:1px;color:var(--signal-text)}
+.pinwarn b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:2px}
+.pinwarn span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.pinnever{display:flex;gap:var(--s-4);align-items:flex-start;margin-top:var(--s-5);
+  padding-top:var(--s-5);border-top:1px solid var(--signal-edge);font-size:var(--t-cap);
+  color:var(--ink);line-height:1.55}
+.pinnever svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--risk)}
+.pinnever b{display:inline;font-weight:600}
+
+/* ── Pending is a real state, not a spinner over an assumption.
+   MoMo settles asynchronously; pretending otherwise is how a payment
+   gets lost. ────────────────────────────────────────────────────── */
+.tsteps{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.tstep{display:flex;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);
+  align-items:flex-start}
+.tstep:last-child{border-bottom:none}
+.tstep .tsn{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:var(--surface-2);border:1px solid var(--rule-2);color:var(--ink-3);
+  font-family:var(--f-mono);font-size:10px;font-weight:600}
+.tstep .tsn svg{width:12px;height:12px}
+.tstep .tsw{flex:1;min-width:0}
+.tstep b{display:block;font-size:var(--t-body-s);font-weight:600}
+.tstep span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55;margin-top:2px}
+.tstep.done .tsn{background:var(--signal);border-color:var(--signal-lo);color:var(--signal-ink)}
+.tstep.now{background:var(--surface-2)}
+.tstep.now .tsn{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.tstep.next{opacity:.55}
+.tstep.fail .tsn{background:var(--risk-fill);border-color:var(--risk-fill);color:#fff}
+.tstep.fail{background:var(--risk-soft)}
+/* The phone prompt, drawn, because "check your phone" is easy to miss */
+.phoneprompt{border:1px solid var(--rule-3);border-radius:var(--r-md);background:var(--surface-2);
+  padding:var(--s-6);margin-bottom:var(--s-6);text-align:center}
+.phoneprompt .ppl{font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:var(--s-5)}
+.phoneprompt .ppb{background:var(--ground);border:1px solid var(--rule-2);border-radius:var(--r-sm);
+  padding:var(--s-6);font-size:var(--t-body-s);line-height:1.6;text-align:left;
+  font-family:var(--f-mono);color:var(--ink)}
+.phoneprompt .ppn{display:block;font-size:var(--t-cap);color:var(--ink-2);margin-top:var(--s-5);
+  line-height:1.5}
+.spin{display:inline-block;width:13px;height:13px;border-radius:50%;
+  border:2px solid var(--rule-2);border-top-color:var(--ink-3);animation:spin .8s linear infinite}
+@media (prefers-reduced-motion:reduce){.spin{animation:none;border-top-color:var(--rule-2)}}
+
+/* ── The three warnings, before anything stops ──────────────────── */
+.warns{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.wrow{display:flex;gap:var(--s-5);padding:var(--s-6);border-bottom:1px solid var(--rule);
+  align-items:flex-start}
+.wrow:last-child{border-bottom:none}
+.wrow .wdot{width:10px;height:10px;border-radius:50%;flex:none;margin-top:5px;background:var(--rule-3)}
+.wrow.a .wdot{background:var(--warn-fill)}
+.wrow.b .wdot{background:var(--warn)}
+.wrow.c .wdot{background:var(--risk-fill)}
+.wrow .ww{flex:1;min-width:0}
+.wrow b{display:block;font-size:var(--t-body-s);font-weight:600}
+.wrow span{display:block;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55;margin-top:2px}
+.wrow .wwhen{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-3);flex:none;padding-top:3px}
+.wrow.past{opacity:.55}
+.wrow.now{background:var(--warn-soft)}
+
+/* ── What lapsing means. Two columns, and the left one is the
+   product's whole promise: G22, tested as SC 17.5. ──────────────── */
+.lapsed{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s-4);margin-bottom:var(--s-6)}
+.lcol{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);overflow:hidden}
+.lcol .lh{padding:var(--s-5) var(--s-6);border-bottom:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;
+  display:flex;align-items:center;gap:var(--s-4)}
+.lcol .lh svg{width:13px;height:13px}
+.lcol.works{border-color:var(--signal-edge)}
+.lcol.works .lh{background:var(--signal-soft);border-bottom-color:var(--signal-edge);color:var(--signal-text)}
+.lcol.stops .lh{background:var(--surface-2);color:var(--ink-3)}
+.lcol ul{list-style:none;margin:0;padding:var(--s-5) var(--s-6);display:grid;
+  grid-template-columns:minmax(0,1fr);gap:var(--s-4)}
+.lcol li{display:flex;gap:var(--s-4);align-items:flex-start;font-size:var(--t-cap);line-height:1.5}
+.lcol li svg{width:14px;height:14px;flex:none;margin-top:2px}
+.lcol.works li svg{color:var(--ok-fill)}
+.lcol.stops li svg{color:var(--ink-3)}
+.lcol.stops li{color:var(--ink-2)}
+.lcol li b{font-weight:600;color:var(--ink)}
+/* The mechanism, because a promise with a mechanism is believable and
+   a promise without one is marketing. */
+.mech{display:flex;gap:var(--s-5);align-items:flex-start;padding:var(--s-6);
+  border:1px dashed var(--rule-3);border-radius:var(--r-md);margin-bottom:var(--s-6);
+  font-size:var(--t-cap);color:var(--ink-2);line-height:1.6}
+.mech svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--ink-3)}
+.mech b{color:var(--ink);font-weight:600}
+
+/* ── Plans. Downgrade has exactly as many taps as upgrade — SC 17.8
+   is a UI audit, so the symmetry is structural, not a promise. ──── */
+.plans{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s-4);margin-bottom:var(--s-6)}
+.plan{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-6)}
+.plan .ph2{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:var(--s-5)}
+.plan .pn2{font-size:var(--t-body);font-weight:600}
+.plan .pp{margin-left:auto;font-family:var(--f-mono);font-size:var(--t-body-s);font-weight:600;
+  font-variant-numeric:tabular-nums;flex:none}
+.plan .pnow2{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--signal-text)}
+.plan ul{list-style:none;margin:0 0 var(--s-5);padding:0;display:grid;
+  grid-template-columns:minmax(0,1fr);gap:var(--s-3)}
+.plan li{display:flex;gap:var(--s-4);font-size:var(--t-cap);color:var(--ink-2);line-height:1.45;
+  align-items:flex-start}
+.plan li svg{width:13px;height:13px;flex:none;margin-top:2px;color:var(--ink-3)}
+.plan.current{border-color:var(--signal-lo);background:var(--signal-soft)}
+.plan .pbtn{width:100%}
+/* Nothing dims a downgrade, nothing makes it smaller, nothing asks
+   twice. A dark pattern buys a month and costs a reputation. */
+.plan.down .pbtn{background:var(--surface);border-color:var(--rule-2);color:var(--ink)}
+
+/* ── The spend cap — the direct answer to a category built on
+   surprise bills. ───────────────────────────────────────────────── */
+.cap2{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  padding:var(--s-6);margin-bottom:var(--s-6)}
+.cap2 .c2h{display:flex;align-items:baseline;gap:var(--s-4);margin-bottom:var(--s-5)}
+.cap2 .c2v{font-family:var(--f-mono);font-size:1.35rem;font-weight:600;font-variant-numeric:tabular-nums}
+.cap2 .c2l{font-size:var(--t-cap);color:var(--ink-2)}
+.captrack{height:8px;border-radius:var(--r-pill);background:var(--surface-3);overflow:hidden;
+  margin-bottom:var(--s-4);position:relative}
+.captrack i{display:block;height:100%;background:var(--signal-lo);border-radius:var(--r-pill)}
+.captrack i.near{background:var(--warn-fill)}
+.captrack i.hit{background:var(--risk-fill)}
+.cap2 p{margin:0;font-size:var(--t-cap);color:var(--ink-2);line-height:1.55}
+.cap2 .c2a{display:flex;gap:var(--s-4);margin-top:var(--s-5);flex-wrap:wrap}
+
+/* ── The statement. Cost first, value second, always in that order. */
+.stmt{border:1px solid var(--rule-2);border-radius:var(--r-md);background:var(--surface);
+  overflow:hidden;margin-bottom:var(--s-6)}
+.stmt .sh3{padding:var(--s-6);border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.stmt .sh3 b{font-family:var(--f-display);font-size:1.05rem;font-variation-settings:"opsz" 18;
+  font-weight:600;letter-spacing:-.016em}
+.srow2{display:flex;align-items:baseline;gap:var(--s-5);padding:var(--s-5) var(--s-6);
+  border-bottom:1px solid var(--rule)}
+.srow2:last-child{border-bottom:none}
+.srow2 .sk3{flex:1;min-width:0;font-size:var(--t-body-s);color:var(--ink-2)}
+.srow2 .sv3{font-family:var(--f-mono);font-size:var(--t-body-s);font-weight:600;
+  font-variant-numeric:tabular-nums;flex:none}
+.srow2.paid{background:var(--surface-2)}
+.srow2.paid .sk3{color:var(--ink);font-weight:500}
+.srow2.val .sv3{color:var(--signal-text)}
+
+/* ── Our outage never costs her a pause ─────────────────────────── */
+.graceext{border:1px solid var(--signal-edge);border-radius:var(--r-md);background:var(--signal-soft);
+  padding:var(--s-6);margin-bottom:var(--s-6)}
+.graceext .gl2{display:flex;align-items:center;gap:var(--s-4);margin-bottom:var(--s-5);
+  font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--signal-text)}
+.graceext .gl2 svg{width:14px;height:14px}
+.graceext b{display:block;font-size:var(--t-body-s);font-weight:600;margin-bottom:var(--s-4)}
+.graceext p{margin:0;font-size:var(--t-cap);color:var(--ink-2);line-height:1.6}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width:640px){
+  /* Restated, not inherited. See conversations.html §07. */
+  .appframe{max-width:100%;height:auto;min-height:600px;border-radius:var(--r-md);box-shadow:none}
+  .appframe.wide{flex-direction:column;height:auto}
+  .appframe.wide .appnav{display:none}
+  .appframe.wide .tabbar{display:flex}
+  /* The days headline stacks. At 360 a 3.6rem numeral and "days left
+     at the rate you have been using it" cannot share a baseline, and
+     the sentence is the half that makes the number mean anything. */
+  .days{padding:var(--s-7) var(--s-6)}
+  .days .dtop{flex-direction:column;gap:var(--s-3)}
+  .days .dn{font-size:2.7rem}
+  /* Four amount presets stay two-up: they are the primary action and
+     a full-width stack would push the MoMo number below the fold. */
+  .amounts{gap:var(--s-3)}
+  .amt{padding:var(--s-5) var(--s-4)}
+  /* A usage row cannot hold a label, a bar and a figure at 360. The
+     bar goes; the figure is the information. */
+  .urow .ub{display:none}
+  .plan .ph2{flex-wrap:wrap}
+  .warns .wrow{flex-wrap:wrap}
+  .warns .wwhen{order:4;padding-left:calc(10px + var(--s-5))}
+}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></symbol><symbol id="i-audio-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /></symbol><symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></symbol><symbol id="i-chart-column" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></symbol><symbol id="i-circle-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></symbol><symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></symbol><symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /> <path d="M12 17h.01" /></symbol><symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol><symbol id="i-ellipsis" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /> <circle cx="19" cy="12" r="1" /> <circle cx="5" cy="12" r="1" /></symbol><symbol id="i-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></symbol><symbol id="i-git-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6a9 9 0 0 0-9 9V3" /> <circle cx="18" cy="6" r="3" /> <circle cx="6" cy="18" r="3" /></symbol><symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol><symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol><symbol id="i-message-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></symbol><symbol id="i-message-square-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z" /> <path d="M7 11h10" /> <path d="M7 15h6" /> <path d="M7 7h8" /></symbol><symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="3" width="5" height="18" rx="1" /> <rect x="5" y="3" width="5" height="18" rx="1" /></symbol><symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></symbol><symbol id="i-rotate-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /></symbol><symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></symbol><symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="i-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></symbol><symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol></defs></svg>
+<div class="bar">
+  <span class="lg"><span class="mk"><svg><use href="#i-wallet"/></svg></span><span><b>Subiza</b><span>Flow 1.15 · credit &amp; MoMo</span></span></span>
+  <div class="sp"></div>
+  <select class="scen" id="scen" aria-label="Scenario">
+    <optgroup label="The balance">
+      <option value="healthy">Eleven days left</option>
+      <option value="low">Under a fifth left</option>
+      <option value="crit">Two days left</option>
+      <option value="grace">It ran out — the grace period</option>
+      <option value="lapsed">Grace over — what still works</option>
+    </optgroup>
+    <optgroup label="Topping up">
+      <option value="topup">Choosing an amount</option>
+      <option value="pending">Waiting on her phone</option>
+      <option value="confirmed">Confirmed</option>
+      <option value="nofunds">Her MoMo didn't have enough</option>
+      <option value="timeout">No answer from MoMo</option>
+      <option value="aggdown">MoMo collection is down</option>
+    </optgroup>
+    <optgroup label="Plans and limits">
+      <option value="plans">Comparing plans</option>
+      <option value="spendcap">The spend cap</option>
+      <option value="capped">The cap was reached</option>
+    </optgroup>
+    <optgroup label="The month">
+      <option value="statement">The monthly statement</option>
+      <option value="warnings">The three warnings</option>
+    </optgroup>
+    <optgroup label="States">
+      <option value="offline">No connection</option>
+    </optgroup>
+  </select>
+  <div class="seg" role="group" aria-label="Width">
+    <button data-w="phone" aria-pressed="true">Phone</button>
+    <button data-w="wide" aria-pressed="false">Desktop</button>
+  </div>
+  <div class="seg" role="group" aria-label="Language">
+    <button data-lang="rw" aria-pressed="false">RW</button>
+    <button data-lang="en" aria-pressed="true">EN</button>
+  </div>
+  <div class="seg" role="group" aria-label="View">
+    <button data-mode="proto" aria-pressed="true">Prototype</button>
+    <button data-mode="spec" aria-pressed="false">Spec</button>
+  </div>
+</div>
+
+<div class="mode on" id="m-proto">
+<div class="auth">
+  <div class="authmain">
+    <div class="authbody">
+
+      <div class="appframe" id="frame">
+        <nav class="appnav" aria-label="Sections">
+          <span class="nvh" data-rw="Subiza Studio">Subiza Studio</span>
+          <a data-nav="home"><svg><use href="#i-house"/></svg><span data-rw="Ahabanza">Home</span></a>
+          <a data-nav="conv"><svg><use href="#i-message-square-text"/></svg><span data-rw="Ibiganiro">Conversations</span></a>
+          <a data-nav="agent"><svg><use href="#i-bot"/></svg><span data-rw="Umufasha wanjye">My agent</span></a>
+          <a data-nav="conn"><svg><use href="#i-link"/></svg><span data-rw="Aho ihuriye">Connections</span></a>
+          <a data-nav="results"><svg><use href="#i-chart-column"/></svg><span data-rw="Ibyavuyemo">Results</span></a>
+          <a class="on" data-nav="credit"><svg><use href="#i-wallet"/></svg><span data-rw="Amafaranga">Credit</span></a>
+          <span class="nvsp"></span>
+          <a data-nav="settings"><svg><use href="#i-settings"/></svg><span data-rw="Igenamiterere">Settings</span></a>
+        </nav>
+
+        <div class="appcol">
+          <header class="apphead">
+            <div class="ahtop">
+              <span class="greet">
+                <b id="headT" data-rw="Amafaranga">Credit</b>
+                <span id="headSub" data-rw="Mbere yishyurwa, kuri MoMo, mu mafaranga y'u Rwanda">Prepaid, on MoMo, in Rwandan francs</span>
+              </span>
+              <button class="pausebtn" id="pauseNow" aria-label="Pause Subiza">
+                <svg class="bi"><use href="#i-pause"/></svg>
+              </button>
+            </div>
+            <div class="statebar">
+              <button class="schip live" id="chPill"><i aria-hidden="true"></i><span id="chPillT" data-rw="Yakira iyo mufunze">Answering after hours</span></button>
+              <button class="schip" id="chCredit"><svg class="bi"><use href="#i-wallet"/></svg><span class="sv" id="chCreditT">14,200 RWF</span></button>
+              <button class="schip ok" id="chHealth"><svg class="bi"><use href="#i-link"/></svg><span data-rw="Imirongo 4 irakora">4 channels working</span></button>
+            </div>
+          </header>
+
+          <div class="feed" id="feed">
+
+            <!-- ═══════════ c1 · THE BALANCE ═══════════
+                 Days lead, francs follow. §4.1 argues for exactly this
+                 and §3's own sketch does the opposite; we follow the
+                 reasoning rather than the drawing. -->
+            <section class="screen on" id="c1">
+              <div class="days" id="daysBox">
+                <div class="dtop">
+                  <span class="dn" id="dNum">11</span>
+                  <span class="dl" id="dLab" data-rw="iminsi isigaye">days left</span>
+                </div>
+                <span class="dwhy" id="dWhy" data-rw="Ku buryo usanzwe uyikoresha — hafi iminota 19 ku munsi mu byumweru bibiri bishize.">At the rate you have been using it — about 19 minutes a day over the last two weeks.</span>
+                <div class="dbar"><i id="dFill" style="width:62%"></i></div>
+                <div class="dfr">
+                  <b id="dFrw">14,200 RWF</b>
+                  <span data-rw="asigaye">remaining</span>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg btn-block" data-go="c2" id="toTopup"><svg class="bi"><use href="#i-wallet"/></svg><span data-rw="Ongera amafaranga kuri MoMo">Top up with MoMo</span></button>
+
+              <div class="banner banner-warn" id="lowBan" hidden>
+                <svg class="bi"><use href="#i-circle-alert"/></svg>
+                <div><b id="lowB" data-rw="Amafaranga ari hasi">Your credit is getting low</b><span id="lowS" data-rw="Tuzakwoherereza ubutumwa kuri WhatsApp hasigaye iminsi ibiri. Nta kintu kizahagarara utabanje kubimenya inshuro eshatu.">We'll send you a WhatsApp when there are two days left. Nothing stops until you've been told three times.</span></div>
+              </div>
+
+              <div class="usage">
+                <div class="urow head"><span class="uk" data-rw="Uku kwezi">This month</span></div>
+                <div class="urow">
+                  <span class="uk" data-rw="Iminota y'amajwi">Voice minutes</span>
+                  <span class="ub"><i style="width:71%"></i></span>
+                  <span class="uv">213 / 300</span>
+                </div>
+                <div class="urow">
+                  <span class="uk" data-rw="Ubutumwa">Messages</span>
+                  <span class="ub"><i style="width:37%"></i></span>
+                  <span class="uv">1,840 / 5,000</span>
+                </div>
+                <div class="urow">
+                  <span class="uk" data-rw="Igiciro">Plan</span>
+                  <span class="uv">20,000 RWF</span>
+                </div>
+              </div>
+
+              <div class="mech">
+                <svg class="bi"><use href="#i-shield-check"/></svg>
+                <span data-rw-html="Amajwi abarwa ku munota; ubutumwa buri mu mafaranga y'ukwezi. <b>Nta karita y'ubwishyu isabwa</b> ahantu na hamwe muri iki gicuruzwa.">Voice is metered by the minute; messages are included in the monthly amount. <b>No payment card is required</b> anywhere in this product.</span>
+              </div>
+
+              <div class="offsw">
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Hindura igiciro">Change your plan</b><span data-rw="Kuzamura cyangwa kugabanya — byombi ni kanda rimwe">Up or down — both are one tap</span></span>
+                  <button class="btn btn-ghost btn-sm" data-go="c8"><span data-rw="Reba">View</span></button>
+                </div>
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Urugero rw'amafaranga ushobora gukoresha">A limit you set yourself</b><span data-rw="Kugira ngo nta fagitire itunguranye ibaho">So there is never a surprise bill</span></span>
+                  <button class="btn btn-ghost btn-sm" data-go="c9"><span data-rw="Shyiraho">Set it</span></button>
+                </div>
+                <div class="offrow">
+                  <span class="ow"><b data-rw="Ibyakozwe uku kwezi">This month's statement</b><span data-rw="Igiciro n'ibyakozwe, mu nyandiko imwe">The cost and what it did, in one place</span></span>
+                  <button class="btn btn-ghost btn-sm" data-go="c10"><span data-rw="Reba">View</span></button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ═══════════ c2 · CHOOSING AN AMOUNT ═══════════ -->
+            <section class="screen" id="c2">
+              <button class="dback" data-go="c1"><svg class="bi"><use href="#i-arrow-left"/></svg><span data-rw="Subira">Back</span></button>
+              <h1 data-rw="Ongera amafaranga angahe?">How much would you like to add?</h1>
+              <p class="sub" data-rw="Buri mubare uvuga iminsi wongeraho, atari amafaranga gusa — ni cyo kibazo ubaza.">Each amount says how many days it adds, not just the francs — that is the question you are actually asking.</p>
+
+              <div class="amounts" id="amounts">
+                <button class="amt" data-a="5000"><b>5,000</b><span data-rw="~ iminsi 4">~ 4 days</span></button>
+                <button class="amt on" data-a="10000"><b>10,000</b><span data-rw="~ iminsi 8">~ 8 days</span></button>
+                <button class="amt" data-a="20000"><b>20,000</b><span data-rw="~ ukwezi kumwe">~ a month</span></button>
+                <button class="amt" data-a="50000"><b>50,000</b><span data-rw="~ amezi 2 n'igice">~ 2½ months</span></button>
+              </div>
+              <div class="inpwrap" style="margin-bottom:var(--s-6)">
+                <svg class="bi"><use href="#i-wallet"/></svg>
+                <input class="inp" id="customAmt" type="text" inputmode="numeric" data-rw-ph="Cyangwa andika umubare wawe" placeholder="Or type your own amount">
+              </div>
+
+              <div class="momo">
+                <div class="ml2"><svg class="bi"><use href="#i-smartphone"/></svg><span data-rw="Nimero ya MoMo">MoMo number</span></div>
+                <div class="mnum">
+                  <b>0788 123 456</b>
+                  <button class="btn btn-ghost btn-sm" id="chgNum"><span data-rw="Hindura">Change</span></button>
+                </div>
+                <span class="mn2" data-rw="Iyi ni nimero ya konti yawe. Ushobora kwishyura uhereye ku yindi nimero — tuzabimenya ku nomero y'ubwishyu.">This is your account number. You can pay from a different number if you like — we match it by the payment reference.</span>
+              </div>
+
+              <!-- The one place this product legitimately causes a PIN
+                   prompt. So: where it comes from, and what we will
+                   never do. MoMo fraud here is endemic. -->
+              <div class="pinwarn">
+                <div class="pw4">
+                  <svg class="bi"><use href="#i-smartphone"/></svg>
+                  <div>
+                    <b data-rw="Telefone yawe izabaza PIN ya MoMo">Your phone will ask for your MoMo PIN</b>
+                    <span data-rw="Ubwo butumwa buva kuri MTN, ntabwo buva kuri twe. Ni bwo buryo bwonyine bwo kwemeza ubwishyu.">That prompt comes from MTN, not from us. It is the only way a payment is confirmed.</span>
+                  </div>
+                </div>
+                <div class="pinnever">
+                  <svg class="bi"><use href="#i-circle-x"/></svg>
+                  <span data-rw-html="<b>Subiza ntizabaza PIN yawe</b> — ntiyibaza muri iyi porogaramu, ntiyibaza mu butumwa, ntiyibaza no ku murongo. Umuntu wese uyibaza ntabwo ari twe."><b>Subiza will never ask for your PIN</b> — not in this app, not in a message, not on a call. Anyone who asks is not us.</span>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-lg btn-block" id="payNow"><svg class="bi"><use href="#i-wallet"/></svg><span id="payT" data-rw="Ishyura 10 000 RWF">Pay 10,000 RWF</span></button>
+              <p class="microfoot" data-rw="Ubwishyu bunyura mu kigo cyemewe. Subiza ntikora ku mafaranga yawe ubwayo.">The payment goes through a licensed aggregator. Subiza never handles your money itself.</p>
+            </section>
+
+            <!-- ═══════════ c3 · WAITING ON HER PHONE ═══════════
+                 MoMo settles asynchronously. Pretending it is instant is
+                 how a payment gets lost. -->
+            <section class="screen" id="c3">
+              <h1 data-rw="Reba telefone yawe">Check your phone</h1>
+              <p class="sub" data-rw="Ubutumwa bwa MTN bugiye kuza. Wandike PIN ya MoMo aho, atari hano.">A message from MTN is on its way. Enter your MoMo PIN there, not here.</p>
+
+              <div class="phoneprompt">
+                <span class="ppl" data-rw="Ibyo uzabona kuri telefone">What you'll see on your phone</span>
+                <div class="ppb" data-rw-html="MTN Mobile Money<br>Ishyura 10,000 RWF kuri<br>SUBIZA LTD<br>Injiza PIN yawe:">MTN Mobile Money<br>Pay 10,000 RWF to<br>SUBIZA LTD<br>Enter your PIN:</div>
+                <span class="ppn" data-rw="Niba butaje mu masegonda 30, dufite buto yo kongera kugerageza — ntacyo uzaba wishyuye kabiri.">If it hasn't arrived in 30 seconds there's a button to try again — you will not be charged twice.</span>
+              </div>
+
+              <div class="tsteps" id="tsteps">
+                <div class="tstep done">
+                  <span class="tsn"><svg class="bi"><use href="#i-check"/></svg></span>
+                  <span class="tsw"><b data-rw="Twasabye ubwishyu">We asked for the payment</b><span data-rw="10 000 RWF · 0788 123 456">10,000 RWF · 0788 123 456</span></span>
+                </div>
+                <div class="tstep now" id="stepWait">
+                  <span class="tsn"><span class="spin" aria-hidden="true"></span></span>
+                  <span class="tsw"><b data-rw="Turategereje ko wemeza">Waiting for you to confirm</b><span id="waitT" data-rw="Kuri telefone yawe. Bisanzwe bifata amasegonda 20.">On your phone. Usually about 20 seconds.</span></span>
+                </div>
+                <div class="tstep next">
+                  <span class="tsn">3</span>
+                  <span class="tsw"><b data-rw="Amafaranga yongerwa">Credit added</b><span data-rw="Ako kanya, kandi tuzakubimenyesha.">Immediately, and we'll tell you.</span></span>
+                </div>
+              </div>
+
+              <button class="btn btn-ghost btn-block" data-go="c1"><span data-rw="Reka mbireba nyuma">I'll check later</span></button>
+              <p class="microfoot" data-rw="Ushobora kuva hano. Ubwishyu ntibuhagarara kuko wafunze iyi paji, kandi tuzakumenyesha bwemejwe.">You can leave this screen. The payment does not stop because you closed it, and we will tell you when it is confirmed.</p>
+            </section>
+
+            <!-- ═══════════ c4 · CONFIRMED ═══════════ -->
+            <section class="screen" id="c4">
+              <div class="donemark"><svg class="bi"><use href="#i-check"/></svg></div>
+              <h1 data-rw="Byemejwe">Confirmed</h1>
+              <p class="sub" data-rw="10 000 RWF yongewe. Umufasha wawe akomeza nk'uko bisanzwe.">10,000 RWF added. Your agent carries on exactly as before.</p>
+
+              <div class="days">
+                <div class="dtop">
+                  <span class="dn">19</span>
+                  <span class="dl" data-rw="iminsi isigaye">days left</span>
+                </div>
+                <span class="dwhy" data-rw="Kuva ku iminsi 11. Ku buryo usanzwe uyikoresha.">Up from 11. At the rate you have been using it.</span>
+                <div class="dbar"><i style="width:88%"></i></div>
+                <div class="dfr"><b>24,200 RWF</b><span data-rw="asigaye">remaining</span></div>
+              </div>
+
+              <div class="usage">
+                <div class="urow head"><span class="uk" data-rw="Inyemezabwishyu">Receipt</span></div>
+                <div class="urow"><span class="uk" data-rw="Umubare">Amount</span><span class="uv">10,000 RWF</span></div>
+                <div class="urow"><span class="uk" data-rw="Nimero ya MoMo">MoMo number</span><span class="uv">0788 123 456</span></div>
+                <div class="urow"><span class="uk" data-rw="Nomero y'ubwishyu">Reference</span><span class="uv">SBZ-4K9T2</span></div>
+                <div class="urow"><span class="uk" data-rw="Igihe">Time</span><span class="uv">13 Sep · 09:41</span></div>
+              </div>
+
+              <button class="btn btn-primary btn-block" data-go="c1"><span data-rw="Byumvikanye">Done</span></button>
+            </section>
+
+            <!-- ═══════════ c5 · HER MOMO DIDN'T HAVE ENOUGH ═══════════ -->
+            <section class="screen" id="c5">
+              <h1 data-rw="MoMo yawe ntiyari ifite ahagije">Your MoMo didn't have enough</h1>
+              <p class="sub" data-rw="Nta kintu cyakuwe. Ushobora kongera umubare muto, cyangwa wongere MoMo hanyuma ugaruke.">Nothing was taken. You can try a smaller amount, or top up your MoMo and come back.</p>
+
+              <div class="tsteps">
+                <div class="tstep done">
+                  <span class="tsn"><svg class="bi"><use href="#i-check"/></svg></span>
+                  <span class="tsw"><b data-rw="Twasabye ubwishyu">We asked for the payment</b><span data-rw="10 000 RWF">10,000 RWF</span></span>
+                </div>
+                <div class="tstep fail">
+                  <span class="tsn"><svg class="bi"><use href="#i-x"/></svg></span>
+                  <span class="tsw"><b data-rw="MTN yanze">MTN declined it</b><span data-rw="«Amafaranga ari kuri konti ntahagije.» Ntabwo ari twe twanze — nta kintu cyanyuze.">“Insufficient funds on the account.” It was not us declining — nothing went through.</span></span>
+                </div>
+              </div>
+
+              <div class="amounts">
+                <button class="amt on" data-a="5000"><b>5,000</b><span data-rw="~ iminsi 4">~ 4 days</span></button>
+                <button class="amt" data-a="2000"><b>2,000</b><span data-rw="~ umunsi 1 n'igice">~ 1½ days</span></button>
+              </div>
+              <button class="btn btn-primary btn-block" data-go="c3"><svg class="bi"><use href="#i-wallet"/></svg><span data-rw="Gerageza 5 000 RWF">Try 5,000 RWF</span></button>
+              <button class="btn btn-ghost btn-block" data-go="c1"><span data-rw="Nzagaruka">I'll come back</span></button>
+              <p class="microfoot" data-rw="Umufasha wawe aracyakora. Uzabanza kubimenyeshwa inshuro eshatu mbere y'uko ikintu kihagarara.">Your agent is still running. You will be told three times before anything stops.</p>
+            </section>
+
+            <!-- ═══════════ c6 · NO ANSWER FROM MOMO ═══════════
+                 Never a silent failure. Pending stays pending, with a
+                 way to check — atlas §7's webhook-never-arrived case. -->
+            <section class="screen" id="c6">
+              <h1 data-rw="Ntituramenya icyabaye">We don't know yet</h1>
+              <p class="sub" data-rw="MTN ntiratubwira. Ibi bibaho, kandi ntibivuze ko amafaranga yabuze — bivuze ko tutaramenya.">MTN hasn't told us yet. This happens, and it does not mean the money is lost — it means we don't know yet.</p>
+
+              <div class="tsteps">
+                <div class="tstep done">
+                  <span class="tsn"><svg class="bi"><use href="#i-check"/></svg></span>
+                  <span class="tsw"><b data-rw="Twasabye ubwishyu">We asked for the payment</b><span data-rw="10 000 RWF · saa tatu n'iminota 41">10,000 RWF · 09:41</span></span>
+                </div>
+                <div class="tstep now">
+                  <span class="tsn"><svg class="bi"><use href="#i-circle-help"/></svg></span>
+                  <span class="tsw">
+                    <b data-rw="Biracyategereje">Still pending</b>
+                    <span data-rw="Niba wanditse PIN, amafaranga azongerwa ako kanya twamenye. Niba utayanditse, nta kintu cyakuwe.">If you entered your PIN, the credit lands the moment we hear. If you didn't, nothing was taken.</span>
+                  </span>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-block" id="checkAgain"><svg class="bi"><use href="#i-rotate-cw"/></svg><span data-rw="Ongera ubaze MTN">Check with MTN again</span></button>
+
+              <div class="mech">
+                <svg class="bi"><use href="#i-shield-check"/></svg>
+                <span data-rw-html="Ntuzishyura kabiri. Buri gusaba rifite <b>nomero yaryo bwite</b>, bityo niba ubwishyu bwa mbere bwaza nyuma, buzongerwa rimwe gusa — atari kabiri.">You cannot be charged twice. Every request carries <b>its own reference</b>, so if the first payment arrives late it is credited once, not twice.</span>
+              </div>
+
+              <p class="microfoot" data-rw="Nyuma y'amasaha 24, niba bitarakemuka, umuntu wo mu bakozi bacu arabikurikirana kandi ashobora kongeramo amafaranga n'intoki hamwe n'impamvu yanditse.">After 24 hours, if it still isn't resolved, somebody on our side follows it up and can add the credit by hand with a written reason.</p>
+            </section>
+
+            <!-- ═══════════ c7 · IT RAN OUT ═══════════ -->
+            <section class="screen" id="c7">
+              <h1 id="c7h" data-rw="Amafaranga yarangiye">Your credit has run out</h1>
+              <p class="sub" id="c7sub" data-rw="Umufasha wawe aracyakora. Dukomeza amasaha 72 mbere y'uko ikintu kihagarara.">Your agent is still running. We carry on for 72 hours before anything stops.</p>
+
+              <div class="days crit" id="graceBox">
+                <div class="dtop">
+                  <span class="dn" id="graceN">72</span>
+                  <span class="dl" data-rw="amasaha yo kwihangana">hours of grace</span>
+                </div>
+                <span class="dwhy" data-rw="Mu gihe gisigaye, byose bikomeza nk'uko bisanzwe. Ntabwo turi kukubuza ikintu.">For that time everything carries on exactly as normal. We are not withholding anything.</span>
+                <div class="dbar"><i id="graceFill" style="width:100%"></i></div>
+                <div class="dfr"><b>0 RWF</b><span data-rw="asigaye">remaining</span></div>
+              </div>
+
+              <button class="btn btn-primary btn-lg btn-block" data-go="c2"><svg class="bi"><use href="#i-wallet"/></svg><span data-rw="Ongera amafaranga kuri MoMo">Top up with MoMo</span></button>
+
+              <div class="warns">
+                <div class="wrow a past">
+                  <span class="wdot"></span>
+                  <span class="ww"><b data-rw="Twabikubwiye ku ncuro ya mbere">We told you the first time</b><span data-rw="Ubwo hasigaye kimwe cya gatanu. Mu porogaramu, kandi umubare uhinduka umuhondo.">When a fifth was left. In the app, with the balance turning amber.</span></span>
+                  <span class="wwhen">8 Sep</span>
+                </div>
+                <div class="wrow b past">
+                  <span class="wdot"></span>
+                  <span class="ww"><b data-rw="Na ku ncuro ya kabiri">And the second</b><span data-rw="Ubwo hasigaye iminsi ibiri. Ubutumwa bwa WhatsApp.">When two days were left. A WhatsApp message.</span></span>
+                  <span class="wwhen">11 Sep</span>
+                </div>
+                <div class="wrow c now">
+                  <span class="wdot"></span>
+                  <span class="ww"><b data-rw="Iyi ni ya gatatu">This is the third</b><span data-rw="Nyuma y'amasaha 72, umufasha arahagarara — ariko guhamagara kuzakomeza kugera kuri telefone yawe.">After 72 hours the agent pauses — but calls will keep reaching your phone.</span></span>
+                  <span class="wwhen" data-rw="ubu">now</span>
+                </div>
+              </div>
+
+              <button class="btn btn-secondary btn-block" data-go="c8b"><svg class="bi"><use href="#i-circle-help"/></svg><span data-rw="Bivuze iki iyo ihagaze?">What does it mean if it pauses?</span></button>
+            </section>
+
+            <!-- ═══════════ c8b · WHAT LAPSING MEANS ═══════════
+                 The most important behaviour in the flow, and a
+                 mechanism rather than a promise. SC 17.5 tests it. -->
+            <section class="screen" id="c8b">
+              <h1 data-rw="Ibyo bibaho iyo yahagaze">What happens if it pauses</h1>
+              <p class="sub" data-rw="Ubucuruzi bwawe ntibuzabe bufite ikibazo kirenze icyo bwari bufite mbere y'uko Subiza ibaho. Ibi ntabwo ari icyubahiro — ni itegeko dupima.">Your business will never be harder to reach than it was before Subiza existed. That is not a courtesy — it is a requirement we test.</p>
+
+              <div class="lapsed">
+                <div class="lcol works">
+                  <div class="lh"><svg class="bi"><use href="#i-check"/></svg><span data-rw="Bikomeza gukora">Still works</span></div>
+                  <ul>
+                    <li><svg class="bi"><use href="#i-phone"/></svg><span data-rw-html="<b>Guhamagara kuvuga kuri telefone yawe</b> nk'uko byahoze — +250 788 123 456"><b>Calls ring your own phone</b> as they always did — +250 788 123 456</span></li>
+                    <li><svg class="bi"><use href="#i-message-square-text"/></svg><span data-rw="Gusoma ibiganiro byose byabaye mbere">Reading every conversation that already happened</span></li>
+                    <li><svg class="bi"><use href="#i-settings"/></svg><span data-rw="Porogaramu yose, igenamiterere, byose">The whole app, all the settings, everything</span></li>
+                    <li><svg class="bi"><use href="#i-wallet"/></svg><span data-rw="Kongeraho amafaranga, birumvikana">Topping up, obviously</span></li>
+                  </ul>
+                </div>
+                <div class="lcol stops">
+                  <div class="lh"><svg class="bi"><use href="#i-pause"/></svg><span data-rw="Birahagarara">Stops</span></div>
+                  <ul>
+                    <li><svg class="bi"><use href="#i-bot"/></svg><span data-rw="Umufasha kwakira guhamagara">The agent answering calls</span></li>
+                    <li><svg class="bi"><use href="#i-message-circle"/></svg><span data-rw="Gusubiza ubutumwa ku buryo bwikora">Answering messages automatically</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- The mechanism. A promise with a mechanism is
+                   believable; one without is marketing. -->
+              <div class="mech">
+                <svg class="bi"><use href="#i-git-branch"/></svg>
+                <span data-rw-html="Uko bikorwa: <b>ntitukuraho itangwa ry'guhamagara</b>. Subiza yanga guhamagara, bityo itegeko ry'umurongo «iyo batitabye» rikoherereza kuri wowe nk'uko ryabikoraga mbere y'uko Subiza ibaho. Nta kintu kigomba gukosorwa, kandi nta kode ugomba guhamagara.">How it works: <b>we never remove your forwarding</b>. Subiza simply declines the call, so the carrier's no-answer rule falls through to you exactly as it did before Subiza existed. Nothing needs repairing, and there is no code for you to dial.</span>
+              </div>
+
+              <div class="banner banner-ok">
+                <svg class="bi"><use href="#i-shield-check"/></svg>
+                <div><b data-rw="Ibi bipimwa buri gihe">This is tested continuously</b><span data-rw="Duhamagara nimero ku konti ifite zeru buri munsi, tureba ko ivuga. Niba bitabaye, ni ikibazo gikomeye kuri twe — atari kuri wowe.">We call a number on a zero-balance account every day and check that it rings. If it ever doesn't, that is a serious problem for us — not for you.</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ c8 · PLANS ═══════════
+                 SC 17.8: the downgrade path has the same number of taps
+                 as the upgrade. So the symmetry is structural. -->
+            <section class="screen" id="c8">
+              <button class="dback" data-go="c1"><svg class="bi"><use href="#i-arrow-left"/></svg><span data-rw="Subira">Back</span></button>
+              <h1 data-rw="Ibiciro">Plans</h1>
+              <p class="sub" data-rw="Nta miyoboro y'abakozi. Ubucuruzi bw'abantu batatu ntabwo bufite «imyanya».">No seats. A three-person business does not have seats.</p>
+
+              <div class="plans">
+                <div class="plan down">
+                  <div class="ph2"><span class="pn2" data-rw="Intangiriro">Intangiriro</span><span class="pp">8,000 RWF</span></div>
+                  <ul>
+                    <li><svg class="bi"><use href="#i-phone"/></svg><span data-rw="Iminota 100 y'amajwi">100 voice minutes</span></li>
+                    <li><svg class="bi"><use href="#i-message-circle"/></svg><span data-rw="Ubutumwa 2 000">2,000 messages</span></li>
+                  </ul>
+                  <button class="btn btn-secondary btn-sm pbtn" data-plan="down"><span data-rw="Jya kuri iki">Move to this</span></button>
+                </div>
+                <div class="plan current">
+                  <div class="ph2"><span class="pn2" data-rw="Ubucuruzi">Ubucuruzi</span><span class="pnow2" data-rw="ubu">now</span><span class="pp">20,000 RWF</span></div>
+                  <ul>
+                    <li><svg class="bi"><use href="#i-phone"/></svg><span data-rw="Iminota 300 y'amajwi">300 voice minutes</span></li>
+                    <li><svg class="bi"><use href="#i-message-circle"/></svg><span data-rw="Ubutumwa 5 000">5,000 messages</span></li>
+                  </ul>
+                  <button class="btn btn-ghost btn-sm pbtn" disabled><span data-rw="Ni iki ufite">This is yours</span></button>
+                </div>
+                <div class="plan">
+                  <div class="ph2"><span class="pn2" data-rw="Ubwiyongere">Ubwiyongere</span><span class="pp">45,000 RWF</span></div>
+                  <ul>
+                    <li><svg class="bi"><use href="#i-phone"/></svg><span data-rw="Iminota 800 y'amajwi">800 voice minutes</span></li>
+                    <li><svg class="bi"><use href="#i-message-circle"/></svg><span data-rw="Ubutumwa ntayagira urugero">Unlimited messages</span></li>
+                  </ul>
+                  <button class="btn btn-secondary btn-sm pbtn" data-plan="up"><span data-rw="Jya kuri iki">Move to this</span></button>
+                </div>
+              </div>
+
+              <div class="mech">
+                <svg class="bi"><use href="#i-arrow-right"/></svg>
+                <span data-rw-html="Kuzamura no kugabanya ni <b>kanda rimwe kuri byombi</b>. Ntidukubaza kabiri, ntidukwereka icyo utakaza, kandi ntidutegereza ko wibagirwa. Impinduka itangira mu kwezi gukurikira.">Moving up and moving down are <b>one tap each</b>. We do not ask twice, we do not list what you'd lose, and we do not hope you forget. The change takes effect next cycle.</span>
+              </div>
+
+              <p class="microfoot" data-rw="Amafaranga usanzwe ufite aracyawe ku giciro cya kera. Niba igiciro cyahindutse, tubimenyesha iminsi 30 mbere.">Credit you already have is honoured at the old rate. If a price changes, you get 30 days' notice.</p>
+            </section>
+
+            <!-- ═══════════ c9 · THE SPEND CAP ═══════════ -->
+            <section class="screen" id="c9">
+              <button class="dback" data-go="c1"><svg class="bi"><use href="#i-arrow-left"/></svg><span data-rw="Subira">Back</span></button>
+              <h1 data-rw="Urugero rw'amafaranga">Your spending limit</h1>
+              <p class="sub" data-rw="Iki gice cy'isoko cyubakiwe ku fagitire zitunguranye. Uru rugero ni igisubizo cyacyo, kandi ni wowe urushyiraho.">This category was built on surprise bills. This limit is the answer to that, and you are the one who sets it.</p>
+
+              <div class="cap2">
+                <div class="c2h">
+                  <span class="c2v" id="capV">30,000</span>
+                  <span class="c2l" data-rw="RWF ku kwezi, nk'urugero">RWF a month, as a ceiling</span>
+                </div>
+                <div class="captrack"><i id="capFill" class="" style="width:67%"></i></div>
+                <p id="capNote" data-rw-html="Uku kwezi wakoresheje <b>20 000 RWF</b>. Iyo ugeze kuri 30 000, umufasha arahagarara kandi tukubimenyesha — nta kintu kirenga aho utabanje kubyemera.">This month you have used <b>20,000 RWF</b>. If you reach 30,000 the agent pauses and we tell you — nothing goes past it without you saying so.</p>
+                <div class="c2a">
+                  <button class="btn btn-secondary btn-sm" id="capEdit"><span data-rw="Hindura urugero">Change the limit</span></button>
+                  <button class="btn btn-ghost btn-sm" id="capOff"><span data-rw="Ntagira urugero">No limit</span></button>
+                </div>
+              </div>
+
+              <div class="banner banner-info">
+                <svg class="bi"><use href="#i-circle-help"/></svg>
+                <div><b data-rw="Iyo ugeze kuri urwo rugero">If you reach it</b><span data-rw="Umufasha arahagarara, ariko guhamagara kugera kuri telefone yawe — nk'uko bigenda iyo amafaranga arangiye. Kandi ufite buto imwe yo kuyongera niba ari umunsi mwiza.">The agent pauses, and calls reach your phone — exactly as when credit runs out. And there is one button to lift it if it happens on a good day.</span></div>
+              </div>
+            </section>
+
+            <!-- ═══════════ c10 · THE STATEMENT ═══════════
+                 Cost first, value second, always in that order. A bill
+                 alone invites cancellation. -->
+            <section class="screen" id="c10">
+              <button class="dback" data-go="c1"><svg class="bi"><use href="#i-arrow-left"/></svg><span data-rw="Subira">Back</span></button>
+              <h1 data-rw="Nzeri na Subiza">September with Subiza</h1>
+              <p class="sub" data-rw="Igiciro hejuru, ibyakozwe hasi, buri gihe uko. Fagitire yonyine itera gusesa; fagitire iri kuruhande rw'ibyakozwe itera gukomeza.">The cost on top, what it did underneath, always that way round. A bill on its own invites cancellation; a bill beside what it did invites renewal.</p>
+
+              <div class="stmt">
+                <div class="sh3"><b data-rw="Nzeri 2026">September 2026</b></div>
+                <div class="srow2 paid"><span class="sk3" data-rw="Wishyuye">You paid</span><span class="sv3">20,000 RWF</span></div>
+                <div class="srow2 val"><span class="sk3" data-rw="Ibiganiro Subiza yakiriye">Conversations Subiza answered</span><span class="sv3">134</span></div>
+                <div class="srow2 val"><span class="sk3" data-rw="Muri byo, byaje mufunze cyangwa uri ku yindi">Of those, while you were closed or busy</span><span class="sv3">89</span></div>
+                <div class="srow2 val"><span class="sk3" data-rw="Abiyandikishije">Bookings taken</span><span class="sv3">38</span></div>
+              </div>
+
+              <div class="wamsg">
+                <div class="wamsg-h">
+                  <span class="m"><svg class="bi"><use href="#i-audio-lines"/></svg></span>
+                  <div><b>Subiza</b><span data-rw="1 Ukwakira">1 October</span></div>
+                </div>
+                <div class="wamsg-b">
+                  <div class="wabub" data-rw-html="Nzeri na Subiza. Wishyuye <b>20 000 RWF</b>. Subiza yakiriye <b>ibiganiro 134</b>, <b>89</b> byaje mufunze, kandi <b>38</b> bahinduwe abiyandikishije.">September with Subiza. You paid <b>20,000 RWF</b>. Subiza answered <b>134 conversations</b>, <b>89</b> of them while you were closed, and <b>38</b> became bookings.</div>
+                </div>
+              </div>
+
+              <p class="microfoot" data-rw="Umubare wa 89 urashobora gufungurwa — buri kiganiro kiri mu Byavuyemo, kandi ushobora kugisoma.">The 89 can be opened — every conversation is in Results, and you can read it.</p>
+            </section>
+
+            <!-- ═══════════ c11 · MOMO COLLECTION IS DOWN ═══════════
+                 Atlas §7: an outage on our side never pauses a
+                 customer's agent. The grace extends by itself. -->
+            <section class="screen" id="c11">
+              <h1 data-rw="Kwishyura ntibikora ubu">Paying isn't working right now</h1>
+              <p class="sub" data-rw="Ni ikibazo cy'ikigo dukoresha, atari icyawe kandi atari icya MTN. Kandi ntabwo bigomba kukugiraho ingaruka.">The aggregator we use has a problem — not you, and not MTN. And it is not allowed to cost you anything.</p>
+
+              <div class="graceext">
+                <div class="gl2"><svg class="bi"><use href="#i-shield-check"/></svg><span data-rw="Igihe cyo kwihangana cyongerewe">Your grace has been extended</span></div>
+                <b data-rw="Amasaha 72 yahindutse amasaha 96">72 hours became 96</b>
+                <p data-rw="Twongeyeho amasaha 24 ku buryo bwikora, kandi tuzayongera nanone niba ikibazo cyacu kirambye. Ntitwakugira ngo uhagarare kubera ikosa ryacu.">We added 24 hours automatically, and we will add more if our problem lasts. We are not going to pause you for a failure of ours.</p>
+              </div>
+
+              <div class="tsteps">
+                <div class="tstep fail">
+                  <span class="tsn"><svg class="bi"><use href="#i-x"/></svg></span>
+                  <span class="tsw"><b data-rw="Kwishyura ntibishoboka">Payment can't be taken</b><span data-rw="Byatangiye saa tatu n'iminota 12. Turi kubikurikirana na bo.">Since 09:12. We are chasing them.</span></span>
+                </div>
+                <div class="tstep done">
+                  <span class="tsn"><svg class="bi"><use href="#i-check"/></svg></span>
+                  <span class="tsw"><b data-rw="Umufasha wawe aracyakora">Your agent is still running</b><span data-rw="Kandi azakomeza. Nta kintu kizahagarara mu gihe iki kibazo kiriho.">And it will keep running. Nothing stops while this is going on.</span></span>
+                </div>
+                <div class="tstep next">
+                  <span class="tsn">3</span>
+                  <span class="tsw"><b data-rw="Tuzakumenyesha bikimara gukosoka">We'll tell you the moment it's fixed</b><span data-rw="Kuri WhatsApp. Ntugomba kugaruka hano kugenzura.">On WhatsApp. You don't need to come back here and check.</span></span>
+                </div>
+              </div>
+
+              <button class="btn btn-ghost btn-block" data-go="c1"><span data-rw="Byumvikanye">Understood</span></button>
+            </section>
+
+            <!-- ═══════════ x1 · OFFLINE ═══════════ -->
+            <section class="screen" id="x1">
+              <div class="banner banner-ok">
+                <svg class="bi"><use href="#i-phone"/></svg>
+                <div><b data-rw="Umufasha wawe ntacyo abaye">Your agent is unaffected</b><span data-rw="Nta interineti kuri iyi telefone. Amafaranga yawe ntacyo abaye, kandi umufasha aracyakira.">No connection on this device. Your credit is untouched and the agent is still answering.</span></div>
+              </div>
+
+              <div class="days" style="margin-top:var(--s-6)">
+                <div class="dtop">
+                  <span class="dn">11</span>
+                  <span class="dl" data-rw="iminsi — ku wa gatanu saa kumi">days — as of Friday 16:00</span>
+                </div>
+                <span class="dwhy" data-rw="Ibi ni ibyari bihari ubwo interineti yari ihari. Bishobora kuba byagabanutse.">This is what we had when you were last online. It may be lower now.</span>
+                <div class="dbar"><i style="width:62%"></i></div>
+                <div class="dfr"><b>14,200 RWF</b><span data-rw="icyo gihe">at that time</span></div>
+              </div>
+
+              <div class="mech" style="margin-top:var(--s-6)">
+                <svg class="bi"><use href="#i-circle-x"/></svg>
+                <span data-rw-html="<b>Kwishyura bisaba interineti.</b> Ntituzerekana buto yo kwishyura idakora — kuyikanda ntacyo byaba bimaze, kandi byaba bidutera kwibaza niba twishyuye."><b>Paying needs a connection.</b> We are not going to show you a Pay button that cannot work — pressing it would achieve nothing and leave you wondering whether you had paid.</span>
+              </div>
+
+              <button class="btn btn-secondary btn-block" id="retryNet"><svg class="bi"><use href="#i-rotate-cw"/></svg><span data-rw="Ongera ugerageze">Try again</span></button>
+            </section>
+
+          </div><!-- /feed -->
+
+          <nav class="tabbar" aria-label="Sections">
+            <a data-nav="home"><svg><use href="#i-house"/></svg><span data-rw="Ahabanza">Home</span></a>
+            <a data-nav="conv"><svg><use href="#i-message-square-text"/></svg><span data-rw="Ibiganiro">Chats</span></a>
+            <a data-nav="agent"><svg><use href="#i-bot"/></svg><span data-rw="Umufasha">Agent</span></a>
+            <a class="on" data-nav="more"><svg><use href="#i-ellipsis"/></svg><span data-rw="Ibindi">More</span></a>
+          </nav>
+        </div><!-- /appcol -->
+      </div><!-- /appframe -->
+
+    </div><!-- /authbody -->
+  </div><!-- /authmain -->
+
+  <aside class="authaside">
+
+    <div class="asidepane on" id="as-bal">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-wallet"/></svg><span data-rw="Icyemezo cy'ingenzi">The decision this screen turns on</span></div>
+        <p class="gq" data-rw-html="<mark>«Iminsi 11»</mark>, atari «14 200 RWF». Umubare w'amafaranga umusaba kubara ubwe."><mark>“About 11 days”</mark>, not “14,200 RWF”. A balance in francs makes her do arithmetic about her own usage.</p>
+        <p class="gt" data-rw="Iminsi isigaye ni igisubizo cy'ikibazo abaza: «ese mfite ahagije?» Amafaranga ni ukuri, ariko ni imibare — kandi ni imibare ku byo akoresha, atari ku byo dufite.">Days remaining is the answer to the question she is asking — have I got enough? The francs are true, but they are a sum, and a sum about her own usage rather than our balance sheet.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Igitabo cyerekana amafaranga mbere">The atlas leads with the francs</h3>
+        <p data-rw="Igishushanyo cya §3 gishyira 14 200 RWF hejuru. Ariko §4.1 isobanura ukuri gutandukanye — kandi ni ryo tukurikiye. Iyi dosiye ikurikiza impamvu, atari igishushanyo.">Its §3 sketch puts 14,200 RWF at the top. But §4.1 argues the opposite, at length — and that is the half we followed. This file implements the reasoning rather than the drawing.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Nta karita, ahantu na hamwe">No card, anywhere</h3>
+        <p data-rw="Abakoresha MoMo ni miliyoni 5.8 mu Rwanda; amakarita ni make cyane. Umwanya w'ikarita ahantu hose muri iki gicuruzwa ni urukuta rw'ukwinjira — atari ihitamo rikeya.">5.8 million active MoMo users in Rwanda; card penetration is marginal. A card field anywhere in this product is a conversion wall, not a lesser option.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-pay">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-smartphone"/></svg><span data-rw="Ahantu hamwe honyine PIN ibazwa">The one place a PIN is asked for</span></div>
+        <p class="gq" data-rw-html="Ubwo butumwa buva kuri MTN. <mark>Subiza ntizabaza PIN yawe na rimwe.</mark>">That prompt comes from MTN. <mark>Subiza will never ask for your PIN.</mark></p>
+        <p class="gt" data-rw="Ubujura bwa MoMo mu iki soko ni bwinshi, kandi iyi flow ni yo yonyine mu gicuruzwa itera ubutumwa bubaza PIN. Bityo ivuga aho butuka, n'ibyo tutazakora na rimwe — kuko gucecekera kuri ibi ni ukwemerera undi kwiyita twe.">MoMo fraud in this market is endemic, and this is the only flow in the product that legitimately causes a PIN prompt. So it names where the prompt comes from and what we will never do — because staying quiet about it is how somebody else gets to impersonate us.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="«Bitegereje» ni imiterere nyayo">Pending is a real state</h3>
+        <p data-rw="MoMo yemeza nyuma, atari ako kanya. Kwiyita ko byihuta ni bwo buryo ubwishyu bubura. Bityo «bitegereje» kirakomeza, kirafite buto yo kongera kubaza, kandi ntigicika mu bucecekere.">MoMo settles asynchronously, not instantly. Pretending otherwise is how a payment gets lost. So pending stays pending, carries a way to check, and never resolves into silence.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ntidukora ku mafaranga">We never touch the money</h3>
+        <p data-rw="Ubwishyu bunyura mu kigo cyemewe. Ibyo ni byo bidushyira hanze y'uruhushya rwa BNR rw'ibigo bitanga serivisi z'ubwishyu — kandi bivuze ko amafaranga yawe atari ku kizere cyacu.">The collection goes through a licensed aggregator. That keeps Subiza outside BNR payment-service-provider licensing — and it means your money is never sitting on our trustworthiness.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-lapse">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-shield-check"/></svg><span data-rw="Uburyo, atari isezerano">A mechanism, not a promise</span></div>
+        <p class="gq" data-rw-html="Ntitukuraho itangwa ry'guhamagara. Subiza <mark>yanga guhamagara</mark>, umurongo ukoherereza kuri we.">We never remove the forwarding. Subiza <mark>declines the call</mark>, and the carrier falls through to her.</p>
+        <p class="gt" data-rw="Isezerano rifite uburyo rishobora kwizerwa; iritagira uburyo ni ubucuruzi. Kandi iri ni ryo rifite akamaro kurusha ayandi yose muri iyi flow: ubucuruzi ntibugomba kuba bufite ikibazo kubera ko bwatugerageje.">A promise with a mechanism can be believed; one without is marketing. And this is the most important promise in the flow: a business must never be worse off for having tried us.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Inshuro eshatu mbere y'ikintu cyose">Three warnings before anything</h3>
+        <p data-rw="Kimwe cya gatanu · iminsi ibiri · zeru hamwe n'amasaha 72. Guta umukiriya kubera amafaranga ni ubwoko bw'ukubura kwirindwa cyane — kandi ni ikibazo cy'igishushanyo, atari cy'ubwishyu.">A fifth left · two days left · zero with 72 hours of grace. Losing a customer to a lapsed balance is the most avoidable kind of churn there is — and it is a design problem, not a payments one.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Ikibazo cyacu ntikigomba kumuhagarika">Our outage cannot pause her</h3>
+        <p data-rw="Iyo kwishyura bidashoboka kubera twe, igihe cyo kwihangana kirongerwa ku buryo bwikora. Guhana umukiriya ku kosa ryacu ni ikintu kidashobora kwemerwa, kandi ntibigomba kuba icyemezo cy'umuntu — bigomba kwikora.">When paying is impossible because of us, the grace extends automatically. Punishing a customer for our failure is indefensible, and it should not depend on somebody remembering — it has to be automatic.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Kugabanya ni kanda rimwe">Downgrade is one tap</h3>
+        <p data-rw="Nk'uko kuzamura ari kanda rimwe. Nta kubaza kabiri, nta rutonde rw'ibyo utakaza, nta kwibagirwa twiteguye. Uburyo bubi bugura ukwezi kumwe bugatwara izina — kandi mu iki soko izina rigenda vuba.">Exactly as upgrading is one tap. No second confirmation, no list of what you'd lose, no hoping she forgets. A dark pattern buys one month and costs a reputation — and in this market reputation travels fast.</p>
+      </div>
+    </div>
+
+    <div class="asidepane" id="as-stmt">
+      <div class="gprev">
+        <div class="gl"><svg><use href="#i-file-text"/></svg><span data-rw="Igiciro n'ibyakozwe, mu nyandiko imwe">Cost and value, in one document</span></div>
+        <p class="gq" data-rw-html="Fagitire yonyine itera gusesa. Fagitire iri kuruhande rwa <mark>«89 byari kuburirwa irengero»</mark> itera gukomeza.">A bill alone invites cancellation. A bill beside <mark>“89 you'd have missed”</mark> invites renewal.</p>
+        <p class="gt" data-rw="Igiciro hejuru, buri gihe. Kuvuga ibyakozwe mbere y'igiciro ni ukugerageza kwirinda ikibazo, kandi umuntu abibona.">The cost on top, always. Leading with the value would be an attempt to soften the number, and she would see it.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Umubare uracyashobora kufungurwa">The number stays openable</h3>
+        <p data-rw="89 ni umubare umwe uvugwa muri Ibyavuyemo, kandi buri kiganiro kirashobora gusomwa. Umubare ku fagitire udashobora kugenzurwa ni umubare utera kwibaza.">The 89 is the same number Results reports, and every conversation behind it can be read. A figure on an invoice that cannot be checked is a figure that invites suspicion.</p>
+      </div>
+      <div class="asidecard">
+        <h3 data-rw="Urugero rwashyizweho na we">A ceiling she set herself</h3>
+        <p data-rw="Iki gice cy'isoko cyubakiwe ku masezerano abacuruzi bato batashoboraga kuvamo. Urugero rw'amafaranga ni igisubizo nyacyo cy'ibyo, kandi ni we urushyiraho — atari twe tumuha «ubwisanzure».">This category was built on contracts small businesses could not exit. A spend cap is the direct answer, and she sets it — rather than us granting her “flexibility”.</p>
+      </div>
+    </div>
+
+  </aside>
+</div><!-- /auth -->
+</div><!-- /m-proto -->
+
+<div class="mode" id="m-spec">
+<div class="specwrap">
+  <p style="font-family:var(--f-mono);font-size:var(--t-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 var(--s-5)">Flow 1.15 · atlas F-17 · blocks paid usage</p>
+  <h1 style="font-family:var(--f-display);font-size:clamp(2rem,1.5rem + 2vw,2.9rem);font-variation-settings:'opsz' 48;font-weight:600;letter-spacing:-.032em;line-height:1.06;margin:0 0 var(--s-6)">Credit &amp; mobile money</h1>
+  <p style="max-width:70ch;color:var(--ink-2);font-size:var(--t-body-l);line-height:1.68;margin:0">Paying the way this market already pays — and making sure that not paying never leaves a business harder to reach than it was before. The second half is the one that needed designing.</p>
+
+  <div class="sechd"><span class="n">01</span><h2>Days, not francs</h2></div>
+  <p>Atlas §4.1: <i>“‘About 11 days’ rather than ‘14,200 RWF’ is the important detail. A balance in francs requires the owner to do arithmetic about their own usage. Days remaining is the answer to the question they are actually asking.”</i></p>
+  <p>So days are the headline at 3.6rem and the francs are a supporting line below a rule. <b>This inverts the atlas's own §3 sketch</b>, which puts <code>14,200 RWF</code> at the top of the card — and that is deliberate: §4.1 argues the case at length and §3 is a drawing. Where a document contradicts itself, the reasoning wins.</p>
+  <p>The same substitution runs through the top-up amounts: each preset is labelled <i>~ 8 days</i> as well as <i>10,000</i>, because the question <i>how much should I add</i> is really <i>how long do I want to stop thinking about this</i>.</p>
+
+  <div class="sechd"><span class="n">02</span><h2>The one place this product causes a PIN prompt</h2></div>
+  <p><code>voice.html</code> already ships the line <i>“We will never ask you for your MoMo PIN, a code, or any money.”</i> This flow is the single exception in the product where a PIN prompt legitimately appears — and it appears on her phone, from MTN, not from us.</p>
+  <p>MoMo fraud in this market is endemic, so that distinction is drawn rather than assumed. <code>c2</code> carries two statements in one block: <b>your phone will ask for your MoMo PIN — that prompt comes from MTN</b>, and beneath it, in risk colour, <b>Subiza will never ask for your PIN — not in this app, not in a message, not on a call. Anyone who asks is not us.</b></p>
+  <div class="why2"><svg><use href="#i-circle-check"/></svg><p>And <code>c3</code> draws the MTN prompt itself — sender, amount, payee, the PIN field — so she knows what a real one looks like. Teaching somebody to recognise the genuine article is better fraud protection than telling them to be careful, and this is the only screen in the programme positioned to do it.</p></div>
+
+  <div class="sechd"><span class="n">03</span><h2>Pending is a state, not a spinner over an assumption</h2></div>
+  <p>MoMo collection is asynchronous. The failure this must prevent is not a declined payment — it is a payment that succeeded while our screen said nothing, or said it had failed.</p>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Outcome</th><th>What the screen does</th></tr></thead>
+    <tbody>
+      <tr><td>Confirmed</td><td>Receipt with the reference, and the days figure visibly moved 11 → 19</td></tr>
+      <tr><td>Declined for funds</td><td><b>Names MTN as the decliner</b>, states that nothing was taken, and offers two smaller amounts</td></tr>
+      <tr><td>No answer at all</td><td><code>c6</code> — <b>stays pending</b>, with a check-again and the idempotency guarantee stated. Never resolves into silence</td></tr>
+      <tr><td>Still unresolved at 24h</td><td>A person follows it up and can credit by hand, with a written reason</td></tr>
+    </tbody>
+  </table></div>
+  <p><code>c3</code> also says she may leave the screen: <i>the payment does not stop because you closed it</i>. A pending state that traps somebody on a page is a pending state they will refresh until it breaks.</p>
+
+  <div class="sechd"><span class="n">04</span><h2>What lapsing means — a mechanism, not a promise</h2></div>
+  <p>Atlas §4.3 is the most important behaviour in this flow and SC 17.5 tests it end-to-end at zero balance. <code>c8b</code> renders it as two columns, and the left one leads with the sentence the whole product rests on: <b>calls ring your own phone as they always did</b>, with the number.</p>
+  <p>But the columns are not the design. <b>The mechanism is:</b></p>
+  <p style="font-family:var(--f-display);font-size:1.12rem;font-variation-settings:'opsz' 20;font-weight:600;letter-spacing:-.016em;line-height:1.45;margin:var(--s-6) 0;padding-left:var(--s-6);border-left:2px solid var(--signal-lo)">We never remove your forwarding. Subiza simply declines the call, so the carrier's no-answer rule falls through to you exactly as it did before Subiza existed.</p>
+  <p>A promise with a mechanism can be believed; one without it is marketing. And this particular mechanism has a second virtue — <b>there is nothing for her to repair.</b> No code to re-dial, no setting to restore, no support call. The state she returns to is the state she was in before she ever met us.</p>
+
+  <div class="sechd"><span class="n">05</span><h2>Three warnings, and a grace we extend against ourselves</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>Point</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr><td>20% left</td><td>Header chip turns amber, in-app prompt</td></tr>
+      <tr><td>5% / ~2 days</td><td>WhatsApp message naming the days</td></tr>
+      <tr><td>Zero</td><td><b>Grace.</b> Everything keeps working, and the screen says so plainly</td></tr>
+      <tr><td>Grace expired</td><td>Agent pauses. Calls fall through to her line</td></tr>
+      <tr><td><b>Our aggregator is down</b></td><td><b>Grace extends automatically</b>, 72 → 96 hours, and keeps extending</td></tr>
+    </tbody>
+  </table></div>
+  <p>That last row is the one worth defending. Punishing a customer for a failure of ours is indefensible, and it should not depend on somebody remembering to be generous — <code>c11</code> shows it as an automatic act with the new number on screen. SC 17.10 fault-injects it.</p>
+  <p><code>c7</code> also shows her the two warnings she <b>already had</b>, greyed, with their dates. Being able to see that you were told twice is what makes the third message land as information rather than as an ambush.</p>
+
+  <div class="sechd"><span class="n">06</span><h2>Downgrade is structurally as easy as upgrade</h2></div>
+  <p>SC 17.8 is a UI audit: the downgrade path must have the same number of taps as the upgrade. So <code>c8</code> makes the symmetry structural rather than promised — three plan cards, <b>one button each, same size, same position, same wording</b> (<i>Move to this</i>). The current plan's button is the only inert one.</p>
+  <p>Nothing dims the cheaper plan, nothing lists what she would lose, nothing asks twice. The copy states why: <i>a dark pattern buys one month and costs a reputation — and in this market reputation travels fast.</i></p>
+
+  <div class="sechd"><span class="n">07</span><h2>The statement: cost first, always</h2></div>
+  <p>Atlas §4.5 wants cost and value in the same message <i>“always in that order”</i>. The order matters and the reason is uncomfortable: leading with the value would be an attempt to soften the number, and she would see it. So <code>20,000 RWF</code> sits at the top in its own tinted row, and the three value lines follow.</p>
+  <p>The 89 is the same figure <code>results.html</code> reports, and the footnote says it can be opened. A number on an invoice that cannot be checked is a number that invites suspicion — which is the argument this programme has now made in three separate files.</p>
+
+  <div class="sechd"><span class="n">08</span><h2>Where this flow stops</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>The tap</th><th>Owned by</th><th>What this file does</th></tr></thead>
+    <tbody>
+      <tr><td>The 89 recovered conversations</td><td>Flow 16 — Results</td><td>States the figure and says it is openable there</td></tr>
+      <tr><td>Any conversation</td><td>Flow 14 — Conversations</td><td>Nothing. Not a transcript in sight</td></tr>
+      <tr><td>Resume after a pause</td><td>Flow 13 — Test &amp; go live</td><td>The header pill; that file owns the ladder</td></tr>
+      <tr><td>Forwarding, if it ever did break</td><td>Flow 07 — Phone</td><td>Explains why it cannot break from a lapse</td></tr>
+      <tr><td>A refund</td><td>Flow 21 — Tenant lifecycle</td><td>Not drawn. It is a manual, audited, support-side act</td></tr>
+      <tr><td>VAT and DST treatment</td><td>Unresolved (atlas 17.f)</td><td>Amounts are shown in RWF with no tax line, because the treatment is not confirmed</td></tr>
+      <tr><td>Who may see billing</td><td>Flow 18 — Team</td><td>Nothing. A5 only, per the atlas header</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sechd"><span class="n">09</span><h2>The eight states</h2></div>
+  <div class="stblwrap"><table class="stbl">
+    <thead><tr><th>State</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>Loading</td><td><code>c3</code> — and it is the only screen in the programme where loading is the <i>subject</i> rather than an interruption</td></tr>
+      <tr><td>Empty</td><td>Not drawn. A balance is never absent; zero is a designed state, not an empty one</td></tr>
+      <tr><td>Offline</td><td><code>x1</code> — last-known balance <b>stamped with when it was true</b>, and the Pay button is <b>absent rather than disabled</b>, with the reason given</td></tr>
+      <tr><td>Partial</td><td><code>c6</code> — pending is exactly this: part of the truth, held honestly</td></tr>
+      <tr><td>Permission denied</td><td>Not drawn. Flow 18's</td></tr>
+      <tr><td>Not found</td><td>Not drawn. There is no addressable sub-resource here to miss</td></tr>
+      <tr><td>Rate limited</td><td>The spend cap, <code>c9</code> — a rate limit she sets on herself rather than one we impose</td></tr>
+      <tr><td>Server error</td><td><code>c11</code> — and the first thing it does is extend her grace</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sechd"><span class="n">10</span><h2>Redesigned for 360, not reflowed</h2></div>
+  <p>The <b>days headline stacks</b>. A 3.6rem numeral and <i>days left at the rate you have been using it</i> cannot share a baseline at 360, and the sentence is the half that makes the number mean anything.</p>
+  <p>The <b>amount presets stay two-up</b> rather than stacking. They are the primary action, and a full-width column would push the MoMo number and the PIN warning below the fold — which on this particular screen is a safety regression, not a layout one.</p>
+  <p>The <b>usage bar goes and the figure stays.</b> <i>213 / 300</i> is the information; the bar is a comparison aid.</p>
+  <p>And the shell's small-screen override is restated, per the trap recorded in <code>conversations.html</code> §07.</p>
+
+  <div class="sechd"><span class="n">11</span><h2>Open questions, and what the design does about them</h2></div>
+  <p>Atlas <b>17.b</b> — how long the grace should be — is unresolved, and the design is built so the answer is a number rather than a rewrite: <code>c7</code> reads <i>72 hours</i> from one place and <code>c11</code> adds to it. <b>17.d</b>, whether Airtel Money is needed at launch, is why every screen says <i>MoMo</i> and only the drawn MTN prompt names MTN; adding a provider is a second prompt, not a second flow. <b>17.f</b>, the VAT and Digital Services Tax treatment of prepaid credit, is genuinely open — so <b>no tax line appears anywhere</b>, because inventing one would be worse than omitting it and it will change the displayed amounts when it is confirmed. <b>17.e</b> — plans versus pure pay-as-you-go — is not settled here; the design shows plans because the atlas does, and the credit card at the top would work identically without them.</p>
+  <p>And the standing caveat: <b>the Kinyarwanda is carefully written and has not been reviewed by a native speaker.</b> It matters more than usual on <code>c2</code>: the PIN warning is the one piece of copy in this programme whose failure mode is somebody losing money.</p>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)},
+    $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+/* One place the grace length lives, so atlas 17.b is a number to change
+   rather than a rewrite. */
+var GRACE_HOURS=72, GRACE_EXTENDED=96;
+
+var S={scen:'healthy',lang:'en',width:'phone',screen:'c1',amt:10000,cap:30000};
+
+var PANE={c1:'as-bal',c2:'as-pay',c3:'as-pay',c4:'as-pay',c5:'as-pay',c6:'as-pay',
+          c7:'as-lapse',c8b:'as-lapse',c8:'as-lapse',c9:'as-stmt',c10:'as-stmt',
+          c11:'as-lapse',x1:'as-bal'};
+var HEAD={
+ c1:['Amafaranga','Credit','Mbere yishyurwa, kuri MoMo','Prepaid, on MoMo'],
+ c2:['Kongeraho','Top up','Hitamo umubare','Choose an amount'],
+ c3:['Reba telefone','Check your phone','Ubutumwa bwa MTN buraza','A message from MTN is coming'],
+ c4:['Byemejwe','Confirmed','Amafaranga yongewe','Credit added'],
+ c5:['Ntibyashobotse','It didn’t go through','Nta kintu cyakuwe','Nothing was taken'],
+ c6:['Biracyategereje','Still pending','Ntituramenya','We don’t know yet'],
+ c7:['Yarangiye','It ran out','Dukomeza gato','We carry on for a while'],
+ c8b:['Iyo ihagaze','If it pauses','Guhamagara kuzakomeza','Calls keep coming'],
+ c8:['Ibiciro','Plans','Kuzamura no kugabanya bingana','Up and down are equal'],
+ c9:['Urugero','Your limit','Nta fagitire itunguranye','No surprise bill'],
+ c10:['Nzeri','September','Igiciro n’ibyakozwe','The cost and what it did'],
+ c11:['Kwishyura ntibikora','Paying is down','Igihe cyawe cyongerewe','Your grace was extended'],
+ x1:['Nta interineti','Offline','Amafaranga ntacyo abaye','Your credit is untouched']
+};
+
+function t(rw,en){ return S.lang==='rw'?rw:en; }
+function setText(n,rw,en){ if(!n)return; n.setAttribute('data-rw',rw); n.setAttribute('data-en',en); n.textContent=t(rw,en); }
+function fr(n){ return n.toLocaleString('en-US'); }
+
+function show(id){
+  var el=document.getElementById(id); if(!el) return;
+  S.screen=id;
+  $$('.screen').forEach(function(s){s.classList.toggle('on',s===el);});
+  $$('.asidepane').forEach(function(p){p.classList.toggle('on',p.id===(PANE[id]||'as-bal'));});
+  var h=HEAD[id];
+  if(h){ setText($('#headT'),h[0],h[1]); setText($('#headSub'),h[2],h[3]); }
+  var f=$('#feed'); if(f) f.scrollTop=0;
+  if(id==='c3') runPending();
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest && e.target.closest('[data-go]');
+  if(b){ e.preventDefault(); show(b.getAttribute('data-go')); }
+});
+
+/* ── The balance, led by days ────────────────────────────────────── */
+var BAL={
+ healthy:{d:11,frw:14200,pct:62,cls:''},
+ low:    {d:4, frw:5100, pct:19,cls:'low'},
+ crit:   {d:2, frw:2400, pct:8, cls:'crit'},
+ grace:  {d:0, frw:0,    pct:0, cls:'crit'}
+};
+function paintBalance(k){
+  var b=BAL[k]||BAL.healthy, box=$('#daysBox');
+  box.className='days'+(b.cls?' '+b.cls:'');
+  $('#dNum').textContent=String(b.d);
+  setText($('#dLab'), b.d===1?'umunsi usigaye':'iminsi isigaye', b.d===1?'day left':'days left');
+  $('#dFill').style.width=b.pct+'%';
+  setText($('#dFrw'),fr(b.frw)+' RWF',fr(b.frw)+' RWF');
+  $('#chCreditT').textContent=fr(b.frw)+' RWF';
+  var cc=$('#chCredit');
+  cc.classList.remove('warn','risk');
+  if(k==='low') cc.classList.add('warn');
+  if(k==='crit'||k==='grace') cc.classList.add('risk');
+  var lb=$('#lowBan');
+  lb.hidden = (k!=='low' && k!=='crit');
+  if(k==='crit'){
+    setText($('#lowB'),'Hasigaye iminsi ibiri','About two days left');
+    setText($('#lowS'),'Twakoherereje ubutumwa kuri WhatsApp. Nyuma yaho, hari amasaha '+GRACE_HOURS+' yo kwihangana mbere y’uko ikintu kihagarara.',
+                       'We have sent you a WhatsApp. After that there are '+GRACE_HOURS+' hours of grace before anything stops.');
+  } else {
+    setText($('#lowB'),'Amafaranga ari hasi','Your credit is getting low');
+    setText($('#lowS'),'Tuzakwoherereza ubutumwa kuri WhatsApp hasigaye iminsi ibiri. Nta kintu kizahagarara utabanje kubimenya inshuro eshatu.',
+                       'We’ll send you a WhatsApp when there are two days left. Nothing stops until you’ve been told three times.');
+  }
+  if(b.d===0){ setText($('#dWhy'),'Nta mafaranga asigaye. Soma ibiri hasi.','No credit left. Read on.'); }
+  else setText($('#dWhy'),'Ku buryo usanzwe uyikoresha — hafi iminota 19 ku munsi mu byumweru bibiri bishize.',
+                          'At the rate you have been using it — about 19 minutes a day over the last two weeks.');
+}
+
+/* ── Amounts. Each carries the days it buys, not just the francs. ── */
+var DAYS_PER={2000:1.5,5000:4,10000:8,20000:30,50000:75};
+$$('.amt').forEach(function(a){
+  a.addEventListener('click',function(){
+    var grp=a.closest('.amounts');
+    $$('.amt',grp).forEach(function(x){x.classList.toggle('on',x===a);});
+    S.amt=parseInt(a.getAttribute('data-a'),10);
+    var pt=$('#payT');
+    if(pt) setText(pt,'Ishyura '+fr(S.amt)+' RWF','Pay '+fr(S.amt)+' RWF');
+  });
+});
+var ci=$('#customAmt'); if(ci) ci.addEventListener('input',function(){
+  var v=parseInt((this.value||'').replace(/[^0-9]/g,''),10);
+  if(!v) return;
+  S.amt=v;
+  $$('.amt',$('#amounts')).forEach(function(x){x.classList.remove('on');});
+  setText($('#payT'),'Ishyura '+fr(v)+' RWF','Pay '+fr(v)+' RWF');
+});
+
+/* ── The payment, which is genuinely asynchronous ───────────────── */
+var pT=null;
+var pn2=$('#payNow'); if(pn2) pn2.addEventListener('click',function(){
+  if(S.scen==='aggdown'){ show('c11'); return; }
+  show('c3');
+});
+function runPending(){
+  if(pT) clearTimeout(pT);
+  var w=$('#waitT');
+  setText(w,'Kuri telefone yawe. Bisanzwe bifata amasegonda 20.','On your phone. Usually about 20 seconds.');
+  var dest = S.scen==='nofunds' ? 'c5' : (S.scen==='timeout' ? 'c6' : 'c4');
+  if(dest==='c6'){
+    pT=setTimeout(function(){
+      if(S.screen!=='c3') return;
+      setText(w,'Birenze amasegonda 30. Turacyategereje MTN.','Over 30 seconds now. We are still waiting on MTN.');
+      pT=setTimeout(function(){ if(S.screen==='c3') show('c6'); },2200);
+    },2600);
+  } else {
+    pT=setTimeout(function(){ if(S.screen==='c3') show(dest); },3200);
+  }
+}
+var ca2=$('#checkAgain'); if(ca2) ca2.addEventListener('click',function(){
+  toast(t('Turabaza MTN…','Asking MTN…'));
+  setTimeout(function(){ if(S.screen==='c6') show('c4'); },1400);
+});
+var cn=$('#chgNum'); if(cn) cn.addEventListener('click',function(){
+  toast(t('Ushobora kwishyura uhereye ku yindi nimero — tuzabimenya ku nomero y’ubwishyu.',
+          'You can pay from another number — we match it by reference.'));
+});
+
+/* ── Plans: one tap either way, and nothing dims the cheaper one ── */
+$$('[data-plan]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var dir=b.getAttribute('data-plan');
+    toast(dir==='down'
+      ? t('Byahinduwe. Bitangira mu kwezi gukurikira, kandi ntitwakubajije kabiri.',
+          'Done. It starts next cycle, and we did not ask you twice.')
+      : t('Byahinduwe. Bitangira mu kwezi gukurikira.','Done. It starts next cycle.'));
+  });
+});
+
+/* ── The cap she sets on herself ────────────────────────────────── */
+function paintCap(hit){
+  var f=$('#capFill'), v=$('#capV'), n=$('#capNote');
+  v.textContent=fr(S.cap);
+  f.className = hit?'hit':'';
+  f.style.width = hit?'100%':'67%';
+  if(hit){
+    n.setAttribute('data-rw-html','Ugeze kuri <b>'+fr(S.cap)+' RWF</b>. Umufasha yahagaze, ariko guhamagara kugera kuri telefone yawe.');
+    n.setAttribute('data-en-html','You have reached <b>'+fr(S.cap)+' RWF</b>. The agent has paused, but calls are reaching your phone.');
+  } else {
+    n.setAttribute('data-rw-html','Uku kwezi wakoresheje <b>20 000 RWF</b>. Iyo ugeze kuri '+fr(S.cap)+', umufasha arahagarara kandi tukubimenyesha — nta kintu kirenga aho utabanje kubyemera.');
+    n.setAttribute('data-en-html','This month you have used <b>20,000 RWF</b>. If you reach '+fr(S.cap)+' the agent pauses and we tell you — nothing goes past it without you saying so.');
+  }
+  n.innerHTML = S.lang==='rw' ? n.getAttribute('data-rw-html') : n.getAttribute('data-en-html');
+}
+var ce=$('#capEdit'); if(ce) ce.addEventListener('click',function(){
+  S.cap = S.cap===30000?50000:30000; paintCap(S.scen==='capped');
+  toast(t('Urugero rwahinduwe.','Limit changed.'));
+});
+var co=$('#capOff'); if(co) co.addEventListener('click',function(){
+  toast(t('Nta rugero. Tuzakomeza kukubwira mbere y’uko ikintu cyose kibaho.',
+          'No limit. We will still tell you before anything happens.'));
+});
+
+/* ── Grace, and the one we extend against ourselves ─────────────── */
+function paintGrace(ext){
+  var n=$('#graceN'); if(!n) return;
+  n.textContent=String(ext?GRACE_EXTENDED:GRACE_HOURS);
+  setText($('#c7sub'),
+    'Umufasha wawe aracyakora. Dukomeza amasaha '+(ext?GRACE_EXTENDED:GRACE_HOURS)+' mbere y’uko ikintu kihagarara.',
+    'Your agent is still running. We carry on for '+(ext?GRACE_EXTENDED:GRACE_HOURS)+' hours before anything stops.');
+}
+
+/* ── The rest ────────────────────────────────────────────────────── */
+$$('[data-nav]').forEach(function(a){
+  a.addEventListener('click',function(){
+    var d=a.getAttribute('data-nav');
+    if(d==='credit'||d==='more'){ show('c1'); return; }
+    var n={home:['Ahabanza','Home'],conv:['Ibiganiro','Conversations'],agent:['Umufasha wanjye','My agent'],
+           conn:['Aho ihuriye','Connections'],results:['Ibyavuyemo','Results'],
+           settings:['Igenamiterere','Settings']}[d]||['',''];
+    toast(t(n[0]+' ni indi flow.',n[1]+' is another flow.'));
+  });
+});
+var pb=$('#pauseNow'); if(pb) pb.addEventListener('click',function(){
+  toast(t('Guhagarika ni muri Kugerageza no Gutangira.','Pausing lives in Test & go live.'));
+});
+[['chPill','Kugerageza no Gutangira','Test & go live'],['chHealth','Aho ihuriye','Connections']]
+ .forEach(function(x){ var e=$('#'+x[0]); if(e) e.addEventListener('click',function(){ toast(t(x[1]+' ni indi flow.',x[2]+' is another flow.')); }); });
+var cc2=$('#chCredit'); if(cc2) cc2.addEventListener('click',function(){ show('c1'); });
+var rn=$('#retryNet'); if(rn) rn.addEventListener('click',function(){ toast(t('Uracyari hanze ya interineti.','Still offline.')); });
+
+var tt=null;
+function toast(msg){
+  var el=$('#toast');
+  if(!el){ el=document.createElement('div'); el.className='toast'; el.id='toast'; el.setAttribute('role','status'); document.body.appendChild(el); }
+  el.textContent=msg; el.classList.add('on');
+  if(tt) clearTimeout(tt);
+  tt=setTimeout(function(){el.classList.remove('on');},2600);
+}
+
+/* ── Shell ───────────────────────────────────────────────────────── */
+$$('[data-w]').forEach(function(b){
+  b.addEventListener('click',function(){
+    S.width=b.getAttribute('data-w');
+    $('#frame').classList.toggle('wide',S.width==='wide');
+    $$('[data-w]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+  });
+});
+function setLang(l){
+  S.lang=l;
+  $$('[data-rw]').forEach(function(n){
+    if(!n.hasAttribute('data-en')) n.setAttribute('data-en',n.textContent);
+    n.textContent = l==='rw' ? n.getAttribute('data-rw') : n.getAttribute('data-en');
+  });
+  $$('[data-rw-html]').forEach(function(n){
+    if(!n.hasAttribute('data-en-html')) n.setAttribute('data-en-html',n.innerHTML);
+    n.innerHTML = l==='rw' ? n.getAttribute('data-rw-html') : n.getAttribute('data-en-html');
+  });
+  $$('[data-rw-ph]').forEach(function(n){
+    if(!n.hasAttribute('data-en-ph')) n.setAttribute('data-en-ph',n.placeholder||'');
+    n.placeholder = l==='rw' ? n.getAttribute('data-rw-ph') : n.getAttribute('data-en-ph');
+  });
+  document.documentElement.lang = l==='rw'?'rw':'en';
+  $$('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-lang')===l));});
+}
+$$('[data-lang]').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-lang'));});});
+$$('[data-mode]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var m=b.getAttribute('data-mode');
+    $$('[data-mode]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});
+    $('#m-proto').classList.toggle('on',m==='proto');
+    $('#m-spec').classList.toggle('on',m==='spec');
+    window.scrollTo(0,0);
+  });
+});
+
+/* ── Scenarios ───────────────────────────────────────────────────── */
+var SCEN={
+ healthy:{go:'c1',bal:'healthy'}, low:{go:'c1',bal:'low'}, crit:{go:'c1',bal:'crit'},
+ grace:{go:'c7',bal:'grace'}, lapsed:{go:'c8b',bal:'grace'},
+ topup:{go:'c2',bal:'healthy'}, pending:{go:'c3',bal:'healthy'},
+ confirmed:{go:'c4',bal:'healthy'}, nofunds:{go:'c3',bal:'healthy'},
+ timeout:{go:'c3',bal:'healthy'}, aggdown:{go:'c11',bal:'grace'},
+ plans:{go:'c8',bal:'healthy'}, spendcap:{go:'c9',bal:'healthy'},
+ capped:{go:'c9',bal:'healthy'}, statement:{go:'c10',bal:'healthy'},
+ warnings:{go:'c7',bal:'grace'}, offline:{go:'x1',bal:'healthy'}
+};
+function applyScen(k){
+  S.scen=k;
+  var c=SCEN[k]||SCEN.healthy;
+  paintBalance(c.bal);
+  paintGrace(k==='aggdown');
+  paintCap(k==='capped');
+  /* the third warning is only "now" once the balance is actually zero */
+  $$('.wrow').forEach(function(r,i){
+    r.classList.toggle('past', i<2);
+    r.classList.toggle('now', i===2);
+  });
+  if(k==='capped'){
+    setText($('#c7h'),'Ugeze ku rugero washyizeho','You have reached your own limit');
+  } else {
+    setText($('#c7h'),'Amafaranga yarangiye','Your credit has run out');
+  }
+  show(c.go);
+}
+var sc=$('#scen'); if(sc) sc.addEventListener('change',function(){applyScen(sc.value);});
+
+setLang('en');
+applyScen('healthy');
+})();
+</script>

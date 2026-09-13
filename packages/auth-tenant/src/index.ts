@@ -10,7 +10,7 @@ export { generateOtp, hmacOtp, otpEquals, isSixDigitCode } from "./otp";
 export { opaqueId } from "./ids";
 export { sendCode, verifyCode, readPreauth, deletePreauth, updatePreauth, remainingCodeMs, membershipsFor, setStep, failCount, deliveryState } from "./engine";
 export { mintSession, deleteSession, readSession, revokeMemberSessions, switchTenant } from "./sessions";
-export { issueHandoff, consumeHandoff } from "./handoff";
+export { issueHandoff, consumeHandoff, materializeHandoff, type HandoffSnapshot } from "./handoff";
 export { openRecovery, lengthenCooldown, executeNumberChange, cooldownHours } from "./recovery";
 export { peekLastOtpForTests, canSendVoice, canSendWhatsApp, smsCircuitOpen, recordSpend } from "./delivery";
 export { senderConfig } from "./sender";
@@ -34,6 +34,88 @@ export {
   createTenantContext,
   type TenantContext,
 } from "./dal";
+export {
+  bundleOf,
+  documentsOf,
+  markStarted,
+  markStepViewed,
+  forceResume,
+  dueActivationResume,
+  recordResumeNudge,
+  skipStep,
+  seedFromTemplate,
+  saveHours,
+  savePrices,
+  previewVoice,
+  saveVoice,
+  destinationForTestCall,
+  requestTestCall,
+  advanceTestCall,
+  completeTestCall,
+  viewTranscript,
+  saveCorrection,
+  saveEscalation,
+  verifyForwarding,
+  setGoLive,
+  pauseLive,
+  currentStep,
+  eventsFor,
+  emptyBundle,
+  TEST_SPEND_CEILING_RWF,
+  TEST_CALL_RATE_RWF_PER_MIN,
+  INBOUND_TEST_NUMBER,
+  SUBIZA_FORWARD_NUMBER,
+  type TenantBundle,
+} from "./activation";
+export {
+  PHONE_SURFACE_AUTH,
+  changeForwarding,
+  choosePhonePath,
+  setPhoneScope,
+  detectPhoneNetwork,
+  markCodeShown,
+  advancePhoneCode,
+  requestPhoneVerification,
+  settlePhoneVerification,
+  requestAssistedCall,
+  setRepairRung,
+  markPhoneDone,
+  startNewNumber,
+  setProvisioningState,
+  markForwardingLost,
+  maybeDetectSilentFailure,
+  setPhoneSurfaceStep,
+  ownerNumber,
+} from "./phone";
+export { verifyMetaSignature, metaHandshake, ingestMetaWebhook } from "./webhooks";
+export {
+  CHANNEL_SURFACE_AUTH,
+  readChannels,
+  elevateForChannelConnect,
+  setChannelStep,
+  createTelegramBot,
+  answerWhatsAppPreflight,
+  chooseWhatsAppRoute,
+  setCoexistenceUnavailable,
+  confirmCoexistence,
+  startEmbeddedSignup,
+  exchangeEmbeddedSignup,
+  abandonEmbeddedSignup,
+  enqueueWhatsAppOnboarding,
+  markDisplayNameRejected,
+  resubmitDisplayName,
+  connectWhatsApp,
+  checkInstagramAccount,
+  claimPrivateReply,
+  settlePrivateReply,
+  markChannelDisconnected,
+  detectSilentDisconnect,
+  reconnectChannel,
+  enqueueWebhook,
+  trainingCorpusFor,
+  expireSignupCode,
+  maybeRefreshInstagramToken,
+} from "./channels";
 export type {
   AuthStep,
   EntryKind,

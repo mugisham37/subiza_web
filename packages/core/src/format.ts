@@ -3,6 +3,22 @@ const RW_PHONE = /^(\+?250|0)?(7[2-9]\d{7})$/;
 /** Allocated Rwanda MNO prefixes. Foreign and unallocated prefixes are refused before any OTP spend. */
 export const ALLOCATED_RW_MNO = ["72", "73", "75", "78", "79"] as const;
 
+/** Prefix → home network. Degrades to `unknown`. Always overridable by the owner. */
+export const RW_MNO_BY_PREFIX: Record<string, "mtn" | "airtel"> = {
+  "78": "mtn",
+  "79": "mtn",
+  "72": "airtel",
+  "73": "airtel",
+  "75": "airtel",
+};
+
+export function detectRwandaNetwork(e164: string): "mtn" | "airtel" | "unknown" {
+  const match = /^\+?250?(7\d)\d{7}$/.exec(e164.replace(/\s+/g, ""));
+  const prefix = match?.[1];
+  if (!prefix) return "unknown";
+  return RW_MNO_BY_PREFIX[prefix] ?? "unknown";
+}
+
 export function isAllocatedRwandaMno(e164: string): boolean {
   const match = /^\+250(7\d)\d{7}$/.exec(e164);
   const prefix = match?.[1];

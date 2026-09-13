@@ -67,6 +67,9 @@
 .chan-ig .cico{background:linear-gradient(135deg,#F58529,#DD2A7B 52%,#8134AF)}
 .chan-tg .cico{background:#2AABEE}
 .chan-ph .cico{background:var(--ink);color:var(--ground)}
+.chan-sms .cico{background:var(--ink);color:var(--ground)}
+.chan-web .cico{background:var(--surface-3);color:var(--ink-2)}
+.chan.is-wait{border-color:var(--rule-2);background:var(--surface)}
 .chan .cmeta{flex:1;min-width:0}
 .chan .cmeta b{display:block;font-size:var(--t-body-s);font-weight:600}
 .chan .cmeta span{display:block;font-size:var(--t-cap);color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

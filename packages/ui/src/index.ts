@@ -60,6 +60,8 @@ export { VoiceLibrary, VoicePlayHint, type VoiceOption } from "./product/VoiceLi
 export { CallStage, LiveTranscript, CallPrimary, type CallStageState } from "./product/CallStage";
 export { ReviewTurn } from "./product/ReviewTurn";
 export { LadderOption } from "./product/LadderOption";
+export { EnforcementBadge, type EnforcementTone } from "./product/EnforcementBadge";
+export { RuleRow } from "./product/RuleRow";
 export { CreditCard } from "./product/CreditCard";
 export { WhatsAppBubble } from "./product/WhatsAppBubble";
 export { PhoneFrame } from "./product/PhoneFrame";

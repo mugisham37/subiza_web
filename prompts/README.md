@@ -23,11 +23,11 @@ customer's own journey from landing page to daily use.
 | **03** | [Authentication & authorization](03-authentication-and-authorization.md)          | `auth.html`          | **Built** |
 | **04** | [Guided activation](04-guided-activation.md)                                      | `activation.html`    | **Built** |
 | **05** | [Phone connection](05-phone-connection.md)                                        | `phone.html`         | **Built** |
-| **06** | [Messaging channel connection](06-messaging-channels.md)                          | `channels.html`      | **Ready** |
-| 07     | Agent design                                                                      | `agent.html`         | pending   |
-| 08     | Knowledge base                                                                    | `knowledge.html`     | pending   |
-| 09     | Voice, cloning and consent                                                        | `voice.html`         | pending   |
-| 10     | Language and switching                                                            | `language.html`      | pending   |
+| **06** | [Messaging channel connection](06-messaging-channels.md)                          | `channels.html`      | **Built** |
+| **07** | [Agent design](07-agent-design.md)                                                | `agent.html`         | **Built** |
+| **08** | [Knowledge base](08-knowledge-base.md)                                            | `knowledge.html`     | **Ready** |
+| **09** | [Voice, cloning and consent](09-voice-cloning-and-consent.md)                     | `voice.html`         | **Ready** |
+| **10** | [Language and switching](10-language-and-switching.md)                            | `language.html`      | **Ready** |
 | 11     | Test and go-live                                                                  | `golive.html`        | pending   |
 | 12     | Home — the feed                                                                   | `home.html`          | pending   |
 | 13     | Conversations — the unified inbox                                                 | `conversations.html` | pending   |

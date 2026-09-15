@@ -188,4 +188,41 @@ export const channelEventSchema = z.discriminatedUnion("name", [
   z.object({ name: z.literal("channel.onboarding_queued"), position: z.number() }),
 ]);
 export type ChannelEvent = z.infer<typeof channelEventSchema>;
-export type TenantEvent = ActivationEvent | PhoneEvent | ChannelEvent;
+
+export const AGENT_EVENTS = [
+  "agent.mode_toggled",
+  "agent.rule_added",
+  "agent.rule_edited",
+  "agent.rule_disabled",
+  "agent.rule_deleted",
+  "agent.greeting_edited",
+  "agent.manner_changed",
+  "agent.contradiction_check_run",
+  "agent.contradiction_resolved",
+  "agent.published_with_conflict",
+  "agent.published",
+  "agent.reverted",
+] as const;
+export type AgentEventName = (typeof AGENT_EVENTS)[number];
+
+export const agentEventSchema = z.discriminatedUnion("name", [
+  z.object({ name: z.literal("agent.mode_toggled"), from: z.enum(["simple", "advanced"]), to: z.enum(["simple", "advanced"]) }),
+  z.object({ name: z.literal("agent.rule_added"), category: z.string(), enforceable: z.boolean() }),
+  z.object({ name: z.literal("agent.rule_edited"), category: z.string(), enforceable: z.boolean() }),
+  z.object({ name: z.literal("agent.rule_disabled"), category: z.string(), enforceable: z.boolean() }),
+  z.object({ name: z.literal("agent.rule_deleted"), category: z.string(), enforceable: z.boolean() }),
+  z.object({ name: z.literal("agent.greeting_edited"), seconds: z.number() }),
+  z.object({ name: z.literal("agent.manner_changed"), tone: z.string(), confidence: z.string() }),
+  z.object({ name: z.literal("agent.contradiction_check_run"), count: z.number() }),
+  z.object({ name: z.literal("agent.contradiction_resolved"), resolution: z.string() }),
+  z.object({ name: z.literal("agent.published_with_conflict"), count: z.number() }),
+  z.object({ name: z.literal("agent.published"), version: z.number(), ruleCount: z.number() }),
+  z.object({
+    name: z.literal("agent.reverted"),
+    fromVersion: z.number(),
+    toVersion: z.number(),
+    msSincePublish: z.number(),
+  }),
+]);
+export type AgentEvent = z.infer<typeof agentEventSchema>;
+export type TenantEvent = ActivationEvent | PhoneEvent | ChannelEvent | AgentEvent;

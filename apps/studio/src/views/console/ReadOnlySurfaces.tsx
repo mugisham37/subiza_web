@@ -1,24 +1,12 @@
-import { Banner, EscalationLadder } from "@subiza/ui";
+import { EscalationLadder } from "@subiza/ui";
 import { getTranslations } from "next-intl/server";
 import { loadConsole } from "@/features/activation/load";
+import { BehaviourSurface } from "@/features/agent/BehaviourSurface";
 import { MessagingSurface } from "@/features/channels/MessagingSurface";
 import { PhoneSurface } from "@/features/phone/PhoneSurface";
 
 export async function AgentSurface() {
-  const model = await loadConsole();
-  const t = await getTranslations("console");
-  return (
-    <main className="surface-ro">
-      <h1>{t("agent")}</h1>
-      <p>{t("readonly")}</p>
-      <Banner tone="info" title={model.tenant.name}>
-        {model.docs.agent?.greeting ?? "—"}
-      </Banner>
-      {model.docs.agent?.rules.map((rule) => (
-        <p key={rule.id}>{rule.text}</p>
-      ))}
-    </main>
-  );
+  return <BehaviourSurface />;
 }
 
 export async function KnowledgeSurface() {

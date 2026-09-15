@@ -1,4 +1,4 @@
-import type { AgentConfig } from "./agent-config";
+import { emptyAgentConfig, normalizeAgentConfig, type AgentConfig } from "./agent-config";
 import type { Knowledge, PriceRow, QaPair, PronunciationEntry } from "./knowledge";
 import { newPronId, newQaId } from "./knowledge";
 import type { BusinessTemplate } from "./template";
@@ -12,7 +12,8 @@ export function applyTemplate(
 ): { agent: AgentConfig; knowledge: Knowledge } {
   const greeting = interpolateGreeting(template.greeting, businessName);
   return {
-    agent: {
+    agent: normalizeAgentConfig({
+      ...emptyAgentConfig(template.week, template.afterHours),
       templateKind: template.kind,
       otherDescription: template.kind === "generic" ? template.persona : null,
       persona: template.persona,
@@ -22,7 +23,7 @@ export function applyTemplate(
       afterHours: template.afterHours,
       hoursConfirmedAt: null,
       needsConflictCheck: false,
-    },
+    }),
     knowledge: {
       prices: [],
       questions: template.questions.map((row) => ({ ...row })),

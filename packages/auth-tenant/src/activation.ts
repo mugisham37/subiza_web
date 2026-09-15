@@ -12,6 +12,7 @@ import {
   type ActivationStep,
   type TenantEvent,
   type AgentConfig,
+  type AgentVersion,
   type EscalationRota,
   type GoLive,
   type GoLiveRung,
@@ -60,6 +61,9 @@ export const SUBIZA_FORWARD_NUMBER = "250788456123";
 
 export type TenantBundle = {
   agent: AgentConfig | null;
+  liveAgent: AgentConfig | null;
+  inFlightAgent: AgentConfig | null;
+  agentVersions: AgentVersion[];
   knowledge: Knowledge | null;
   voice: VoiceSelection | null;
   testCall: TestCall | null;
@@ -81,6 +85,9 @@ export type TenantBundle = {
 export function emptyBundle(language: "rw" | "en"): TenantBundle {
   return {
     agent: null,
+    liveAgent: null,
+    inFlightAgent: null,
+    agentVersions: [],
     knowledge: emptyKnowledge(),
     voice: emptyVoiceSelection(language),
     testCall: null,
@@ -366,7 +373,10 @@ export function requestTestCall(
     startedAt: Date.now(),
   };
   bundle.testCall = call;
-  if (route !== "inbound") bundle.inFlightCallId = call.id;
+  if (route !== "inbound") {
+    bundle.inFlightCallId = call.id;
+    bundle.inFlightAgent = bundle.liveAgent ? structuredClone(bundle.liveAgent) : structuredClone(bundle.agent);
+  }
   emit(ctx, { name: "activation.test_call_requested", channel: route, attempt: 1 });
   return call;
 }
@@ -378,6 +388,7 @@ export function advanceTestCall(ctx: TenantContext, next: TestCallState): TestCa
   if (!call) throw Object.assign(new Error("notFound"), { code: "notFound" as const });
   if (next === "voicemail-detected" || next === "no-answer" || next === "carrier-failed") {
     bundle.inFlightCallId = null;
+    bundle.inFlightAgent = null;
     bundle.lastCallEndedAt = Date.now();
     bundle.spendTestRwf += Math.ceil(TEST_CALL_RATE_RWF_PER_MIN / 6);
     bundle.testCall = { ...call, status: next, endedAt: Date.now(), durationSeconds: 8 };
@@ -465,6 +476,7 @@ export function completeTestCall(ctx: TenantContext, turns: readonly TranscriptT
   const spend = Math.ceil((duration / 60) * TEST_CALL_RATE_RWF_PER_MIN);
   bundle.spendTestRwf += spend;
   bundle.inFlightCallId = null;
+  bundle.inFlightAgent = null;
   bundle.lastCallEndedAt = Date.now();
   const pricesQuoted = turns
     .filter((turn) => turn.sourceKind === "price" && turn.sourceLabel)

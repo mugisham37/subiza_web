@@ -2,6 +2,7 @@
 
 import {
   advanceTestCall,
+  documentsOf,
   pauseLive,
   previewVoice,
   requestTestCall,
@@ -18,11 +19,11 @@ import {
 } from "@subiza/auth-tenant";
 import { parseRwandaPhone } from "@subiza/core";
 import {
-  WEEKDAYS,
+  afterHoursSchema,
   flagLowConfidence,
   newPriceId,
   salonWeek,
-  type AfterHoursPolicy,
+  weekGridFromForm,
   type ActivationStep,
   type GoLiveRung,
   type LibraryVoiceId,
@@ -30,7 +31,6 @@ import {
   type PriceRow,
   type TemplateKind,
   type TestCallState,
-  type WeekGrid,
   type Weekday,
 } from "@subiza/domain";
 import { businessTemplates } from "@subiza/fixtures";
@@ -59,16 +59,12 @@ export async function saveBusiness(form: FormData) {
 
 export async function saveHoursAction(form: FormData) {
   const ctx = await requireStudioContext();
-  const hours = salonWeek();
+  const fallback = documentsOf(ctx).agent?.hours ?? salonWeek();
+  const hours = weekGridFromForm(form, fallback);
   const varies = form.get("varies") === "on";
-  for (const day of WEEKDAYS) {
-    const closed = varies || form.get(`closed-${day}`) === "on";
-    const start = String(form.get(`start-${day}`) ?? hours[day].start);
-    const end = String(form.get(`end-${day}`) ?? hours[day].end);
-    hours[day] = { open: !closed, start, end };
-  }
-  const after = (varies ? "message-only" : String(form.get("after") ?? "answer-and-message")) as AfterHoursPolicy;
-  saveHours(ctx, hours as WeekGrid, after);
+  const raw = varies ? "message-only" : String(form.get("after") ?? "answer-and-message");
+  const after = afterHoursSchema.safeParse(raw).success ? afterHoursSchema.parse(raw) : "answer-and-message";
+  saveHours(ctx, hours, after);
   go("prices");
 }
 

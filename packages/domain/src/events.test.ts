@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ACTIVATION_EVENTS, PHONE_EVENTS, activationEventSchema, phoneEventSchema } from "./events";
+import { ACTIVATION_EVENTS, AGENT_EVENTS, PHONE_EVENTS, activationEventSchema, agentEventSchema, phoneEventSchema } from "./events";
 import { DOMAIN_DOCUMENTS } from "./index";
 
 describe("instrumentation", () => {
@@ -29,6 +29,14 @@ describe("instrumentation", () => {
     ]);
     expect(
       phoneEventSchema.safeParse({ name: "phone.verification_result", outcome: "inconclusive" }).success,
+    ).toBe(true);
+  });
+
+  it("names every Prompt 07 agent event", () => {
+    expect(AGENT_EVENTS).toContain("agent.mode_toggled");
+    expect(AGENT_EVENTS).toContain("agent.published_with_conflict");
+    expect(
+      agentEventSchema.safeParse({ name: "agent.reverted", fromVersion: 7, toVersion: 6, msSincePublish: 1_000 }).success,
     ).toBe(true);
   });
 });

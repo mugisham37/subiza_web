@@ -14,7 +14,7 @@ import {
   VoiceLibrary,
   WizardShell,
 } from "@subiza/ui";
-import type { ActivationStep } from "@subiza/domain";
+import type { ActivationStep, WeekGrid } from "@subiza/domain";
 import { RESUME_LABEL, WEEKDAYS, salonWeek } from "@subiza/domain";
 import { interpolateGreeting } from "@subiza/domain";
 import { businessTemplates } from "@subiza/fixtures";
@@ -99,7 +99,7 @@ export async function ActivateView({
           </a>
         ) : null}
         {step === "business" ? <BusinessStep name={model.tenant.name} /> : null}
-        {step === "hours" ? <HoursStep /> : null}
+        {step === "hours" ? <HoursStep hours={model.docs.agent?.hours ?? salonWeek()} /> : null}
         {step === "prices" ? <PricesStep tab={q("tab") ?? "cam"} confirm={q("confirm") === "1"} blurry={q("err") === "blurry"} /> : null}
         {step === "voice" ? (
           <VoiceStep greeting={model.docs.agent?.greeting ?? interpolateGreeting("Muraho, ni {business}. Nabafasha nte?", model.tenant.name)} />
@@ -200,10 +200,10 @@ export async function BusinessStep({ name }: { name: string }) {
   );
 }
 
-export async function HoursStep() {
+export async function HoursStep({ hours }: { hours?: WeekGrid }) {
   const t = await getTranslations("w2");
   const w = await getTranslations("wizard");
-  const week = salonWeek();
+  const week = hours ?? salonWeek();
   return (
     <form action={saveHoursAction}>
       <h1>{t("title")}</h1>

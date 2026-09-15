@@ -148,6 +148,22 @@ export function connectChannel(ctx: TenantContext): void {
   }
 }
 
+export function updatePersona(ctx: TenantContext): void {
+  requireGrant(ctx, "configureAgentPersona", "write", "full");
+  writeAudit({
+    tenantId: ctx.tenantId,
+    actorType: ctx.actorType,
+    actorId: ctx.personId,
+    onBehalfOf: null,
+    action: "updatePersona",
+    capability: "configureAgentPersona",
+    outcome: "allowed",
+    before: null,
+    after: null,
+    reason: null,
+  });
+}
+
 export function initiateVoiceCloning(ctx: TenantContext): void {
   requireGrant(ctx, "initiateVoiceCloning", "write", "full");
 }

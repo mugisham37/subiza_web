@@ -148,3 +148,37 @@ trunk, not audio, not AMD, not a query API. `CARRIER_FORWARDING` stays `false`
 until docs/13 Q2 is answered on live SIMs. Recurring checks reject with SIP 486;
 only the one-time activation check answers. Re-verification is scheduled inside
 08:00–19:00 Africa/Kigali, never at 02:00.
+
+**Agent design — Prompt 07.** Advanced ships in v1 as a *view* (`?view=`), not a
+persisted mode. `packages/domain/src/agent-config.ts` is the document. Routes
+live at `/agent/behaviour/[step]`. Writes require `configureAgentPersona`
+(`AGENT_SURFACE_AUTH`); recovered sessions are refused. `guaranteed` is earned
+only by a named mechanism (typed-field-lookup, tool-absent, every-turn-trigger,
+required-step-before-commit). Containment, not immunity. The contradiction check
+is non-blocking; publish-anyway is audited. Restore snapshots the current state
+first. Versions live on `TenantBundle`, not as a thirteenth domain document.
+Kinyarwanda checks run dual-run until a test-call week settles accuracy.
+`needsConflictCheck` is read and cleared on publish. Hours editing uses
+`docs.agent.hours` and `weekGridFromForm` — never a hard-coded salon week.
+
+### Adversarial report (Prompt 07 G7)
+
+Tried as a reviewer, not an author:
+
+1. **Delete a locked rule by posting the mutator.** `deleteRule(ctx, "rul_disclosure")`
+   and `rul_out_of_scope` throw `notFound` and leave both ids in the array. The
+   UI omits the delete button; the server action is the real lock.
+2. **Earn `guaranteed` with no mechanism.** `addRule` always writes `enf: "soft"`
+   and `mechanism: null`. `badgeTone` maps `enf: "hard"` without a named
+   mechanism to `soft`. "Be warm" and "Always be right" cannot wear a guarantee.
+3. **Round-trip a rule away.** Simple and Advanced filter the same `rules[]` by
+   `cat` vs `stage`. No second array. The count beside the switch is
+   `agent.rules.length`, computed.
+4. **Restore and lose the current state.** `restoreAgentVersion` pushes the
+   current snapshot before applying the old one. A revert is itself revertible.
+5. **Edit during a live call.** `requestTestCall` copies `inFlightAgent`. Later
+   publishes replace `liveAgent` only. The in-flight snapshot is unchanged.
+6. **Raw conflict object on screen.** The conflict screen quotes `ruleText` and
+   offers three named resolutions. No JSON dump.
+
+Next: Prompt 08 — Knowledge base.

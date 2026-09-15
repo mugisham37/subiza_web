@@ -88,6 +88,18 @@ export function shopWeek(): WeekGrid {
   };
 }
 
+export function weekGridFromForm(form: FormData, fallback: WeekGrid): WeekGrid {
+  const varies = form.get("varies") === "on";
+  const next: WeekGrid = { ...fallback };
+  for (const day of WEEKDAYS) {
+    const closed = varies || form.get(`closed-${day}`) === "on";
+    const start = String(form.get(`start-${day}`) ?? fallback[day].start);
+    const end = String(form.get(`end-${day}`) ?? fallback[day].end);
+    next[day] = { open: !closed, start, end };
+  }
+  return weekGridSchema.parse(next);
+}
+
 export function repairWeek(): WeekGrid {
   return {
     mon: { open: true, start: "08:00", end: "18:00" },

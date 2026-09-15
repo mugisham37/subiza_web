@@ -1,10 +1,8 @@
-import { Suspense } from "react";
-import { AgentSurface } from "@/views/console/ReadOnlySurfaces";
+import { redirect } from "next/navigation";
+import { hrefForAgent } from "@/features/agent/steps";
+
+export const dynamic = "force-dynamic";
 
 export default function Page() {
-  return (
-    <Suspense>
-      <AgentSurface />
-    </Suspense>
-  );
+  redirect(hrefForAgent("behaviour") as never);
 }
